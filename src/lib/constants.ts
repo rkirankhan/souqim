@@ -1,0 +1,86 @@
+import {
+  Laptop,
+  Megaphone,
+  Palette,
+  Scissors,
+  Shirt,
+  PenTool,
+  Camera,
+  GraduationCap,
+  Users,
+  Heart,
+  UtensilsCrossed,
+  Hop as Home,
+  Package,
+  Calendar,
+  Wrench,
+  Rocket,
+  Briefcase,
+  type LucideIcon,
+} from 'lucide-react'
+
+export const CATEGORIES = [
+  'IT & Technology',
+  'Marketing & Social Media',
+  'Makeup Artist',
+  'Beauty & Salon',
+  'Fashion & Clothing',
+  'Writers & Content Creators',
+  'Photography',
+  'Education & Tutors',
+  'Coaching & Consulting',
+  'Health & Wellness',
+  'Food & Catering',
+  'Home Services',
+  'Handmade & Crafts',
+  'Events & Planning',
+  'Local Services',
+  'Startups',
+  'Freelancers',
+] as const
+
+export type Category = typeof CATEGORIES[number]
+
+export const CATEGORY_ICONS: Record<string, LucideIcon> = {
+  'IT & Technology': Laptop,
+  'Marketing & Social Media': Megaphone,
+  'Makeup Artist': Palette,
+  'Beauty & Salon': Scissors,
+  'Fashion & Clothing': Shirt,
+  'Writers & Content Creators': PenTool,
+  'Photography': Camera,
+  'Education & Tutors': GraduationCap,
+  'Coaching & Consulting': Users,
+  'Health & Wellness': Heart,
+  'Food & Catering': UtensilsCrossed,
+  'Home Services': Home,
+  'Handmade & Crafts': Package,
+  'Events & Planning': Calendar,
+  'Local Services': Wrench,
+  'Startups': Rocket,
+  'Freelancers': Briefcase,
+}
+
+export const DEFAULT_CATEGORY_ICON = Briefcase
+
+export const CATEGORY_ACCENTS: Record<string, { bg: string; fg: string; grad: [string, string] }> = {
+  'Food & Catering':     { bg: '#FEF3E8', fg: '#C2410C', grad: ['#FEF3E8', '#FDE8D3'] },
+  'Beauty & Salon':      { bg: '#FDF4FF', fg: '#9333EA', grad: ['#FDF4FF', '#F3E8FF'] },
+  'Makeup Artist':       { bg: '#FDF4FF', fg: '#9333EA', grad: ['#FDF4FF', '#FAE8FF'] },
+  'Home Services':       { bg: '#F0FDF4', fg: '#16A34A', grad: ['#F0FDF4', '#DCFCE7'] },
+  'Local Services':      { bg: '#F0FDF4', fg: '#16A34A', grad: ['#F0FDF4', '#DCFCE7'] },
+  'Fashion & Clothing':  { bg: '#EFF6FF', fg: '#2563EB', grad: ['#EFF6FF', '#DBEAFE'] },
+  'IT & Technology':     { bg: '#F0FDFA', fg: '#0F766E', grad: ['#F0FDFA', '#CCFBF1'] },
+  'Events & Planning':   { bg: '#FFFBEB', fg: '#D97706', grad: ['#FFFBEB', '#FEF3C7'] },
+  'Health & Wellness':   { bg: '#FFF1F2', fg: '#E11D48', grad: ['#FFF1F2', '#FFE4E6'] },
+  'Education & Tutors':  { bg: '#F5F3FF', fg: '#7C3AED', grad: ['#F5F3FF', '#EDE9FE'] },
+  'Coaching & Consulting': { bg: '#F5F3FF', fg: '#7C3AED', grad: ['#F5F3FF', '#EDE9FE'] },
+  'Photography':         { bg: '#ECFEFF', fg: '#0891B2', grad: ['#ECFEFF', '#CFFAFE'] },
+  'Writers & Content Creators': { bg: '#F0F9FF', fg: '#0369A1', grad: ['#F0F9FF', '#E0F2FE'] },
+  'Marketing & Social Media':   { bg: '#FFF7ED', fg: '#EA580C', grad: ['#FFF7ED', '#FFEDD5'] },
+  'Handmade & Crafts':   { bg: '#FEFCE8', fg: '#CA8A04', grad: ['#FEFCE8', '#FEF9C3'] },
+  'Startups':            { bg: '#EEF2FF', fg: '#4F46E5', grad: ['#EEF2FF', '#E0E7FF'] },
+  'Freelancers':         { bg: '#F8FAFC', fg: '#475569', grad: ['#F8FAFC', '#F1F5F9'] },
+}
+
+export const DEFAULT_CATEGORY_ACCENT = { bg: '#FEF3E8', fg: '#C2410C', grad: ['#FEF3E8', '#FDE8D3'] as [string, string] }

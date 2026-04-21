@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Redirect all 404s to the SPA index with the original path preserved
+      var path = window.location.pathname + window.location.search + window.location.hash;
+      window.location.replace('/' + '?redirect=' + encodeURIComponent(path));
+    </script>
+  </head>
+  <body></body>
+</html>

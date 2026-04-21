@@ -1,0 +1,127 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export interface OpeningHoursDay {
+  open: boolean
+  start: string
+  end: string
+}
+
+export type OpeningHours = Record<string, OpeningHoursDay>
+
+export interface Database {
+  public: {
+    Tables: {
+      businesses: {
+        Relationships: []
+        Row: {
+          id: string
+          name: string
+          owner_name: string | null
+          owner_id: string | null
+          pending_email: string | null
+          categories: string[]
+          description: string
+          tagline: string | null
+          founding_year: number | null
+          location: string
+          postcode: string
+          phone: string | null
+          email: string | null
+          website: string | null
+          social_facebook: string | null
+          social_twitter: string | null
+          social_instagram: string | null
+          social_linkedin: string | null
+          image_url: string | null
+          logo_url: string | null
+          photos: string[]
+          opening_hours: OpeningHours | null
+          is_women_owned: boolean
+          is_home_based: boolean
+          is_startup: boolean
+          is_featured: boolean
+          status: 'live' | 'paused' | 'draft'
+          view_count: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          owner_name?: string | null
+          owner_id?: string | null
+          pending_email?: string | null
+          categories?: string[]
+          description: string
+          tagline?: string | null
+          founding_year?: number | null
+          location: string
+          postcode: string
+          phone?: string | null
+          email?: string | null
+          website?: string | null
+          social_facebook?: string | null
+          social_twitter?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          image_url?: string | null
+          logo_url?: string | null
+          photos?: string[]
+          opening_hours?: OpeningHours | null
+          is_women_owned?: boolean
+          is_home_based?: boolean
+          is_startup?: boolean
+          is_featured?: boolean
+          status?: 'live' | 'paused' | 'draft'
+          view_count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          owner_name?: string | null
+          owner_id?: string | null
+          pending_email?: string | null
+          categories?: string[]
+          description?: string
+          tagline?: string | null
+          founding_year?: number | null
+          location?: string
+          postcode?: string
+          phone?: string | null
+          email?: string | null
+          website?: string | null
+          social_facebook?: string | null
+          social_twitter?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          image_url?: string | null
+          logo_url?: string | null
+          photos?: string[]
+          opening_hours?: OpeningHours | null
+          is_women_owned?: boolean
+          is_home_based?: boolean
+          is_startup?: boolean
+          is_featured?: boolean
+          status?: 'live' | 'paused' | 'draft'
+          view_count?: number
+          created_at?: string
+          updated_at?: string
+        }
+      }
+    }
+    Views: Record<string, never>
+    Functions: Record<string, never>
+  }
+}
+
+export type Business = Database['public']['Tables']['businesses']['Row']
+export type BusinessInsert = Database['public']['Tables']['businesses']['Insert']
+export type BusinessUpdate = Database['public']['Tables']['businesses']['Update']
