@@ -11,6 +11,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/lib/auth-context'
 import { CATEGORIES, CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import type { OpeningHours, OpeningHoursDay } from '@/lib/database.types'
 import {
@@ -18,6 +19,7 @@ import {
   Sparkles, Clock, Camera, MapPin, RefreshCw, Hop as Home, ImagePlus,
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 const TOP_CATEGORIES = CATEGORIES.slice(0, 6)
 
@@ -59,6 +61,8 @@ const STEPS = [
 ]
 
 export function ListPage() {
+  const { user } = useAuth()
+  const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [confirmationState, setConfirmationState] = useState<{
@@ -224,7 +228,7 @@ export function ListPage() {
         uploadLogoToStorage(),
       ])
 
-      const insertPayload = {
+      const basePayload = {
         name: data.name,
         categories: data.categories,
         tagline: data.tagline || null,
@@ -240,9 +244,13 @@ export function ListPage() {
         opening_hours: openingHours as any,
         image_url: photoUrls[0] || null,
         logo_url: logoUrl,
-        status: 'draft' as const,
-        pending_email: data.email,
       }
+
+      // Signed-in: publish straight to live, owned by current user.
+      // Anonymous: save as draft + send magic link to claim.
+      const insertPayload = user
+        ? { ...basePayload, owner_id: user.id, status: 'live' as const }
+        : { ...basePayload, status: 'draft' as const, pending_email: data.email }
 
       const { data: business, error } = await supabase
         .from('businesses')
@@ -251,6 +259,12 @@ export function ListPage() {
         .single()
 
       if (error) throw error
+
+      if (user) {
+        toast.success('Your business has been published!')
+        setTimeout(() => navigate(`/business/${business.id}`), 600)
+        return
+      }
 
       const { error: otpError } = await supabase.auth.signInWithOtp({
         email: data.email,
