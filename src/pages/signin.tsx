@@ -93,6 +93,23 @@ export function SignInPage() {
     }
   }
 
+  async function handleGoogleSignIn() {
+    setSubmitting(true)
+    setError(null)
+    try {
+      const { error: authError } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+      if (authError) throw authError
+    } catch (err: any) {
+      setError(err?.message || 'Could not start Google sign-in. Please try again.')
+      setSubmitting(false)
+    }
+  }
+
   function switchMode() {
     setMode(mode === 'signin' ? 'signup' : 'signin')
     setError(null)
@@ -121,7 +138,29 @@ export function SignInPage() {
         </div>
 
         <Card>
-          <CardContent className="pt-6">
+          <CardContent className="pt-6 space-y-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleGoogleSignIn}
+              disabled={submitting}
+              className="w-full h-11 gap-2"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.66 4.1-5.5 4.1-3.3 0-6-2.7-6-6.2S8.7 5.8 12 5.8c1.9 0 3.2.8 3.9 1.5l2.7-2.6C16.9 3 14.7 2 12 2 6.9 2 2.8 6.1 2.8 12S6.9 22 12 22c6.9 0 9.5-4.8 9.5-8.7 0-.6-.1-1.1-.2-1.6H12z"/>
+              </svg>
+              Continue with Google
+            </Button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">or</span>
+              </div>
+            </div>
+
             {mode === 'signin' ? (
               <form onSubmit={signInForm.handleSubmit(handleSignIn)} className="space-y-4">
                 <div className="space-y-1.5">
