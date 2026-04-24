@@ -15,11 +15,11 @@ import { useAuth } from '@/lib/auth-context'
 import { CATEGORIES, CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import type { OpeningHours, OpeningHoursDay } from '@/lib/database.types'
 import {
-  ArrowLeft, ArrowRight, Check, Upload, X, Mail,
-  Sparkles, Clock, Camera, MapPin, RefreshCw, Hop as Home, ImagePlus,
+  ArrowLeft, ArrowRight, Check, Upload, X,
+  Sparkles, Clock, Camera, MapPin, Hop as Home, ImagePlus,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 const TOP_CATEGORIES = CATEGORIES.slice(0, 6)
 
@@ -61,15 +61,10 @@ const STEPS = [
 ]
 
 export function ListPage() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
-  const [confirmationState, setConfirmationState] = useState<{
-    email: string
-    businessId: string
-  } | null>(null)
-  const [resendCooldown, setResendCooldown] = useState(0)
   const [openingHours, setOpeningHours] = useState<OpeningHours>(getDefaultOpeningHours)
   const [photos, setPhotos] = useState<{ file: File; preview: string }[]>([])
   const [logo, setLogo] = useState<{ file: File; preview: string } | null>(null)
@@ -221,6 +216,7 @@ export function ListPage() {
   }
 
   async function handleSubmit(data: ListingFormData) {
+    if (!user) return
     setSubmitting(true)
     try {
       const [photoUrls, logoUrl] = await Promise.all([
@@ -228,7 +224,7 @@ export function ListPage() {
         uploadLogoToStorage(),
       ])
 
-      const basePayload = {
+      const insertPayload = {
         name: data.name,
         categories: data.categories,
         tagline: data.tagline || null,
@@ -244,13 +240,9 @@ export function ListPage() {
         opening_hours: openingHours as any,
         image_url: photoUrls[0] || null,
         logo_url: logoUrl,
+        owner_id: user.id,
+        status: 'live' as const,
       }
-
-      // Signed-in: publish straight to live, owned by current user.
-      // Anonymous: save as draft + send magic link to claim.
-      const insertPayload = user
-        ? { ...basePayload, owner_id: user.id, status: 'live' as const }
-        : { ...basePayload, status: 'draft' as const, pending_email: data.email }
 
       const { data: business, error } = await supabase
         .from('businesses')
@@ -260,29 +252,8 @@ export function ListPage() {
 
       if (error) throw error
 
-      if (user) {
-        toast.success('Your business has been published!')
-        setTimeout(() => navigate(`/business/${business.id}`), 600)
-        return
-      }
-
-      const { error: otpError } = await supabase.auth.signInWithOtp({
-        email: data.email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      })
-
-      if (otpError) {
-        console.error('OTP send failed:', otpError)
-        toast.error(
-          otpError.message
-            ? `Draft saved, but we couldn't send the confirmation email: ${otpError.message}`
-            : "Draft saved, but we couldn't send the confirmation email. Try resending from the next screen."
-        )
-      }
-
-      setConfirmationState({ email: data.email, businessId: business.id })
+      toast.success('Your business has been published!')
+      setTimeout(() => navigate(`/business/${business.id}`), 600)
     } catch (err: any) {
       console.error('Error creating listing:', err)
       toast.error(err?.message || 'Something went wrong. Please try again.')
@@ -291,87 +262,16 @@ export function ListPage() {
     }
   }
 
-  async function handleResendLink() {
-    if (!confirmationState || resendCooldown > 0) return
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email: confirmationState.email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      })
-      if (error) throw error
-      toast.success('Link resent. Check your inbox.')
-      setResendCooldown(60)
-      const interval = setInterval(() => {
-        setResendCooldown((c) => {
-          if (c <= 1) {
-            clearInterval(interval)
-            return 0
-          }
-          return c - 1
-        })
-      }, 1000)
-    } catch {
-      toast.error('Failed to resend. Please try again.')
-    }
-  }
-
-  function handleUseDifferentEmail() {
-    setConfirmationState(null)
-    setStep(1)
-  }
-
-  if (confirmationState) {
+  if (authLoading) {
     return (
-      <div className="min-h-screen py-10 px-4">
-        <div className="mx-auto max-w-[640px]">
-          <Card className="rounded-2xl shadow-sm">
-            <CardContent className="p-6 sm:p-12 text-center">
-              <div className="mx-auto mb-8 flex size-20 items-center justify-center rounded-full bg-primary/10">
-                <Mail className="size-10 text-primary" />
-              </div>
-              <h2
-                className="text-2xl sm:text-3xl font-medium mb-3"
-                style={{ fontFamily: 'Fraunces, serif' }}
-              >
-                Check your email
-              </h2>
-              <p className="text-muted-foreground mb-2 max-w-sm mx-auto">
-                We sent a confirmation link to
-              </p>
-              <p className="font-medium text-foreground mb-8">
-                {confirmationState.email}
-              </p>
-              <p className="text-sm text-muted-foreground mb-8 max-w-sm mx-auto">
-                Click the link in the email to publish your listing. The link
-                expires in 1 hour.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <Button
-                  variant="outline"
-                  onClick={handleResendLink}
-                  disabled={resendCooldown > 0}
-                  className="rounded-full h-11 px-6"
-                >
-                  <RefreshCw className="size-4" />
-                  {resendCooldown > 0
-                    ? `Resend in ${resendCooldown}s`
-                    : 'Resend link'}
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={handleUseDifferentEmail}
-                  className="rounded-full h-11 px-6"
-                >
-                  Use a different email
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner className="size-8" />
       </div>
     )
+  }
+
+  if (!user) {
+    return <Navigate to={`/signin?returnTo=${encodeURIComponent('/list')}`} replace />
   }
 
   const visibleCategories = showAllCategories ? CATEGORIES : TOP_CATEGORIES
@@ -396,7 +296,17 @@ export function ListPage() {
 
         <Card className="rounded-2xl shadow-sm mt-6">
           <CardContent className="p-6 sm:p-12">
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <form
+              onSubmit={(e) => {
+                // Hard guard: the form only ever submits from the final step.
+                // Stops Enter-key submissions from earlier steps.
+                if (step !== 2) {
+                  e.preventDefault()
+                  return
+                }
+                return form.handleSubmit(handleSubmit)(e)
+              }}
+            >
               <div
                 className="transition-all duration-200 ease-in-out"
                 key={step}
