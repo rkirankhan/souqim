@@ -14,6 +14,7 @@ import { AuthCallbackPage } from '@/pages/auth-callback'
 import { DashboardPage } from '@/pages/dashboard'
 import { EditBusinessPage } from '@/pages/edit-business'
 import { AccountPage } from '@/pages/account'
+import { AdminPage } from '@/pages/admin'
 
 export function App() {
   return (
@@ -33,6 +34,7 @@ export function App() {
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/dashboard/edit/:id" element={<ProtectedRoute><EditBusinessPage /></ProtectedRoute>} />
           <Route path="/dashboard/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
         </Routes>
       </Layout>
       <Toaster />

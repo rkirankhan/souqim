@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, Info, LayoutGrid, Circle as HelpCircle, LogOut, User, LayoutDashboard } from 'lucide-react'
+import { Menu, X, Info, LayoutGrid, Circle as HelpCircle, LogOut, User, LayoutDashboard, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
@@ -28,7 +28,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation()
   const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { user, displayName, signOut, loading } = useAuth()
+  const { user, displayName, signOut, loading, isAdmin } = useAuth()
 
   async function handleSignOut() {
     await signOut()
@@ -104,6 +104,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       <User className="size-4" />
                       Account
                     </DropdownMenuItem>
+                    {isAdmin && (
+                      <DropdownMenuItem onSelect={() => navigate('/admin')}>
+                        <ShieldCheck className="size-4" />
+                        Admin
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={handleSignOut}>
                       <LogOut className="size-4" />
@@ -158,6 +164,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       >
                         Account
                       </Link>
+                      {isAdmin && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5"
+                        >
+                          <ShieldCheck className="size-4" /> Admin
+                        </Link>
+                      )}
                       <button
                         onClick={handleSignOut}
                         className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors text-left"

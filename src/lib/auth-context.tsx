@@ -7,6 +7,7 @@ interface AuthContextValue {
   session: Session | null
   loading: boolean
   displayName: string
+  isAdmin: boolean
   signOut: () => Promise<void>
 }
 
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextValue>({
   session: null,
   loading: true,
   displayName: '',
+  isAdmin: false,
   signOut: async () => {},
 })
 
@@ -22,6 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     if (!supabaseConfigured) {
@@ -32,17 +35,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s)
       setUser(s?.user ?? null)
+      checkAdmin(s?.user?.id)
       setLoading(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s)
       setUser(s?.user ?? null)
+      checkAdmin(s?.user?.id)
       setLoading(false)
     })
 
     return () => subscription.unsubscribe()
   }, [])
+
+  async function checkAdmin(userId: string | undefined) {
+    if (!userId) {
+      setIsAdmin(false)
+      return
+    }
+    try {
+      const { data } = await supabase
+        .from('admins')
+        .select('user_id')
+        .eq('user_id', userId)
+        .maybeSingle()
+      setIsAdmin(!!data)
+    } catch {
+      setIsAdmin(false)
+    }
+  }
 
   const displayName = user?.user_metadata?.full_name
     || user?.user_metadata?.first_name
@@ -54,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, displayName, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, displayName, isAdmin, signOut }}>
       {children}
     </AuthContext.Provider>
   )
