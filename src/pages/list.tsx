@@ -15,7 +15,7 @@ import { useAuth } from '@/lib/auth-context'
 import { CATEGORIES, CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import {
   ArrowLeft, ArrowRight, Check, Upload, X,
-  Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Settings, Rocket,
+  Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Rocket,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Navigate, useNavigate } from 'react-router-dom'
