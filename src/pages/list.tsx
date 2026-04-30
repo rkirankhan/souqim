@@ -278,13 +278,7 @@ export function ListPage() {
         <Card className="rounded-2xl shadow-sm mt-6">
           <CardContent className="p-6 sm:p-12">
             <form
-              onSubmit={(e) => {
-                if (step !== 2) {
-                  e.preventDefault()
-                  return
-                }
-                return form.handleSubmit(handleSubmit)(e)
-              }}
+              onSubmit={(e) => e.preventDefault()}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && (e.target as HTMLElement).tagName !== 'TEXTAREA') {
                   e.preventDefault()
@@ -348,7 +342,8 @@ export function ListPage() {
                   </Button>
                 ) : (
                   <Button
-                    type="submit"
+                    type="button"
+                    onClick={form.handleSubmit(handleSubmit)}
                     disabled={submitting || uploadingPhotos}
                     className="rounded-full h-11 min-w-[160px]"
                   >
