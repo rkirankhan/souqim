@@ -16,6 +16,7 @@ const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   live: { label: 'Live', className: 'bg-secondary text-secondary-foreground hover:bg-secondary' },
   paused: { label: 'Paused', className: 'bg-muted text-muted-foreground hover:bg-muted' },
   draft: { label: 'Draft', className: 'bg-amber text-amber-foreground hover:bg-amber' },
+  pending: { label: 'Pending review', className: 'bg-amber text-amber-foreground hover:bg-amber' },
 }
 
 export function DashboardPage() {

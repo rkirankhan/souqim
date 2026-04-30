@@ -46,7 +46,7 @@ export interface Database {
           is_home_based: boolean
           is_startup: boolean
           is_featured: boolean
-          status: 'live' | 'paused' | 'draft'
+          status: 'live' | 'paused' | 'draft' | 'pending'
           view_count: number
           created_at: string
           updated_at: string
@@ -78,7 +78,7 @@ export interface Database {
           is_home_based?: boolean
           is_startup?: boolean
           is_featured?: boolean
-          status?: 'live' | 'paused' | 'draft'
+          status?: 'live' | 'paused' | 'draft' | 'pending'
           view_count?: number
           created_at?: string
           updated_at?: string
@@ -110,7 +110,7 @@ export interface Database {
           is_home_based?: boolean
           is_startup?: boolean
           is_featured?: boolean
-          status?: 'live' | 'paused' | 'draft'
+          status?: 'live' | 'paused' | 'draft' | 'pending'
           view_count?: number
           created_at?: string
           updated_at?: string

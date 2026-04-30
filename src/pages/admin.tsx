@@ -9,13 +9,14 @@ import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
 import { toast } from 'sonner'
 import {
-  Search, Eye, Pencil, ExternalLink, Pause, Play, Star, Trash2, Sparkles, ShieldCheck,
+  Search, Eye, Pencil, ExternalLink, Pause, Play, Star, Trash2, Sparkles, ShieldCheck, Check, X,
 } from 'lucide-react'
 
 const STATUS_COLOR: Record<string, string> = {
   live: 'bg-secondary text-secondary-foreground hover:bg-secondary',
   paused: 'bg-muted text-muted-foreground hover:bg-muted',
   draft: 'bg-amber text-amber-foreground hover:bg-amber',
+  pending: 'bg-primary text-primary-foreground hover:bg-primary',
 }
 
 export function AdminPage() {
@@ -24,7 +25,7 @@ export function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [busyId, setBusyId] = useState<string | null>(null)
   const [filter, setFilter] = useState('')
-  const [statusFilter, setStatusFilter] = useState<'all' | 'live' | 'paused' | 'draft'>('all')
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'live' | 'paused' | 'draft'>('pending')
 
   useEffect(() => {
     if (isAdmin) loadAll()
@@ -98,6 +99,7 @@ export function AdminPage() {
 
   const counts = useMemo(() => ({
     all: businesses.length,
+    pending: businesses.filter((b) => b.status === 'pending').length,
     live: businesses.filter((b) => b.status === 'live').length,
     paused: businesses.filter((b) => b.status === 'paused').length,
     draft: businesses.filter((b) => b.status === 'draft').length,
@@ -129,7 +131,10 @@ export function AdminPage() {
               Manage listings
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              {counts.all} total · {counts.live} live · {counts.paused} paused · {counts.draft} draft · {counts.featured} featured
+              {counts.pending > 0 && (
+                <span className="text-primary font-medium">{counts.pending} pending review · </span>
+              )}
+              {counts.all} total · {counts.live} live · {counts.paused} paused · {counts.featured} featured
             </p>
           </div>
         </div>
@@ -145,7 +150,7 @@ export function AdminPage() {
             />
           </div>
           <div className="flex gap-1 bg-muted rounded-full p-1">
-            {(['all', 'live', 'paused', 'draft'] as const).map((s) => (
+            {(['pending', 'live', 'paused', 'draft', 'all'] as const).map((s) => (
               <button
                 key={s}
                 onClick={() => setStatusFilter(s)}
@@ -219,6 +224,28 @@ export function AdminPage() {
                           <Spinner className="size-4 mr-2" />
                         ) : (
                           <>
+                            {b.status === 'pending' && (
+                              <>
+                                <Button
+                                  size="sm"
+                                  className="h-8 bg-primary text-primary-foreground"
+                                  onClick={() => patchBusiness(b.id, { status: 'live' })}
+                                  title="Approve — publish to live"
+                                >
+                                  <Check className="size-3.5" />
+                                  <span className="hidden md:inline">Approve</span>
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-8 text-destructive hover:text-destructive"
+                                  onClick={() => patchBusiness(b.id, { status: 'paused' })}
+                                  title="Reject — set to paused"
+                                >
+                                  <X className="size-3.5" />
+                                </Button>
+                              </>
+                            )}
                             <Button
                               size="sm"
                               variant="ghost"
@@ -228,17 +255,19 @@ export function AdminPage() {
                             >
                               <Star className={`size-3.5 ${b.is_featured ? 'fill-current text-primary' : ''}`} />
                             </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-8"
-                              onClick={() =>
-                                patchBusiness(b.id, { status: b.status === 'live' ? 'paused' : 'live' })
-                              }
-                              title={b.status === 'live' ? 'Pause' : 'Make live'}
-                            >
-                              {b.status === 'live' ? <Pause className="size-3.5" /> : <Play className="size-3.5" />}
-                            </Button>
+                            {b.status !== 'pending' && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-8"
+                                onClick={() =>
+                                  patchBusiness(b.id, { status: b.status === 'live' ? 'paused' : 'live' })
+                                }
+                                title={b.status === 'live' ? 'Pause' : 'Make live'}
+                              >
+                                {b.status === 'live' ? <Pause className="size-3.5" /> : <Play className="size-3.5" />}
+                              </Button>
+                            )}
                             <Button asChild size="sm" variant="ghost" className="h-8" title="View public page">
                               <a href={`/business/${b.id}`} target="_blank" rel="noopener noreferrer">
                                 <ExternalLink className="size-3.5" />

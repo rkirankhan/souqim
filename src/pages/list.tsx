@@ -61,7 +61,7 @@ const STEPS = [
 ]
 
 export function ListPage() {
-  const { user, loading: authLoading } = useAuth()
+  const { user, isAdmin, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
@@ -241,7 +241,8 @@ export function ListPage() {
         image_url: photoUrls[0] || null,
         logo_url: logoUrl,
         owner_id: user.id,
-        status: 'live' as const,
+        // Admins publish straight to live; everyone else goes through review.
+        status: (isAdmin ? 'live' : 'pending') as 'live' | 'pending',
       }
 
       const { data: business, error } = await supabase
@@ -252,8 +253,13 @@ export function ListPage() {
 
       if (error) throw error
 
-      toast.success('Your business has been published!')
-      setTimeout(() => navigate(`/business/${business.id}`), 600)
+      if (isAdmin) {
+        toast.success('Your business has been published!')
+        setTimeout(() => navigate(`/business/${business.id}`), 600)
+      } else {
+        toast.success("Submitted! We'll review it shortly and let you know.")
+        setTimeout(() => navigate('/dashboard'), 600)
+      }
     } catch (err: any) {
       console.error('Error creating listing:', err)
       toast.error(err?.message || 'Something went wrong. Please try again.')
