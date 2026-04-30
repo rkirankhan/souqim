@@ -131,7 +131,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[280px]">
+              <SheetContent side="right" className="w-[280px] p-6">
                 <nav className="flex flex-col gap-4 mt-8">
                   {navItems.map((item) => (
                     <Link
