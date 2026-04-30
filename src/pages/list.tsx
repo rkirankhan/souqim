@@ -279,13 +279,16 @@ export function ListPage() {
           <CardContent className="p-6 sm:p-12">
             <form
               onSubmit={(e) => {
-                // Hard guard: the form only ever submits from the final step.
-                // Stops Enter-key submissions from earlier steps.
                 if (step !== 2) {
                   e.preventDefault()
                   return
                 }
                 return form.handleSubmit(handleSubmit)(e)
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && (e.target as HTMLElement).tagName !== 'TEXTAREA') {
+                  e.preventDefault()
+                }
               }}
             >
               <div
