@@ -11,7 +11,7 @@ import { ArrowLeft } from 'lucide-react'
 
 export function EditBusinessPage() {
   const { id } = useParams<{ id: string }>()
-  const { user } = useAuth()
+  const { user, isAdmin } = useAuth()
   const navigate = useNavigate()
   const [business, setBusiness] = useState<Business | null>(null)
   const [loading, setLoading] = useState(true)
@@ -20,17 +20,17 @@ export function EditBusinessPage() {
 
   useEffect(() => {
     if (id && user) loadBusiness(id)
-  }, [id, user])
+  }, [id, user, isAdmin])
 
   async function loadBusiness(businessId: string) {
     setLoading(true)
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('businesses')
         .select('*')
         .eq('id', businessId)
-        .eq('owner_id', user!.id)
-        .maybeSingle()
+      if (!isAdmin) query = query.eq('owner_id', user!.id)
+      const { data, error } = await query.maybeSingle()
 
       if (error) throw error
       if (!data) {
