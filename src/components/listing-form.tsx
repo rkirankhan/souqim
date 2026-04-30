@@ -163,7 +163,14 @@ export function ListingForm({ mode, defaultValues, updatedAt, submitting, onSubm
 
       <Card>
         <CardContent className="pt-6">
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && (e.target as HTMLElement).tagName !== 'TEXTAREA') {
+                e.preventDefault()
+              }
+            }}
+          >
             {step === 0 && <StepBusinessDetails form={form} />}
             {step === 1 && <StepLocationContact form={form} />}
             {step === 2 && <StepSocialType form={form} />}
