@@ -11,7 +11,8 @@ import {
 import { useAuth } from '@/lib/auth-context'
 
 const navItems = [
-  { label: 'Browse', path: '/browse' },
+  { label: 'Home', path: '/' },
+  { label: 'Explore', path: '/browse' },
   { label: 'Categories', path: '/categories' },
 ]
 
