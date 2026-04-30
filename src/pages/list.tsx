@@ -41,14 +41,12 @@ type ListingFormData = z.infer<typeof listingSchema>
 
 const STEP_FIELDS: (keyof ListingFormData)[][] = [
   ['name', 'categories', 'tagline', 'description'],
-  ['location', 'city', 'postcode', 'phone', 'email', 'website'],
-  ['is_women_owned', 'is_home_based'],
+  ['location', 'city', 'postcode', 'phone', 'email', 'website', 'is_women_owned', 'is_home_based'],
 ]
 
 const STEPS = [
   { label: 'Basics', icon: Sparkles },
-  { label: 'Contact', icon: MapPin },
-  { label: 'Details', icon: Settings },
+  { label: 'Contact & details', icon: MapPin },
 ]
 
 export function ListPage() {
@@ -87,7 +85,7 @@ export function ListPage() {
   async function goNext() {
     const fields = STEP_FIELDS[step]
     const valid = await form.trigger(fields)
-    if (valid) setStep((s) => Math.min(s + 1, 2))
+    if (valid) setStep((s) => Math.min(s + 1, 1))
   }
 
   function goBack() {
@@ -303,16 +301,18 @@ export function ListPage() {
                     logoInputRef={logoInputRef}
                   />
                 )}
-                {step === 1 && <StepContact form={form} />}
-                {step === 2 && (
-                  <StepDetails
-                    form={form}
-                    photos={photos}
-                    onPhotoSelect={handlePhotoSelect}
-                    onPhotoDrop={handleDrop}
-                    onPhotoRemove={removePhoto}
-                    fileInputRef={fileInputRef}
-                  />
+                {step === 1 && (
+                  <div className="space-y-8">
+                    <StepContact form={form} />
+                    <StepDetails
+                      form={form}
+                      photos={photos}
+                      onPhotoSelect={handlePhotoSelect}
+                      onPhotoDrop={handleDrop}
+                      onPhotoRemove={removePhoto}
+                      fileInputRef={fileInputRef}
+                    />
+                  </div>
                 )}
               </div>
 
@@ -331,7 +331,7 @@ export function ListPage() {
                   <div />
                 )}
                 <div className="flex-1" />
-                {step < 2 ? (
+                {step < 1 ? (
                   <Button
                     type="button"
                     onClick={goNext}
