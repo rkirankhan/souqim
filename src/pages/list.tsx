@@ -15,7 +15,7 @@ import { useAuth } from '@/lib/auth-context'
 import { CATEGORIES, CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import {
   ArrowLeft, ArrowRight, Check, Upload, X,
-  Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Settings,
+  Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Settings, Rocket,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Navigate, useNavigate } from 'react-router-dom'
@@ -35,13 +35,14 @@ const listingSchema = z.object({
   website: z.string().url('Invalid URL').optional().or(z.literal('')),
   is_women_owned: z.boolean(),
   is_home_based: z.boolean(),
+  is_startup: z.boolean(),
 })
 
 type ListingFormData = z.infer<typeof listingSchema>
 
 const STEP_FIELDS: (keyof ListingFormData)[][] = [
   ['name', 'categories', 'tagline', 'description'],
-  ['location', 'city', 'postcode', 'phone', 'email', 'website', 'is_women_owned', 'is_home_based'],
+  ['location', 'city', 'postcode', 'phone', 'email', 'website', 'is_women_owned', 'is_home_based', 'is_startup'],
 ]
 
 const STEPS = [
@@ -77,6 +78,7 @@ export function ListPage() {
       website: '',
       is_women_owned: false,
       is_home_based: false,
+      is_startup: false,
     },
   })
 
@@ -210,6 +212,7 @@ export function ListPage() {
         website: data.website || null,
         is_women_owned: data.is_women_owned,
         is_home_based: data.is_home_based,
+        is_startup: data.is_startup,
         photos: photoUrls,
         image_url: photoUrls[0] || null,
         logo_url: logoUrl,
@@ -771,6 +774,7 @@ function StepDetails({
 }) {
   const isWomenOwned = form.watch('is_women_owned')
   const isHomeBased = form.watch('is_home_based')
+  const isStartup = form.watch('is_startup')
 
   return (
     <div className="space-y-8">
@@ -896,6 +900,35 @@ function StepDetails({
             checked={isHomeBased}
             onCheckedChange={(checked) =>
               form.setValue('is_home_based', checked)
+            }
+          />
+        </div>
+      </div>
+
+      {/* Startup Toggle */}
+      <div
+        className={`rounded-xl border p-4 transition-colors duration-200 ${
+          isStartup ? 'bg-muted border-primary/30' : 'bg-card border-border'
+        }`}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Rocket
+              className={`size-5 ${
+                isStartup ? 'text-primary' : 'text-muted-foreground'
+              }`}
+            />
+            <div>
+              <p className="text-sm font-medium">Is this a startup?</p>
+              <p className="text-xs text-muted-foreground">
+                Show that you're an emerging business
+              </p>
+            </div>
+          </div>
+          <Switch
+            checked={isStartup}
+            onCheckedChange={(checked) =>
+              form.setValue('is_startup', checked)
             }
           />
         </div>
