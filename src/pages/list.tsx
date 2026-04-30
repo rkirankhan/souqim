@@ -13,23 +13,14 @@ import { Spinner } from '@/components/ui/spinner'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth-context'
 import { CATEGORIES, CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
-import type { OpeningHours, OpeningHoursDay } from '@/lib/database.types'
 import {
   ArrowLeft, ArrowRight, Check, Upload, X,
-  Sparkles, Clock, Camera, MapPin, Hop as Home, ImagePlus,
+  Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Settings,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 const TOP_CATEGORIES = CATEGORIES.slice(0, 6)
-
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const
-
-const DEFAULT_HOURS: OpeningHoursDay = { open: false, start: '09:00', end: '17:00' }
-
-function getDefaultOpeningHours(): OpeningHours {
-  return Object.fromEntries(DAYS.map((day) => [day, { ...DEFAULT_HOURS }]))
-}
 
 const listingSchema = z.object({
   name: z.string().min(2, 'Business name must be at least 2 characters'),
@@ -57,7 +48,7 @@ const STEP_FIELDS: (keyof ListingFormData)[][] = [
 const STEPS = [
   { label: 'Basics', icon: Sparkles },
   { label: 'Contact', icon: MapPin },
-  { label: 'Details', icon: Clock },
+  { label: 'Details', icon: Settings },
 ]
 
 export function ListPage() {
@@ -65,7 +56,6 @@ export function ListPage() {
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
-  const [openingHours, setOpeningHours] = useState<OpeningHours>(getDefaultOpeningHours)
   const [photos, setPhotos] = useState<{ file: File; preview: string }[]>([])
   const [logo, setLogo] = useState<{ file: File; preview: string } | null>(null)
   const [uploadingPhotos, setUploadingPhotos] = useState(false)
@@ -102,20 +92,6 @@ export function ListPage() {
 
   function goBack() {
     setStep((s) => Math.max(s - 1, 0))
-  }
-
-  function handleDayToggle(day: string, open: boolean) {
-    setOpeningHours((prev) => ({
-      ...prev,
-      [day]: { ...prev[day], open },
-    }))
-  }
-
-  function handleTimeChange(day: string, field: 'start' | 'end', value: string) {
-    setOpeningHours((prev) => ({
-      ...prev,
-      [day]: { ...prev[day], [field]: value },
-    }))
   }
 
   function handleLogoSelect(e: React.ChangeEvent<HTMLInputElement>) {
@@ -237,7 +213,6 @@ export function ListPage() {
         is_women_owned: data.is_women_owned,
         is_home_based: data.is_home_based,
         photos: photoUrls,
-        opening_hours: openingHours as any,
         image_url: photoUrls[0] || null,
         logo_url: logoUrl,
         owner_id: user.id,
@@ -335,9 +310,6 @@ export function ListPage() {
                 {step === 2 && (
                   <StepDetails
                     form={form}
-                    openingHours={openingHours}
-                    onDayToggle={handleDayToggle}
-                    onTimeChange={handleTimeChange}
                     photos={photos}
                     onPhotoSelect={handlePhotoSelect}
                     onPhotoDrop={handleDrop}
@@ -786,9 +758,6 @@ function StepContact({
 
 function StepDetails({
   form,
-  openingHours,
-  onDayToggle,
-  onTimeChange,
   photos,
   onPhotoSelect,
   onPhotoDrop,
@@ -796,9 +765,6 @@ function StepDetails({
   fileInputRef,
 }: {
   form: ReturnType<typeof useForm<ListingFormData>>
-  openingHours: OpeningHours
-  onDayToggle: (day: string, open: boolean) => void
-  onTimeChange: (day: string, field: 'start' | 'end', value: string) => void
   photos: { file: File; preview: string }[]
   onPhotoSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
   onPhotoDrop: (e: React.DragEvent) => void
@@ -810,53 +776,6 @@ function StepDetails({
 
   return (
     <div className="space-y-8">
-      {/* Opening Hours */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Clock className="size-4 text-primary" />
-          <Label className="text-sm font-medium text-foreground">Opening hours</Label>
-        </div>
-        <div className="space-y-2">
-          {DAYS.map((day) => {
-            const dayHours = openingHours[day]
-            return (
-              <div
-                key={day}
-                className="flex items-center gap-3 py-2 px-3 rounded-lg bg-muted/50"
-              >
-                <span className="w-20 text-sm font-medium shrink-0">
-                  {day.slice(0, 3)}
-                </span>
-                <Switch
-                  checked={dayHours.open}
-                  onCheckedChange={(checked) => onDayToggle(day, checked)}
-                  size="sm"
-                />
-                {dayHours.open ? (
-                  <div className="flex items-center gap-2 text-sm">
-                    <input
-                      type="time"
-                      value={dayHours.start}
-                      onChange={(e) => onTimeChange(day, 'start', e.target.value)}
-                      className="bg-card border border-input rounded-md px-2 py-1 text-sm h-8 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                    />
-                    <span className="text-muted-foreground">to</span>
-                    <input
-                      type="time"
-                      value={dayHours.end}
-                      onChange={(e) => onTimeChange(day, 'end', e.target.value)}
-                      className="bg-card border border-input rounded-md px-2 py-1 text-sm h-8 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                    />
-                  </div>
-                ) : (
-                  <span className="text-sm text-muted-foreground">Closed</span>
-                )}
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
       {/* Photo Upload */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
