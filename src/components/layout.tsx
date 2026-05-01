@@ -221,7 +221,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><Link to="/about" className="hover:text-foreground transition-colors">About Listmio</Link></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">How it works</a></li>
+                <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link></li>
+                <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link></li>
               </ul>
             </div>
             <div>
@@ -250,8 +251,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="pt-6 border-t border-border/50 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>© 2026 ListMio. All Rights Reserved - List your business. Be found by your community.</p>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-secondary transition-colors">Privacy</a>
-              <a href="#" className="hover:text-secondary transition-colors">Terms</a>
+              <Link to="/privacy" className="hover:text-secondary transition-colors">Privacy</Link>
+              <Link to="/terms" className="hover:text-secondary transition-colors">Terms</Link>
             </div>
           </div>
         </div>
