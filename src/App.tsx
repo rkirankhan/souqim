@@ -12,7 +12,6 @@ import { ContactPage } from '@/pages/contact'
 import { SignInPage } from '@/pages/signin'
 import { AuthCallbackPage } from '@/pages/auth-callback'
 import { DashboardPage } from '@/pages/dashboard'
-import { EditBusinessPage } from '@/pages/edit-business'
 import { AccountPage } from '@/pages/account'
 import { AdminPage } from '@/pages/admin'
 
@@ -32,7 +31,7 @@ export function App() {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-          <Route path="/dashboard/edit/:id" element={<ProtectedRoute><EditBusinessPage /></ProtectedRoute>} />
+          <Route path="/dashboard/edit/:id" element={<ProtectedRoute><ListPage /></ProtectedRoute>} />
           <Route path="/dashboard/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
         </Routes>

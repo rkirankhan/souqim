@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -18,7 +18,8 @@ import {
   Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Rocket,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import type { Business } from '@/lib/database.types'
 
 const TOP_CATEGORIES = CATEGORIES.slice(0, 6)
 
@@ -28,7 +29,7 @@ const listingSchema = z.object({
   tagline: z.string().optional(),
   description: z.string().min(20, 'Description must be at least 20 characters'),
   location: z.string().min(2, 'Address is required'),
-  city: z.string().min(2, 'City is required'),
+  city: z.string().optional().or(z.literal('')),
   postcode: z.string().min(2, 'Postcode is required'),
   phone: z.string().optional(),
   email: z.string().email('Please enter a valid email'),
@@ -53,11 +54,17 @@ const STEPS = [
 export function ListPage() {
   const { user, isAdmin, loading: authLoading } = useAuth()
   const navigate = useNavigate()
+  const { id: editId } = useParams<{ id?: string }>()
+  const isEditMode = Boolean(editId)
   const [step, setStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [photos, setPhotos] = useState<{ file: File; preview: string }[]>([])
+  const [existingPhotoUrls, setExistingPhotoUrls] = useState<string[]>([])
   const [logo, setLogo] = useState<{ file: File; preview: string } | null>(null)
+  const [existingLogoUrl, setExistingLogoUrl] = useState<string | null>(null)
   const [uploadingPhotos, setUploadingPhotos] = useState(false)
+  const [editLoading, setEditLoading] = useState(isEditMode)
+  const [editNotFound, setEditNotFound] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const logoInputRef = useRef<HTMLInputElement>(null)
   const [showAllCategories, setShowAllCategories] = useState(false)
@@ -84,6 +91,45 @@ export function ListPage() {
 
   const selectedCategories = form.watch('categories')
 
+  useEffect(() => {
+    if (!isEditMode || !editId || !user) return
+    let cancelled = false
+    ;(async () => {
+      let query = supabase.from('businesses').select('*').eq('id', editId)
+      if (!isAdmin) query = query.eq('owner_id', user.id)
+      const { data, error } = await query.maybeSingle<Business>()
+      if (cancelled) return
+      if (error || !data) {
+        setEditNotFound(true)
+        setEditLoading(false)
+        return
+      }
+      // Saved location is "<address>, <city>"; pre-fill best-effort.
+      const lastComma = data.location.lastIndexOf(',')
+      const addressPart = lastComma > -1 ? data.location.slice(0, lastComma).trim() : data.location
+      const cityPart = lastComma > -1 ? data.location.slice(lastComma + 1).trim() : ''
+      form.reset({
+        name: data.name,
+        categories: data.categories ?? [],
+        tagline: data.tagline ?? '',
+        description: data.description,
+        location: addressPart,
+        city: cityPart,
+        postcode: data.postcode,
+        phone: data.phone ?? '',
+        email: data.email ?? '',
+        website: data.website ?? '',
+        is_women_owned: data.is_women_owned,
+        is_home_based: data.is_home_based,
+        is_startup: data.is_startup,
+      })
+      setExistingPhotoUrls(data.photos ?? [])
+      setExistingLogoUrl(data.logo_url ?? null)
+      setEditLoading(false)
+    })()
+    return () => { cancelled = true }
+  }, [isEditMode, editId, user, isAdmin, form])
+
   async function goNext() {
     const fields = STEP_FIELDS[step]
     const valid = await form.trigger(fields)
@@ -107,11 +153,16 @@ export function ListPage() {
       URL.revokeObjectURL(logo.preview)
       setLogo(null)
     }
+    setExistingLogoUrl(null)
+  }
+
+  function removeExistingPhoto(url: string) {
+    setExistingPhotoUrls((prev) => prev.filter((u) => u !== url))
   }
 
   function handlePhotoSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files || [])
-    const remaining = 5 - photos.length
+    const remaining = 5 - photos.length - existingPhotoUrls.length
     const toAdd = files.slice(0, remaining)
 
     const newPhotos = toAdd.map((file) => ({
@@ -134,14 +185,14 @@ export function ListPage() {
     const files = Array.from(e.dataTransfer.files).filter((f) =>
       f.type.startsWith('image/')
     )
-    const remaining = 5 - photos.length
+    const remaining = 5 - photos.length - existingPhotoUrls.length
     const toAdd = files.slice(0, remaining)
     const newPhotos = toAdd.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }))
     setPhotos((prev) => [...prev, ...newPhotos])
-  }, [photos.length])
+  }, [photos.length, existingPhotoUrls.length])
 
   async function uploadLogoToStorage(): Promise<string | null> {
     if (!logo) return null
@@ -195,17 +246,21 @@ export function ListPage() {
     if (!user) return
     setSubmitting(true)
     try {
-      const [photoUrls, logoUrl] = await Promise.all([
+      const [newPhotoUrls, newLogoUrl] = await Promise.all([
         uploadPhotosToStorage(),
         uploadLogoToStorage(),
       ])
 
-      const insertPayload = {
+      const finalPhotoUrls = [...existingPhotoUrls, ...newPhotoUrls]
+      const finalLogoUrl = newLogoUrl ?? existingLogoUrl
+      const combinedLocation = data.city ? `${data.location}, ${data.city}` : data.location
+
+      const basePayload = {
         name: data.name,
         categories: data.categories,
         tagline: data.tagline || null,
         description: data.description,
-        location: `${data.location}, ${data.city}`,
+        location: combinedLocation,
         postcode: data.postcode,
         phone: data.phone || null,
         email: data.email,
@@ -213,38 +268,49 @@ export function ListPage() {
         is_women_owned: data.is_women_owned,
         is_home_based: data.is_home_based,
         is_startup: data.is_startup,
-        photos: photoUrls,
-        image_url: photoUrls[0] || null,
-        logo_url: logoUrl,
-        owner_id: user.id,
-        // Admins publish straight to live; everyone else goes through review.
-        status: (isAdmin ? 'live' : 'pending') as 'live' | 'pending',
+        photos: finalPhotoUrls,
+        image_url: finalPhotoUrls[0] || null,
+        logo_url: finalLogoUrl,
       }
 
-      const { data: business, error } = await supabase
-        .from('businesses')
-        .insert(insertPayload as any)
-        .select('id')
-        .single()
-
-      if (error) throw error
-
-      if (isAdmin) {
-        toast.success('Your business has been published!')
-        setTimeout(() => navigate(`/business/${business.id}`), 600)
-      } else {
-        toast.success("Submitted! We'll review it shortly and let you know.")
+      if (isEditMode && editId) {
+        const { error } = await supabase
+          .from('businesses')
+          .update({ ...basePayload, updated_at: new Date().toISOString() } as any)
+          .eq('id', editId)
+        if (error) throw error
+        toast.success('Listing updated.')
         setTimeout(() => navigate('/dashboard'), 600)
+      } else {
+        const insertPayload = {
+          ...basePayload,
+          owner_id: user.id,
+          // Admins publish straight to live; everyone else goes through review.
+          status: (isAdmin ? 'live' : 'pending') as 'live' | 'pending',
+        }
+        const { data: business, error } = await supabase
+          .from('businesses')
+          .insert(insertPayload as any)
+          .select('id')
+          .single()
+        if (error) throw error
+        if (isAdmin) {
+          toast.success('Your business has been published!')
+          setTimeout(() => navigate(`/business/${business.id}`), 600)
+        } else {
+          toast.success("Submitted! We'll review it shortly and let you know.")
+          setTimeout(() => navigate('/dashboard'), 600)
+        }
       }
     } catch (err: any) {
-      console.error('Error creating listing:', err)
+      console.error(isEditMode ? 'Error updating listing:' : 'Error creating listing:', err)
       toast.error(err?.message || 'Something went wrong. Please try again.')
     } finally {
       setSubmitting(false)
     }
   }
 
-  if (authLoading) {
+  if (authLoading || editLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Spinner className="size-8" />
@@ -253,7 +319,21 @@ export function ListPage() {
   }
 
   if (!user) {
-    return <Navigate to={`/signin?returnTo=${encodeURIComponent('/list')}`} replace />
+    return <Navigate to={`/signin?returnTo=${encodeURIComponent(isEditMode ? `/dashboard/edit/${editId}` : '/list')}`} replace />
+  }
+
+  if (editNotFound) {
+    return (
+      <div className="min-h-screen py-16 px-4 text-center">
+        <h1 className="text-2xl font-medium mb-3">Listing not found</h1>
+        <p className="text-muted-foreground mb-6">
+          This listing doesn't exist or you don't have permission to edit it.
+        </p>
+        <Button onClick={() => navigate('/dashboard')} className="rounded-full">
+          Back to Dashboard
+        </Button>
+      </div>
+    )
   }
 
   const visibleCategories = showAllCategories ? CATEGORIES : TOP_CATEGORIES
@@ -266,11 +346,12 @@ export function ListPage() {
             className="text-3xl sm:text-4xl font-medium tracking-tight mb-2"
             style={{ fontFamily: 'Fraunces, serif' }}
           >
-            List Your Business
+            {isEditMode ? 'Edit your listing' : 'List Your Business'}
           </h1>
           <p className="text-muted-foreground">
-            No account needed to get started. Fill in your details and go live
-            in minutes.
+            {isEditMode
+              ? 'Update your details below and save your changes.'
+              : 'No account needed to get started. Fill in your details and go live in minutes.'}
           </p>
         </div>
 
@@ -299,6 +380,7 @@ export function ListPage() {
                     showAllCategories={showAllCategories}
                     onToggleAllCategories={() => setShowAllCategories((v) => !v)}
                     logo={logo}
+                    existingLogoUrl={existingLogoUrl}
                     onLogoSelect={handleLogoSelect}
                     onLogoRemove={removeLogo}
                     logoInputRef={logoInputRef}
@@ -310,9 +392,11 @@ export function ListPage() {
                     <StepDetails
                       form={form}
                       photos={photos}
+                      existingPhotoUrls={existingPhotoUrls}
                       onPhotoSelect={handlePhotoSelect}
                       onPhotoDrop={handleDrop}
                       onPhotoRemove={removePhoto}
+                      onExistingPhotoRemove={removeExistingPhoto}
                       fileInputRef={fileInputRef}
                     />
                   </div>
@@ -353,7 +437,7 @@ export function ListPage() {
                     {submitting || uploadingPhotos ? (
                       <Spinner className="size-4" />
                     ) : (
-                      'Publish my listing'
+                      isEditMode ? 'Save changes' : 'Publish my listing'
                     )}
                   </Button>
                 )}
@@ -443,6 +527,7 @@ function StepBasics({
   showAllCategories,
   onToggleAllCategories,
   logo,
+  existingLogoUrl,
   onLogoSelect,
   onLogoRemove,
   logoInputRef,
@@ -453,10 +538,13 @@ function StepBasics({
   showAllCategories: boolean
   onToggleAllCategories: () => void
   logo: { file: File; preview: string } | null
+  existingLogoUrl: string | null
   onLogoSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
   onLogoRemove: () => void
   logoInputRef: React.RefObject<HTMLInputElement | null>
 }) {
+  const logoPreviewSrc = logo?.preview ?? existingLogoUrl
+  const logoLabel = logo?.file.name ?? (existingLogoUrl ? 'Current logo' : null)
   return (
     <div className="space-y-6">
       <div className="space-y-1.5">
@@ -483,10 +571,10 @@ function StepBasics({
           <span className="text-muted-foreground font-normal ml-1">(optional)</span>
         </Label>
         <div className="flex items-center gap-4">
-          {logo ? (
+          {logoPreviewSrc ? (
             <div className="relative group">
               <img
-                src={logo.preview}
+                src={logoPreviewSrc}
                 alt="Business logo"
                 className="size-20 rounded-full object-cover border-2 border-border shadow-sm"
               />
@@ -509,9 +597,9 @@ function StepBasics({
           )}
           <div className="text-sm">
             <p className="text-muted-foreground">
-              {logo ? logo.file.name : 'Upload your business logo'}
+              {logoLabel ?? 'Upload your business logo'}
             </p>
-            {logo ? (
+            {logoPreviewSrc ? (
               <button
                 type="button"
                 onClick={() => logoInputRef.current?.click()}
@@ -760,21 +848,26 @@ function StepContact({
 function StepDetails({
   form,
   photos,
+  existingPhotoUrls,
   onPhotoSelect,
   onPhotoDrop,
   onPhotoRemove,
+  onExistingPhotoRemove,
   fileInputRef,
 }: {
   form: ReturnType<typeof useForm<ListingFormData>>
   photos: { file: File; preview: string }[]
+  existingPhotoUrls: string[]
   onPhotoSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
   onPhotoDrop: (e: React.DragEvent) => void
   onPhotoRemove: (index: number) => void
+  onExistingPhotoRemove: (url: string) => void
   fileInputRef: React.RefObject<HTMLInputElement | null>
 }) {
   const isWomenOwned = form.watch('is_women_owned')
   const isHomeBased = form.watch('is_home_based')
   const isStartup = form.watch('is_startup')
+  const totalPhotos = existingPhotoUrls.length + photos.length
 
   return (
     <div className="space-y-8">
@@ -790,8 +883,24 @@ function StepDetails({
           </Label>
         </div>
 
-        {photos.length > 0 && (
+        {totalPhotos > 0 && (
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+            {existingPhotoUrls.map((url) => (
+              <div key={url} className="relative aspect-square rounded-lg overflow-hidden group">
+                <img
+                  src={url}
+                  alt="Existing photo"
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => onExistingPhotoRemove(url)}
+                  className="absolute top-1 right-1 size-6 rounded-full bg-foreground/70 text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </div>
+            ))}
             {photos.map((photo, i) => (
               <div key={i} className="relative aspect-square rounded-lg overflow-hidden group">
                 <img
@@ -811,7 +920,7 @@ function StepDetails({
           </div>
         )}
 
-        {photos.length < 5 && (
+        {totalPhotos < 5 && (
           <div
             onDrop={onPhotoDrop}
             onDragOver={(e) => e.preventDefault()}
