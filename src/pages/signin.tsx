@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSearchParams, Navigate } from 'react-router-dom'
+import { useSearchParams, Navigate, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { supabase } from '@/lib/supabase'
@@ -86,7 +86,15 @@ export function SignInPage() {
         </Card>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          By continuing, you agree to our Terms and Privacy Policy.
+          By continuing, you agree to our{' '}
+          <Link to="/terms" className="underline hover:text-foreground transition-colors">
+            Terms
+          </Link>{' '}
+          and{' '}
+          <Link to="/privacy" className="underline hover:text-foreground transition-colors">
+            Privacy Policy
+          </Link>
+          .
         </p>
       </div>
     </div>

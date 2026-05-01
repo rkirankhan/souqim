@@ -221,7 +221,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><Link to="/about" className="hover:text-foreground transition-colors">About Listmio</Link></li>
-                <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link></li>
+                <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
                 <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link></li>
               </ul>
             </div>
