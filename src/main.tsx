@@ -8,7 +8,7 @@ import { AuthProvider } from "@/lib/auth-context.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="listmio-theme-v2">
       <AuthProvider>
         <App />
       </AuthProvider>

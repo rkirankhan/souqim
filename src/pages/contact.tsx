@@ -25,10 +25,10 @@ export function ContactPage() {
             </CardHeader>
             <CardContent>
               <a
-                href="mailto:contact@localbusinessdirectory.com"
+                href="mailto:info@listmio.com"
                 className="text-primary hover:underline"
               >
-                contact@localbusinessdirectory.com
+                info@listmio.com
               </a>
             </CardContent>
           </Card>
