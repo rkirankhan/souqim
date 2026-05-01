@@ -28,7 +28,7 @@ const listingSchema = z.object({
   categories: z.array(z.string()).min(1, 'Please select at least one category').max(3, 'You can select up to 3 categories'),
   tagline: z.string().optional(),
   description: z.string().min(20, 'Description must be at least 20 characters'),
-  location: z.string().min(2, 'Address is required'),
+  location: z.string().optional().or(z.literal('')),
   city: z.string().optional().or(z.literal('')),
   postcode: z.string().min(2, 'Postcode is required'),
   phone: z.string().optional(),
@@ -48,7 +48,7 @@ const STEP_FIELDS: (keyof ListingFormData)[][] = [
 
 const STEPS = [
   { label: 'Basics', icon: Sparkles },
-  { label: 'Contact & details', icon: MapPin },
+  { label: 'Business Details & Publish', icon: MapPin },
 ]
 
 export function ListPage() {
@@ -297,7 +297,10 @@ export function ListPage() {
         return
       }
 
-      const combinedLocation = data.city ? `${data.location}, ${data.city}` : data.location
+      const addr = (data.location || '').trim()
+      const cty = (data.city || '').trim()
+      const combinedLocation =
+        addr && cty ? `${addr}, ${cty}` : addr || cty || data.postcode
 
       const basePayload = {
         name: data.name,
@@ -776,27 +779,10 @@ function StepContact({
 }) {
   return (
     <div className="space-y-6">
-      <div className="space-y-1.5">
-        <Label htmlFor="location" className="text-sm font-medium text-foreground">
-          Address *
-        </Label>
-        <Input
-          id="location"
-          placeholder="Street address"
-          className="h-12"
-          {...form.register('location')}
-        />
-        {form.formState.errors.location && (
-          <p className="text-sm text-destructive">
-            {form.formState.errors.location.message}
-          </p>
-        )}
-      </div>
-
       <div className="grid sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <Label htmlFor="city" className="text-sm font-medium text-foreground">
-            City *
+            City <span className="text-muted-foreground font-normal">(optional)</span>
           </Label>
           <Input
             id="city"
@@ -826,6 +812,23 @@ function StepContact({
             </p>
           )}
         </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="location" className="text-sm font-medium text-foreground">
+          Address <span className="text-muted-foreground font-normal">(optional)</span>
+        </Label>
+        <Input
+          id="location"
+          placeholder="Street address"
+          className="h-12"
+          {...form.register('location')}
+        />
+        {form.formState.errors.location && (
+          <p className="text-sm text-destructive">
+            {form.formState.errors.location.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-1.5">
