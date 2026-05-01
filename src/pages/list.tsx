@@ -158,30 +158,72 @@ export function ListPage() {
 
   const selectedCategories = form.watch('categories')
 
-  // Restore + auto-publish a pending listing after the user signs in.
+  // After sign-in, publish the pending listing inline and go to the dashboard.
   useEffect(() => {
     if (isEditMode || !user) return
     const raw = localStorage.getItem('listmio_pending_listing')
     if (!raw) return
-    try {
-      const { data, photoUrls, logoUrl } = JSON.parse(raw) as {
-        data: ListingFormData
-        photoUrls: string[]
-        logoUrl: string | null
+    let cancelled = false
+    ;(async () => {
+      let parsed: { data: ListingFormData; photoUrls: string[]; logoUrl: string | null }
+      try {
+        parsed = JSON.parse(raw)
+      } catch {
+        localStorage.removeItem('listmio_pending_listing')
+        return
       }
       localStorage.removeItem('listmio_pending_listing')
-      form.reset(data)
-      setExistingPhotoUrls(photoUrls || [])
-      setExistingLogoUrl(logoUrl ?? null)
-      toast.info('Welcome back — publishing your listing now.')
-      // Defer to the next tick so state updates are flushed before submit.
-      setTimeout(() => {
-        form.handleSubmit(handleSubmit)()
-      }, 0)
-    } catch {
-      localStorage.removeItem('listmio_pending_listing')
-    }
-    // We intentionally only run this once per user-id transition.
+      const { data, photoUrls, logoUrl } = parsed
+      const addr = (data.location || '').trim()
+      const cty = (data.city || '').trim()
+      const combinedLocation =
+        addr && cty ? `${addr}, ${cty}` : addr || cty || data.postcode
+      const insertPayload = {
+        name: data.name,
+        categories: data.categories,
+        tagline: data.tagline || null,
+        description: data.description,
+        location: combinedLocation,
+        postcode: data.postcode,
+        phone: data.phone || null,
+        email: data.email,
+        website: data.website || null,
+        is_women_owned: data.is_women_owned,
+        is_home_based: data.is_home_based,
+        is_startup: data.is_startup,
+        social_instagram: data.social_instagram || null,
+        social_tiktok: data.social_tiktok || null,
+        social_linkedin: data.social_linkedin || null,
+        social_facebook: data.social_facebook || null,
+        photos: photoUrls || [],
+        image_url: photoUrls?.[0] || null,
+        logo_url: logoUrl ?? null,
+        owner_id: user.id,
+        status: (isAdmin ? 'live' : 'pending') as 'live' | 'pending',
+      }
+      try {
+        toast.info('Welcome back — publishing your listing now.')
+        const { error } = await supabase
+          .from('businesses')
+          .insert(insertPayload as any)
+        if (cancelled) return
+        if (error) throw error
+        if (isAdmin) {
+          toast.success('Your business has been published!')
+        } else {
+          toast.success("Submitted! We'll review it shortly and let you know.")
+        }
+        navigate('/dashboard')
+      } catch (err: any) {
+        console.error('Error auto-publishing pending listing:', err)
+        toast.error(err?.message || 'Failed to publish. Please try again.')
+        // Fall back: restore the form so the user can retry manually.
+        form.reset(data)
+        setExistingPhotoUrls(photoUrls || [])
+        setExistingLogoUrl(logoUrl ?? null)
+      }
+    })()
+    return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id])
 
