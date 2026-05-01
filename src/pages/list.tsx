@@ -91,6 +91,33 @@ export function ListPage() {
 
   const selectedCategories = form.watch('categories')
 
+  // Restore + auto-publish a pending listing after the user signs in.
+  useEffect(() => {
+    if (isEditMode || !user) return
+    const raw = localStorage.getItem('listmio_pending_listing')
+    if (!raw) return
+    try {
+      const { data, photoUrls, logoUrl } = JSON.parse(raw) as {
+        data: ListingFormData
+        photoUrls: string[]
+        logoUrl: string | null
+      }
+      localStorage.removeItem('listmio_pending_listing')
+      form.reset(data)
+      setExistingPhotoUrls(photoUrls || [])
+      setExistingLogoUrl(logoUrl ?? null)
+      toast.info('Welcome back — publishing your listing now.')
+      // Defer to the next tick so state updates are flushed before submit.
+      setTimeout(() => {
+        form.handleSubmit(handleSubmit)()
+      }, 0)
+    } catch {
+      localStorage.removeItem('listmio_pending_listing')
+    }
+    // We intentionally only run this once per user-id transition.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id])
+
   useEffect(() => {
     if (!isEditMode || !editId || !user) return
     let cancelled = false
@@ -243,7 +270,6 @@ export function ListPage() {
   }
 
   async function handleSubmit(data: ListingFormData) {
-    if (!user) return
     setSubmitting(true)
     try {
       const [newPhotoUrls, newLogoUrl] = await Promise.all([
@@ -253,6 +279,24 @@ export function ListPage() {
 
       const finalPhotoUrls = [...existingPhotoUrls, ...newPhotoUrls]
       const finalLogoUrl = newLogoUrl ?? existingLogoUrl
+
+      // Anonymous users: save state and redirect to sign in.
+      // The listing isn't persisted yet — sign-in unlocks publishing
+      // and lets them manage the listing afterwards.
+      if (!user && !isEditMode) {
+        localStorage.setItem(
+          'listmio_pending_listing',
+          JSON.stringify({ data, photoUrls: finalPhotoUrls, logoUrl: finalLogoUrl }),
+        )
+        toast.info('Sign in to publish — your details are saved.', {
+          description: 'Signing in lets you manage and update your listing later.',
+          duration: 5000,
+        })
+        setSubmitting(false)
+        navigate('/signin?returnTo=/list')
+        return
+      }
+
       const combinedLocation = data.city ? `${data.location}, ${data.city}` : data.location
 
       const basePayload = {
@@ -284,7 +328,7 @@ export function ListPage() {
       } else {
         const insertPayload = {
           ...basePayload,
-          owner_id: user.id,
+          owner_id: user!.id,
           // Admins publish straight to live; everyone else goes through review.
           status: (isAdmin ? 'live' : 'pending') as 'live' | 'pending',
         }
@@ -318,8 +362,9 @@ export function ListPage() {
     )
   }
 
-  if (!user) {
-    return <Navigate to={`/signin?returnTo=${encodeURIComponent(isEditMode ? `/dashboard/edit/${editId}` : '/list')}`} replace />
+  // Edit mode requires auth; create mode is open until publish.
+  if (!user && isEditMode) {
+    return <Navigate to={`/signin?returnTo=${encodeURIComponent(`/dashboard/edit/${editId}`)}`} replace />
   }
 
   if (editNotFound) {
