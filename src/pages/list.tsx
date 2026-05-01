@@ -393,11 +393,11 @@ export function ListPage() {
           >
             {isEditMode ? 'Edit your listing' : 'List Your Business'}
           </h1>
-          <p className="text-muted-foreground">
-            {isEditMode
-              ? 'Update your details below and save your changes.'
-              : 'No account needed to get started. Fill in your details and go live in minutes.'}
-          </p>
+          {isEditMode && (
+            <p className="text-muted-foreground">
+              Update your details below and save your changes.
+            </p>
+          )}
         </div>
 
         <Stepper step={step} onStepClick={(i) => { if (i < step) setStep(i) }} />
@@ -502,65 +502,60 @@ function Stepper({
   step: number
   onStepClick: (i: number) => void
 }) {
+  const progressPct = STEPS.length > 1 ? (step / (STEPS.length - 1)) * 100 : 0
+
   return (
-    <div className="flex items-start justify-between gap-0">
-      {STEPS.map((s, i) => {
-        const isActive = i === step
-        const isCompleted = i < step
-        return (
-          <div key={i} className="flex-1 flex flex-col items-center gap-2">
-            <div className="flex items-center w-full">
-              {i > 0 && (
-                <div className="flex-1 h-0.5 transition-colors duration-200">
-                  <div
-                    className={`h-full transition-all duration-200 ${
-                      isCompleted || isActive ? 'bg-primary' : 'bg-border'
-                    }`}
-                  />
-                </div>
-              )}
+    <div className="relative px-5">
+      {/* Continuous track behind the steps */}
+      <div className="absolute left-5 right-5 top-5 h-1 rounded-full bg-border/70 overflow-hidden" aria-hidden="true">
+        <div
+          className="h-full bg-primary rounded-full transition-[width] duration-500 ease-out"
+          style={{ width: `${progressPct}%` }}
+        />
+      </div>
+
+      <div className="relative flex items-start justify-between">
+        {STEPS.map((s, i) => {
+          const Icon = s.icon
+          const isActive = i === step
+          const isCompleted = i < step
+          const isClickable = i <= step
+          return (
+            <div key={i} className="flex flex-col items-center gap-2.5">
               <button
                 type="button"
-                onClick={() => onStepClick(i)}
-                disabled={i > step}
-                className={`shrink-0 size-8 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-200 ${
+                onClick={() => isClickable && onStepClick(i)}
+                disabled={!isClickable}
+                className={`relative z-10 size-10 rounded-full flex items-center justify-center transition-all duration-300 ease-out ${
                   isCompleted
-                    ? 'bg-primary text-primary-foreground cursor-pointer'
+                    ? 'bg-primary text-primary-foreground shadow-sm hover:scale-105 cursor-pointer'
                     : isActive
-                      ? 'ring-2 ring-primary ring-offset-2 ring-offset-background bg-background text-primary'
-                      : 'bg-muted text-muted-foreground cursor-default'
+                      ? 'bg-primary text-primary-foreground shadow-md ring-4 ring-primary/15 scale-105'
+                      : 'bg-card border-2 border-border text-muted-foreground'
                 }`}
+                aria-current={isActive ? 'step' : undefined}
               >
                 {isCompleted ? (
-                  <Check className="size-4" />
+                  <Check className="size-4" strokeWidth={2.5} />
                 ) : (
-                  <span>{i + 1}</span>
+                  <Icon className="size-4" />
                 )}
               </button>
-              {i < STEPS.length - 1 && (
-                <div className="flex-1 h-0.5 transition-colors duration-200">
-                  <div
-                    className={`h-full transition-all duration-200 ${
-                      isCompleted ? 'bg-primary' : 'bg-border'
-                    }`}
-                  />
-                </div>
-              )}
+              <span
+                className={`text-xs tracking-wide whitespace-nowrap transition-colors ${
+                  isActive
+                    ? 'text-foreground font-semibold'
+                    : isCompleted
+                      ? 'text-foreground font-medium'
+                      : 'text-muted-foreground'
+                }`}
+              >
+                {s.label}
+              </span>
             </div>
-            <span
-              className={`text-xs text-center ${
-                isActive
-                  ? 'text-foreground font-medium'
-                  : isCompleted
-                    ? 'text-primary font-medium'
-                    : 'text-muted-foreground'
-              }`}
-            >
-              {s.label}
-            </span>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }
