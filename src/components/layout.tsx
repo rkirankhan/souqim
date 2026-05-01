@@ -243,8 +243,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><Link to="/contact" className="hover:text-foreground transition-colors">Contact us</Link></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Help center</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Guidelines</a></li>
+                <li><Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link></li>
               </ul>
             </div>
           </div>

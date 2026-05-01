@@ -10,6 +10,7 @@ import { BusinessProfilePage } from '@/pages/business-profile'
 import { ListPage } from '@/pages/list'
 import { AboutPage } from '@/pages/about'
 import { ContactPage } from '@/pages/contact'
+import { FaqPage } from '@/pages/faq'
 import { SignInPage } from '@/pages/signin'
 import { AuthCallbackPage } from '@/pages/auth-callback'
 import { DashboardPage } from '@/pages/dashboard'
@@ -30,6 +31,7 @@ export function App() {
           <Route path="/add-business" element={<Navigate to="/list" replace />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />

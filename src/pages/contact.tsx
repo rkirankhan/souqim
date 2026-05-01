@@ -49,40 +49,6 @@ export function ContactPage() {
           </Card>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Frequently Asked Questions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <h3 className="font-semibold mb-2">How do I list my business?</h3>
-              <p className="text-muted-foreground">
-                Click on "List Your Business" in the navigation menu or on the homepage, fill out the form with your business details, and submit. It's completely free!
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">Is there a cost to list my business?</h3>
-              <p className="text-muted-foreground">
-                No, listing your business is completely free. We believe in supporting local businesses and entrepreneurs.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">Can I update my business information?</h3>
-              <p className="text-muted-foreground">
-                Yes, you can edit yourself anytime. Or you can also contact us with any updates to your business listing and we'll make the changes for you.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">How do I get featured?</h3>
-              <p className="text-muted-foreground">
-                Featured listings are selected based on various factors. Contact us to learn more about featuring your business.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   )
