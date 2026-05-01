@@ -248,12 +248,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </ul>
             </div>
           </div>
-          <div className="pt-6 border-t border-border/50 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+          <div className="pt-6 border-t border-border/50 text-sm text-muted-foreground text-center sm:text-left">
             <p>© 2026 ListMio. All Rights Reserved - List your business. Be found by your community.</p>
-            <div className="flex gap-4">
-              <Link to="/privacy" className="hover:text-secondary transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-secondary transition-colors">Terms</Link>
-            </div>
           </div>
         </div>
       </footer>
