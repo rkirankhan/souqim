@@ -147,6 +147,30 @@ export function BusinessProfilePage() {
           </div>
         </div>
 
+        {business.photos && business.photos.length > 0 && (
+          <div className="bg-card border border-border rounded-xl p-6 mb-8">
+            <h2 className="text-xl font-medium mb-4">Photos</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {business.photos.map((url, i) => (
+                <a
+                  key={url}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-90 transition-opacity"
+                >
+                  <img
+                    src={url}
+                    alt={`${business.name} photo ${i + 1}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <div className="bg-card border border-border rounded-xl p-6">
             <h2 className="text-xl font-medium mb-4">About</h2>
