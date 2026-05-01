@@ -118,25 +118,24 @@ export function AboutPage() {
 
           <div className="space-y-6 text-foreground leading-7">
             <p>
-              ListMio was founded by R. Kir&aacute;n Khan, a lead product
-              designer/engineer with 15+ years&rsquo; experience working for
-              companies including American Express, Mapp Digital, Momentum
-              Worldwide, McCann Worldgroup, Verizon, SAP, McKinsey, and many
-              more &mdash; building and shipping digital platforms and SaaS
-              applications.
+              ListMio was founded by R. Kay, a lead product designer and
+              engineer with over 15 years of experience building and launching
+              digital platforms and SaaS products. Her background includes work
+              with organisations such as American Express, Mapp Digital, McCann
+              Worldgroup, Verizon, SAP, and McKinsey.
             </p>
             <p>
-              She started ListMio after watching too many thoughtful,
-              independently run businesses in her own community struggle to be
-              found &mdash; not because the work wasn&rsquo;t exceptional, but
-              because the platforms meant to surface them weren&rsquo;t built
-              with them in mind. Within that already-crowded space, women-led
-              businesses faced a second layer of invisibility.
+              She created ListMio after noticing how many thoughtful,
+              independently run businesses in her community struggled to be
+              discovered &mdash; not due to a lack of quality, but because
+              existing platforms weren&rsquo;t designed with them in mind.
+              Within this already crowded landscape, women-led businesses often
+              faced an additional layer of invisibility.
             </p>
             <p>
-              ListMio is her attempt to fix that. A directory designed around
-              the people listing on it, with women-led ventures given the
-              visibility they&rsquo;ve always deserved.
+              ListMio is her response to that gap: a directory built around the
+              needs of those listing on it, with a focus on giving women-led
+              ventures the visibility they deserve.
             </p>
           </div>
         </div>
