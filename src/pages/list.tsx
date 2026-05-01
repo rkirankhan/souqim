@@ -37,17 +37,74 @@ const listingSchema = z.object({
   is_women_owned: z.boolean(),
   is_home_based: z.boolean(),
   is_startup: z.boolean(),
-  social_facebook: z.string().url('Invalid URL').optional().or(z.literal('')),
-  social_twitter: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_instagram: z.string().url('Invalid URL').optional().or(z.literal('')),
+  social_tiktok: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_linkedin: z.string().url('Invalid URL').optional().or(z.literal('')),
+  social_facebook: z.string().url('Invalid URL').optional().or(z.literal('')),
 })
 
 type ListingFormData = z.infer<typeof listingSchema>
 
+type IconProps = { className?: string }
+
+function InstagramIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  )
+}
+
+function TikTokIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.16a8.16 8.16 0 0 0 4.77 1.52V6.32a4.85 4.85 0 0 1-1.84-.63z" />
+    </svg>
+  )
+}
+
+function LinkedinIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
+}
+
+function FacebookIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  )
+}
+
+function SocialInput({
+  icon,
+  placeholder,
+  register,
+}: {
+  icon: React.ReactNode
+  placeholder: string
+  register: ReturnType<ReturnType<typeof useForm<ListingFormData>>['register']>
+}) {
+  return (
+    <div className="relative">
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
+        {icon}
+      </span>
+      <Input type="url" placeholder={placeholder} className="h-12 pl-10" {...register} />
+    </div>
+  )
+}
+
 const STEP_FIELDS: (keyof ListingFormData)[][] = [
   ['name', 'categories', 'tagline', 'description'],
-  ['location', 'city', 'postcode', 'phone', 'email', 'website', 'social_facebook', 'social_twitter', 'social_instagram', 'social_linkedin'],
+  ['location', 'city', 'postcode', 'phone', 'email', 'website', 'social_instagram', 'social_tiktok', 'social_linkedin', 'social_facebook'],
   ['is_women_owned', 'is_home_based', 'is_startup'],
 ]
 
@@ -92,10 +149,10 @@ export function ListPage() {
       is_women_owned: false,
       is_home_based: false,
       is_startup: false,
-      social_facebook: '',
-      social_twitter: '',
       social_instagram: '',
+      social_tiktok: '',
       social_linkedin: '',
+      social_facebook: '',
     },
   })
 
@@ -159,10 +216,10 @@ export function ListPage() {
         is_women_owned: data.is_women_owned,
         is_home_based: data.is_home_based,
         is_startup: data.is_startup,
-        social_facebook: data.social_facebook ?? '',
-        social_twitter: data.social_twitter ?? '',
         social_instagram: data.social_instagram ?? '',
+        social_tiktok: data.social_tiktok ?? '',
         social_linkedin: data.social_linkedin ?? '',
+        social_facebook: data.social_facebook ?? '',
       })
       setExistingPhotoUrls(data.photos ?? [])
       setExistingLogoUrl(data.logo_url ?? null)
@@ -329,10 +386,10 @@ export function ListPage() {
         is_women_owned: data.is_women_owned,
         is_home_based: data.is_home_based,
         is_startup: data.is_startup,
-        social_facebook: data.social_facebook || null,
-        social_twitter: data.social_twitter || null,
         social_instagram: data.social_instagram || null,
+        social_tiktok: data.social_tiktok || null,
         social_linkedin: data.social_linkedin || null,
+        social_facebook: data.social_facebook || null,
         photos: finalPhotoUrls,
         image_url: finalPhotoUrls[0] || null,
         logo_url: finalLogoUrl,
@@ -801,35 +858,31 @@ function StepContact({
           Social media <span className="text-muted-foreground font-normal">(optional)</span>
         </Label>
         <div className="grid sm:grid-cols-2 gap-3">
-          <Input
-            type="url"
-            placeholder="https://facebook.com/…"
-            className="h-12"
-            {...form.register('social_facebook')}
-          />
-          <Input
-            type="url"
+          <SocialInput
+            icon={<InstagramIcon className="size-4" />}
             placeholder="https://instagram.com/…"
-            className="h-12"
-            {...form.register('social_instagram')}
+            register={form.register('social_instagram')}
           />
-          <Input
-            type="url"
-            placeholder="https://twitter.com/…"
-            className="h-12"
-            {...form.register('social_twitter')}
+          <SocialInput
+            icon={<TikTokIcon className="size-4" />}
+            placeholder="https://tiktok.com/@…"
+            register={form.register('social_tiktok')}
           />
-          <Input
-            type="url"
-            placeholder="https://linkedin.com/…"
-            className="h-12"
-            {...form.register('social_linkedin')}
+          <SocialInput
+            icon={<LinkedinIcon className="size-4" />}
+            placeholder="https://linkedin.com/in/…"
+            register={form.register('social_linkedin')}
+          />
+          <SocialInput
+            icon={<FacebookIcon className="size-4" />}
+            placeholder="https://facebook.com/…"
+            register={form.register('social_facebook')}
           />
         </div>
-        {(form.formState.errors.social_facebook ||
-          form.formState.errors.social_instagram ||
-          form.formState.errors.social_twitter ||
-          form.formState.errors.social_linkedin) && (
+        {(form.formState.errors.social_instagram ||
+          form.formState.errors.social_tiktok ||
+          form.formState.errors.social_linkedin ||
+          form.formState.errors.social_facebook) && (
           <p className="text-sm text-destructive">
             One of the social links isn’t a valid URL. Include https:// at the start.
           </p>
