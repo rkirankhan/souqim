@@ -95,18 +95,15 @@ export function BusinessProfilePage() {
 
   return (
     <div className="min-h-screen">
-      <div className="relative h-24 md:h-32 bg-gradient-to-br from-primary/20 to-primary/5">
-        <div className="absolute inset-0 flex items-end">
-          <div className="container max-w-4xl mx-auto px-4 pb-3">
-            <Button variant="ghost" size="sm" asChild className="text-foreground/80 hover:text-foreground hover:bg-card">
-              <Link to="/browse">
-                <ArrowLeft className="size-4" data-icon="inline-start" />
-                Back to explore
-              </Link>
-            </Button>
-          </div>
-        </div>
+      <div className="container max-w-4xl mx-auto px-4 pt-2">
+        <Button variant="ghost" size="sm" asChild className="-ml-2 text-muted-foreground hover:bg-transparent hover:text-foreground">
+          <Link to="/browse">
+            <ArrowLeft className="size-4" data-icon="inline-start" />
+            Back to explore
+          </Link>
+        </Button>
       </div>
+      <div className="relative h-20 md:h-24 bg-gradient-to-br from-primary/20 to-primary/5" />
 
       <div className="container max-w-4xl mx-auto px-4 -mt-6 relative z-10">
         <div className="bg-card border border-border rounded-xl p-8 shadow-lg mb-8">
