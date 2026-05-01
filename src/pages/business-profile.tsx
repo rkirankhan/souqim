@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { BusinessCard } from '@/components/business-card'
 import { supabase } from '@/lib/supabase'
 import type { Business } from '@/lib/database.types'
@@ -21,6 +22,7 @@ export function BusinessProfilePage() {
   const [business, setBusiness] = useState<Business | null>(null)
   const [relatedBusinesses, setRelatedBusinesses] = useState<Business[]>([])
   const [loading, setLoading] = useState(true)
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null)
 
   useEffect(() => {
     if (id) {
@@ -93,9 +95,9 @@ export function BusinessProfilePage() {
 
   return (
     <div className="min-h-screen">
-      <div className="relative h-48 md:h-64 bg-gradient-to-br from-primary/20 to-primary/5">
+      <div className="relative h-24 md:h-32 bg-gradient-to-br from-primary/20 to-primary/5">
         <div className="absolute inset-0 flex items-end">
-          <div className="container max-w-4xl mx-auto px-4 pb-6">
+          <div className="container max-w-4xl mx-auto px-4 pb-3">
             <Button variant="ghost" asChild className="mb-4 hover:bg-card/80">
               <Link to="/browse">
                 <ArrowLeft className="size-4" data-icon="inline-start" />
@@ -106,7 +108,7 @@ export function BusinessProfilePage() {
         </div>
       </div>
 
-      <div className="container max-w-4xl mx-auto px-4 -mt-16 relative z-10">
+      <div className="container max-w-4xl mx-auto px-4 -mt-6 relative z-10">
         <div className="bg-card border border-border rounded-xl p-8 shadow-lg mb-8">
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {(business.logo_url || business.image_url) ? (
@@ -146,30 +148,6 @@ export function BusinessProfilePage() {
             </div>
           </div>
         </div>
-
-        {business.photos && business.photos.length > 0 && (
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-medium mb-4">Photos</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {business.photos.map((url, i) => (
-                <a
-                  key={url}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-90 transition-opacity"
-                >
-                  <img
-                    src={url}
-                    alt={`${business.name} photo ${i + 1}`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <div className="bg-card border border-border rounded-xl p-6">
@@ -233,6 +211,41 @@ export function BusinessProfilePage() {
             </div>
           </div>
         </div>
+
+        {business.photos && business.photos.length > 0 && (
+          <div className="bg-card border border-border rounded-xl p-6 mb-12">
+            <h2 className="text-xl font-medium mb-4">Gallery</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {business.photos.map((url, i) => (
+                <button
+                  key={url}
+                  type="button"
+                  onClick={() => setLightboxUrl(url)}
+                  className="block aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-90 transition-opacity cursor-zoom-in"
+                >
+                  <img
+                    src={url}
+                    alt={`${business.name} photo ${i + 1}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <Dialog open={lightboxUrl !== null} onOpenChange={(open) => !open && setLightboxUrl(null)}>
+          <DialogContent className="max-w-4xl p-0 bg-transparent border-0 shadow-none">
+            {lightboxUrl && (
+              <img
+                src={lightboxUrl}
+                alt={business.name}
+                className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
+              />
+            )}
+          </DialogContent>
+        </Dialog>
 
         {(business.social_facebook || business.social_twitter || business.social_instagram || business.social_linkedin) && (
           <div className="bg-muted/30 rounded-xl p-6 mb-12">
