@@ -98,7 +98,7 @@ export function BusinessProfilePage() {
       <div className="relative h-24 md:h-32 bg-gradient-to-br from-primary/20 to-primary/5">
         <div className="absolute inset-0 flex items-end">
           <div className="container max-w-4xl mx-auto px-4 pb-3">
-            <Button variant="ghost" asChild className="mb-4 hover:bg-card/80">
+            <Button variant="ghost" size="sm" asChild className="text-foreground/80 hover:text-foreground hover:bg-card">
               <Link to="/browse">
                 <ArrowLeft className="size-4" data-icon="inline-start" />
                 Back to explore
