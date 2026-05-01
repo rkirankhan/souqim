@@ -14,6 +14,7 @@ const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Explore', path: '/browse' },
   { label: 'Categories', path: '/categories' },
+  { label: 'About', path: '/about' },
 ]
 
 function getInitials(name: string) {
@@ -221,7 +222,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><Link to="/about" className="hover:text-foreground transition-colors">About Listmio</Link></li>
                 <li><a href="#" className="hover:text-foreground transition-colors">How it works</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Success stories</a></li>
               </ul>
             </div>
             <div>
