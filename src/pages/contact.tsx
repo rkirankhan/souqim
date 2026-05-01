@@ -71,7 +71,7 @@ export function ContactPage() {
             <div>
               <h3 className="font-semibold mb-2">Can I update my business information?</h3>
               <p className="text-muted-foreground">
-                Please contact us with any updates to your business listing and we'll make the changes for you.
+                Yes, you can edit yourself anytime. Or you can also contact us with any updates to your business listing and we'll make the changes for you.
               </p>
             </div>
 
