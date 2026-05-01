@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from '@/components/ui/sonner'
 import { Layout } from '@/components/layout'
 import { ProtectedRoute } from '@/components/protected-route'
+import { ScrollToTop } from '@/components/scroll-to-top'
 import { HomePage } from '@/pages/home'
 import { BrowsePage } from '@/pages/browse'
 import { CategoriesPage } from '@/pages/categories'
@@ -18,6 +19,7 @@ import { AdminPage } from '@/pages/admin'
 export function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
