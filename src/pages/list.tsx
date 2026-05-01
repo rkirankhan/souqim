@@ -15,7 +15,7 @@ import { useAuth } from '@/lib/auth-context'
 import { CATEGORIES, CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import {
   ArrowLeft, ArrowRight, Check, Upload, X,
-  Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Rocket,
+  Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Rocket, Share2,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -37,18 +37,24 @@ const listingSchema = z.object({
   is_women_owned: z.boolean(),
   is_home_based: z.boolean(),
   is_startup: z.boolean(),
+  social_facebook: z.string().url('Invalid URL').optional().or(z.literal('')),
+  social_twitter: z.string().url('Invalid URL').optional().or(z.literal('')),
+  social_instagram: z.string().url('Invalid URL').optional().or(z.literal('')),
+  social_linkedin: z.string().url('Invalid URL').optional().or(z.literal('')),
 })
 
 type ListingFormData = z.infer<typeof listingSchema>
 
 const STEP_FIELDS: (keyof ListingFormData)[][] = [
   ['name', 'categories', 'tagline', 'description'],
-  ['location', 'city', 'postcode', 'phone', 'email', 'website', 'is_women_owned', 'is_home_based', 'is_startup'],
+  ['location', 'city', 'postcode', 'phone', 'email', 'website', 'social_facebook', 'social_twitter', 'social_instagram', 'social_linkedin'],
+  ['is_women_owned', 'is_home_based', 'is_startup'],
 ]
 
 const STEPS = [
   { label: 'Basics', icon: Sparkles },
-  { label: 'Business Details & Publish', icon: MapPin },
+  { label: 'Details', icon: MapPin },
+  { label: 'Publish', icon: Camera },
 ]
 
 export function ListPage() {
@@ -86,6 +92,10 @@ export function ListPage() {
       is_women_owned: false,
       is_home_based: false,
       is_startup: false,
+      social_facebook: '',
+      social_twitter: '',
+      social_instagram: '',
+      social_linkedin: '',
     },
   })
 
@@ -149,6 +159,10 @@ export function ListPage() {
         is_women_owned: data.is_women_owned,
         is_home_based: data.is_home_based,
         is_startup: data.is_startup,
+        social_facebook: data.social_facebook ?? '',
+        social_twitter: data.social_twitter ?? '',
+        social_instagram: data.social_instagram ?? '',
+        social_linkedin: data.social_linkedin ?? '',
       })
       setExistingPhotoUrls(data.photos ?? [])
       setExistingLogoUrl(data.logo_url ?? null)
@@ -160,7 +174,7 @@ export function ListPage() {
   async function goNext() {
     const fields = STEP_FIELDS[step]
     const valid = await form.trigger(fields)
-    if (valid) setStep((s) => Math.min(s + 1, 1))
+    if (valid) setStep((s) => Math.min(s + 1, 2))
   }
 
   function goBack() {
@@ -315,6 +329,10 @@ export function ListPage() {
         is_women_owned: data.is_women_owned,
         is_home_based: data.is_home_based,
         is_startup: data.is_startup,
+        social_facebook: data.social_facebook || null,
+        social_twitter: data.social_twitter || null,
+        social_instagram: data.social_instagram || null,
+        social_linkedin: data.social_linkedin || null,
         photos: finalPhotoUrls,
         image_url: finalPhotoUrls[0] || null,
         logo_url: finalLogoUrl,
@@ -434,20 +452,18 @@ export function ListPage() {
                     logoInputRef={logoInputRef}
                   />
                 )}
-                {step === 1 && (
-                  <div className="space-y-8">
-                    <StepContact form={form} />
-                    <StepDetails
-                      form={form}
-                      photos={photos}
-                      existingPhotoUrls={existingPhotoUrls}
-                      onPhotoSelect={handlePhotoSelect}
-                      onPhotoDrop={handleDrop}
-                      onPhotoRemove={removePhoto}
-                      onExistingPhotoRemove={removeExistingPhoto}
-                      fileInputRef={fileInputRef}
-                    />
-                  </div>
+                {step === 1 && <StepContact form={form} />}
+                {step === 2 && (
+                  <StepDetails
+                    form={form}
+                    photos={photos}
+                    existingPhotoUrls={existingPhotoUrls}
+                    onPhotoSelect={handlePhotoSelect}
+                    onPhotoDrop={handleDrop}
+                    onPhotoRemove={removePhoto}
+                    onExistingPhotoRemove={removeExistingPhoto}
+                    fileInputRef={fileInputRef}
+                  />
                 )}
               </div>
 
@@ -466,7 +482,7 @@ export function ListPage() {
                   <div />
                 )}
                 <div className="flex-1" />
-                {step < 1 ? (
+                {step < 2 ? (
                   <Button
                     type="button"
                     onClick={goNext}
@@ -779,6 +795,101 @@ function StepContact({
 }) {
   return (
     <div className="space-y-6">
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-foreground inline-flex items-center gap-2">
+          <Share2 className="size-4 text-primary" />
+          Social media <span className="text-muted-foreground font-normal">(optional)</span>
+        </Label>
+        <div className="grid sm:grid-cols-2 gap-3">
+          <Input
+            type="url"
+            placeholder="https://facebook.com/…"
+            className="h-12"
+            {...form.register('social_facebook')}
+          />
+          <Input
+            type="url"
+            placeholder="https://instagram.com/…"
+            className="h-12"
+            {...form.register('social_instagram')}
+          />
+          <Input
+            type="url"
+            placeholder="https://twitter.com/…"
+            className="h-12"
+            {...form.register('social_twitter')}
+          />
+          <Input
+            type="url"
+            placeholder="https://linkedin.com/…"
+            className="h-12"
+            {...form.register('social_linkedin')}
+          />
+        </div>
+        {(form.formState.errors.social_facebook ||
+          form.formState.errors.social_instagram ||
+          form.formState.errors.social_twitter ||
+          form.formState.errors.social_linkedin) && (
+          <p className="text-sm text-destructive">
+            One of the social links isn’t a valid URL. Include https:// at the start.
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="website" className="text-sm font-medium text-foreground">
+          Website
+          <span className="text-muted-foreground font-normal ml-1">(optional)</span>
+        </Label>
+        <Input
+          id="website"
+          type="url"
+          placeholder="https://yourbusiness.com"
+          className="h-12"
+          {...form.register('website')}
+        />
+        {form.formState.errors.website && (
+          <p className="text-sm text-destructive">
+            {form.formState.errors.website.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="email" className="text-sm font-medium text-foreground">
+          Email *
+        </Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="you@example.com"
+          className="h-12"
+          {...form.register('email')}
+        />
+        <p className="text-xs text-muted-foreground">
+          Used for customer enquiries and managing your listing.
+        </p>
+        {form.formState.errors.email && (
+          <p className="text-sm text-destructive">
+            {form.formState.errors.email.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="phone" className="text-sm font-medium text-foreground">
+          Phone
+          <span className="text-muted-foreground font-normal ml-1">(optional)</span>
+        </Label>
+        <Input
+          id="phone"
+          type="tel"
+          placeholder="Phone number"
+          className="h-12"
+          {...form.register('phone')}
+        />
+      </div>
+
       <div className="grid sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <Label htmlFor="city" className="text-sm font-medium text-foreground">
@@ -790,11 +901,6 @@ function StepContact({
             className="h-12"
             {...form.register('city')}
           />
-          {form.formState.errors.city && (
-            <p className="text-sm text-destructive">
-              {form.formState.errors.city.message}
-            </p>
-          )}
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="postcode" className="text-sm font-medium text-foreground">
@@ -824,65 +930,6 @@ function StepContact({
           className="h-12"
           {...form.register('location')}
         />
-        {form.formState.errors.location && (
-          <p className="text-sm text-destructive">
-            {form.formState.errors.location.message}
-          </p>
-        )}
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="phone" className="text-sm font-medium text-foreground">
-          Phone
-          <span className="text-muted-foreground font-normal ml-1">(optional)</span>
-        </Label>
-        <Input
-          id="phone"
-          type="tel"
-          placeholder="Phone number"
-          className="h-12"
-          {...form.register('phone')}
-        />
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="email" className="text-sm font-medium text-foreground">
-          Email *
-        </Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-          className="h-12"
-          {...form.register('email')}
-        />
-        <p className="text-xs text-muted-foreground">
-          Used for customer enquiries and managing your listing.
-        </p>
-        {form.formState.errors.email && (
-          <p className="text-sm text-destructive">
-            {form.formState.errors.email.message}
-          </p>
-        )}
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="website" className="text-sm font-medium text-foreground">
-          Website
-          <span className="text-muted-foreground font-normal ml-1">(optional)</span>
-        </Label>
-        <Input
-          id="website"
-          type="url"
-          placeholder="https://yourbusiness.com"
-          className="h-12"
-          {...form.register('website')}
-        />
-        {form.formState.errors.website && (
-          <p className="text-sm text-destructive">
-            {form.formState.errors.website.message}
-          </p>
-        )}
       </div>
     </div>
   )
