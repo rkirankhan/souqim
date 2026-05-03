@@ -75,12 +75,12 @@ export function HomePage() {
             className="text-4xl sm:text-5xl md:text-[62px] font-medium text-foreground mb-5"
             style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.06, letterSpacing: '-0.03em' }}
           >
-            List your business.<br />
-            <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>Be found</em> by your community.
+            Find any local business<br />
+            <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>worth knowing</em>.
           </h1>
 
           <p className="text-base md:text-lg text-[color:#5C4E46] max-w-[520px] mx-auto mb-10 leading-[1.65]">
-            Connecting small businesses with customers who value local, authentic services.
+            Discover the small, independent shops, cafés, services and creators in your community.
           </p>
 
           {/* Pill search */}
@@ -148,6 +148,16 @@ export function HomePage() {
               Women-led businesses
             </button>
           </div>
+
+          <p className="text-sm text-[color:#5C4E46] mt-6">
+            Run a local business?{' '}
+            <button
+              onClick={() => navigate('/list')}
+              className="text-primary font-medium hover:underline underline-offset-2"
+            >
+              List yours — it’s free →
+            </button>
+          </p>
         </div>
       </section>
 
