@@ -56,7 +56,7 @@ export function HomePage() {
   return (
     <div className="min-h-screen">
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden py-16 md:py-24 px-4" style={{ backgroundColor: '#FEF3E8' }}>
+      <section className="relative overflow-hidden pt-6 md:pt-10 pb-14 md:pb-20 px-4" style={{ backgroundColor: '#FEF3E8' }}>
         <div aria-hidden className="hero-blob hero-blob-1 z-[1] -top-20 -left-16 w-[300px] h-[340px] md:w-[540px] md:h-[580px]"
           style={{ backgroundColor: '#C2410C', opacity: 0.17, filter: 'blur(130px)' }} />
         <div aria-hidden className="hero-blob hero-blob-2 z-[1] -top-10 -right-20 w-[260px] h-[280px] md:w-[400px] md:h-[440px]"
@@ -79,9 +79,19 @@ export function HomePage() {
             <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>worth knowing</em>.
           </h1>
 
-          <p className="text-base md:text-lg text-[color:#5C4E46] max-w-[520px] mx-auto mb-10 leading-[1.65]">
+          <p className="text-base md:text-lg text-[color:#5C4E46] max-w-[520px] mx-auto mb-6 leading-[1.65]">
             Discover the small, independent shops, cafés, services and creators in your community.
           </p>
+
+          <div className="max-w-[760px] mx-auto -my-2 md:-my-4">
+            <img
+              src="/hero/community.png"
+              alt="Illustration of a diverse community of local business owners — chef, designer, makeup artist, baker, handyman and more"
+              className="w-full h-auto select-none pointer-events-none"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
 
           {/* Pill search */}
           <div
