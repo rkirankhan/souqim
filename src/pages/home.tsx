@@ -83,11 +83,11 @@ export function HomePage() {
             Discover the small, independent shops, cafés, services and creators in your community.
           </p>
 
-          <div className="max-w-[760px] mx-auto -my-2 md:-my-4">
+          <div className="max-w-[820px] mx-auto mt-4 md:mt-6 overflow-hidden aspect-[3/1]">
             <img
               src="/hero/community.png"
               alt="Illustration of a diverse community of local business owners — chef, designer, makeup artist, baker, handyman and more"
-              className="w-full h-auto select-none pointer-events-none"
+              className="w-full h-full object-cover object-top select-none pointer-events-none"
               loading="eager"
               decoding="async"
             />
@@ -95,7 +95,7 @@ export function HomePage() {
 
           {/* Pill search */}
           <div
-            className="flex flex-col sm:flex-row bg-card border rounded-[18px] p-[5px] gap-1 max-w-[620px] mx-auto mb-7 transition-all"
+            className="flex flex-col sm:flex-row bg-card border rounded-[18px] p-[5px] gap-1 max-w-[820px] mx-auto mb-7 transition-all"
             style={{
               borderColor: focusedField ? '#C2410C' : '#E8E2DC',
               boxShadow: focusedField
