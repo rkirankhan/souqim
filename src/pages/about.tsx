@@ -179,7 +179,8 @@ export function AboutPage() {
                 </a>
                 , a lead product design engineer with over 15 years of
                 experience building and launching digital platforms and SaaS
-                products.
+                products for global companies; Scale AI, McKinsey, Momentum,
+                Mapp Digital, American Express and many more.
               </p>
               <p>
                 She created ListMio after noticing how many thoughtful,
