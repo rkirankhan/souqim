@@ -118,35 +118,6 @@ export function BrowsePage() {
       {/* ── HEADER / SEARCH ── */}
       <section className="border-b px-4 py-7 md:py-8" style={{ backgroundColor: '#FAF6F1' }}>
         <div className="container max-w-6xl mx-auto">
-          {selectedCategory && CATEGORY_ILLUSTRATIONS[selectedCategory] ? (
-            <div className="flex items-center gap-4 md:gap-5 mb-5">
-              <img
-                src={CATEGORY_ILLUSTRATIONS[selectedCategory]}
-                alt=""
-                className="size-16 md:size-20 object-contain select-none shrink-0"
-                loading="eager"
-              />
-              <div>
-                <p className="text-xs font-semibold tracking-[0.10em] uppercase text-[#9D8E87] mb-1">
-                  Browsing
-                </p>
-                <h1
-                  className="text-3xl md:text-[34px] font-medium text-foreground"
-                  style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em' }}
-                >
-                  {selectedCategory}
-                </h1>
-              </div>
-            </div>
-          ) : (
-            <h1
-              className="text-3xl md:text-[34px] font-medium text-foreground mb-4"
-              style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em' }}
-            >
-              Browse Businesses
-            </h1>
-          )}
-
           {/* Category quick-jump scroll row */}
           {(() => {
             const cats = CATEGORIES.filter((c) => CATEGORY_ILLUSTRATIONS[c])
@@ -195,7 +166,7 @@ export function BrowsePage() {
           })()}
 
           <div
-            className="flex flex-col sm:flex-row bg-card border rounded-[14px] p-1 max-w-[700px] transition-all"
+            className="flex flex-col sm:flex-row bg-card border rounded-[14px] p-1 max-w-[700px] mx-auto transition-all"
             style={{
               borderColor: focusedField ? '#C2410C' : '#E8E2DC',
               boxShadow: focusedField ? '0 0 0 3px #FEF0E7' : '0 2px 10px rgba(0,0,0,0.05)',
