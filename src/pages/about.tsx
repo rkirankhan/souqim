@@ -118,11 +118,20 @@ export function AboutPage() {
 
           <div className="space-y-6 text-foreground leading-7">
             <p>
-              ListMio was founded by R. Kay, a lead product designer and
-              engineer with over 15 years of experience building and launching
-              digital platforms and SaaS products. Her background includes work
-              with organisations such as American Express, Mapp Digital, McCann
-              Worldgroup, Verizon, SAP, and McKinsey.
+              ListMio is founded by{' '}
+              <a
+                href="https://www.linkedin.com/in/rkirankhan/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary font-medium hover:underline underline-offset-2"
+              >
+                R. Kir&aacute;n Khan
+              </a>
+              , a lead product design engineer with over 15 years of experience
+              building and launching digital platforms and SaaS products. Her
+              background includes work with companies such as American Express,
+              Mapp Digital, McCann Worldgroup, Verizon, SAP, and recently with
+              McKinsey.
             </p>
             <p>
               She created ListMio after noticing how many thoughtful,
