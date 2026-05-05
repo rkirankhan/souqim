@@ -129,9 +129,9 @@ export function AboutPage() {
               </a>
               , a lead product design engineer with over 15 years of experience
               building and launching digital platforms and SaaS products. Her
-              background includes work with companies such as American Express,
-              Mapp Digital, McCann Worldgroup, Verizon, SAP, and recently with
-              McKinsey.
+              background includes work with companies such as Scale AI,
+              American Express, Mapp Digital, McCann Worldgroup, Toptal,
+              Momentum, Verizon, SAP, and recently with McKinsey.
             </p>
             <p>
               She created ListMio after noticing how many thoughtful,
