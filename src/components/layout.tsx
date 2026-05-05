@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, Info, LayoutGrid, Circle as HelpCircle, LogOut, User, LayoutDashboard, ShieldCheck } from 'lucide-react'
+import { Menu, X, Info, LayoutGrid, MessageSquare, LogOut, User, LayoutDashboard, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
@@ -239,7 +239,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
             <div>
               <h3 className="font-medium mb-3 text-foreground inline-flex items-center gap-2" style={{ fontFamily: 'Fraunces, serif' }}>
-                <HelpCircle className="size-4 text-muted-foreground" />
+                <MessageSquare className="size-4 text-muted-foreground" />
                 Support
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
