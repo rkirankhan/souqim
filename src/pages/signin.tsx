@@ -121,10 +121,10 @@ export function SignInPage() {
             className="text-2xl font-medium text-primary inline-block mb-6"
             style={{ fontFamily: 'Fraunces, serif' }}
           >
-            Listmio
+            ListMio
           </span>
           <h1 className="text-2xl font-medium mb-2" style={{ fontFamily: 'Fraunces, serif' }}>
-            {isSignup ? 'Create your account' : 'Sign in to Listmio'}
+            {isSignup ? 'Create your account' : 'Sign in to ListMio'}
           </h1>
           <p className="text-muted-foreground text-sm">
             {isSignup

@@ -79,7 +79,7 @@ export function AboutPage() {
           <div>
             <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary rounded-full px-3.5 py-1.5 text-xs md:text-sm font-medium">
               <Sparkles className="size-3" />
-              Listmio is built differently
+              ListMio is built differently
             </span>
           </div>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">

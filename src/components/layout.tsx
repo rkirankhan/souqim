@@ -44,7 +44,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container max-w-7xl mx-auto flex h-16 items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
             <span className="text-xl font-medium text-primary" style={{ fontFamily: 'Fraunces, serif' }}>
-              Listmio
+              ListMio
             </span>
           </Link>
 
@@ -220,7 +220,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 About
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/about" className="hover:text-foreground transition-colors">About Listmio</Link></li>
+                <li><Link to="/about" className="hover:text-foreground transition-colors">About ListMio</Link></li>
                 <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
                 <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link></li>
               </ul>
