@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { CATEGORIES, CATEGORY_ICONS, CATEGORY_ILLUSTRATIONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import { supabase } from '@/lib/supabase'
-import { Input } from '@/components/ui/input'
 
 export function CategoriesPage() {
   const [counts, setCounts] = useState<Record<string, number>>({})
-  const [search, setSearch] = useState('')
   const [missingIllustrations, setMissingIllustrations] = useState<Set<string>>(new Set())
 
   useEffect(() => {
@@ -31,10 +29,7 @@ export function CategoriesPage() {
 
   const totalListings = Object.values(counts).reduce((s, n) => s + n, 0)
   const totalCategories = CATEGORIES.length
-  const q = search.trim().toLowerCase()
-  const filtered = q
-    ? CATEGORIES.filter((c) => c.toLowerCase().includes(q))
-    : CATEGORIES
+  const filtered = CATEGORIES
 
   const markMissing = (category: string) =>
     setMissingIllustrations((prev) => {
@@ -63,63 +58,12 @@ export function CategoriesPage() {
               category
             </em>
           </h1>
-          <p className="text-base md:text-lg text-[color:#5C4E46] mb-7 max-w-xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-[color:#5C4E46] max-w-xl mx-auto leading-relaxed">
             Discover small, independent businesses &mdash; from food and coffee to tech, design and beyond.
           </p>
-          <div className="relative max-w-md mx-auto">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search categories…"
-              className="pl-11 h-12 rounded-full bg-card shadow-sm"
-            />
-          </div>
         </div>
       </section>
 
-      {/* Glass-effect circle row */}
-      {(() => {
-        const withIllustration = CATEGORIES.filter(
-          (c) => CATEGORY_ILLUSTRATIONS[c] && !missingIllustrations.has(c),
-        )
-        if (withIllustration.length === 0) return null
-        return (
-          <section className="px-4 py-8 md:py-10">
-            <div className="container max-w-6xl mx-auto">
-              <div
-                className="flex gap-5 md:gap-7 overflow-x-auto pb-2 -mb-2 scrollbar-thin px-1"
-                style={{
-                  WebkitMaskImage:
-                    'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
-                  maskImage:
-                    'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
-                }}
-              >
-                {withIllustration.map((category) => (
-                  <Link
-                    key={category}
-                    to={`/browse?category=${encodeURIComponent(category)}`}
-                    className="group flex-shrink-0 flex flex-col items-center gap-2 w-[88px]"
-                    title={category}
-                  >
-                    <img
-                      src={CATEGORY_ILLUSTRATIONS[category]}
-                      alt={category}
-                      className="size-[80px] md:size-[96px] object-contain select-none transition-transform group-hover:scale-[1.06]"
-                      loading="lazy"
-                      onError={() => markMissing(category)}
-                    />
-                    <span className="text-[11px] md:text-xs font-medium text-foreground/80 text-center leading-tight line-clamp-2">
-                      {category}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )
-      })()}
 
       {/* All categories grid */}
       <section className="py-12 md:py-16 px-4" style={{ backgroundColor: '#FAF6F1' }}>
@@ -133,7 +77,7 @@ export function CategoriesPage() {
                 className="text-2xl md:text-3xl font-medium tracking-tight"
                 style={{ fontFamily: 'Fraunces, serif' }}
               >
-                {q ? 'Search results' : 'Find your people'}
+                Find your people
               </h2>
             </div>
             <Link
@@ -145,8 +89,7 @@ export function CategoriesPage() {
             </Link>
           </div>
 
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {filtered.map((category) => {
                 const Icon = CATEGORY_ICONS[category] || DEFAULT_CATEGORY_ICON
                 const illustration = CATEGORY_ILLUSTRATIONS[category]
@@ -184,12 +127,7 @@ export function CategoriesPage() {
                   </Link>
                 )
               })}
-            </div>
-          ) : (
-            <div className="text-center py-20 text-muted-foreground">
-              No categories match &ldquo;{search}&rdquo;
-            </div>
-          )}
+          </div>
         </div>
       </section>
 
