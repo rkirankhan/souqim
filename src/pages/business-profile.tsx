@@ -241,6 +241,29 @@ export function BusinessProfilePage() {
           </div>
         )}
 
+        {business.opening_hours && Object.values(business.opening_hours).some((d) => d?.open) && (
+          <div className="bg-card border border-border rounded-xl p-6 mb-8">
+            <h2 className="text-xl font-medium mb-4" style={{ fontFamily: 'Fraunces, serif' }}>
+              Opening hours
+            </h2>
+            <ul className="divide-y divide-border">
+              {(['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] as const).map((day) => {
+                const d = business.opening_hours?.[day]
+                return (
+                  <li key={day} className="flex items-center justify-between py-2 text-sm">
+                    <span className="font-medium">{day}</span>
+                    {d?.open ? (
+                      <span className="text-foreground/80 tabular-nums">{d.start} – {d.end}</span>
+                    ) : (
+                      <span className="text-muted-foreground">Closed</span>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        )}
+
         {business.photos && business.photos.length > 0 && (
           <div className="bg-card border border-border rounded-xl p-6 mb-12">
             <h2 className="text-xl font-medium mb-4">Gallery</h2>

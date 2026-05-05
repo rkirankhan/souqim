@@ -20,9 +20,30 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import type { Business } from '@/lib/database.types'
+import type { Business, OpeningHours, OpeningHoursDay } from '@/lib/database.types'
 
 const TOP_CATEGORIES = CATEGORIES.slice(0, 6)
+
+const DAYS_OF_WEEK = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+] as const
+
+const DEFAULT_OPEN_HOURS: OpeningHoursDay = { open: false, start: '09:00', end: '17:00' }
+
+function getDefaultOpeningHours(): OpeningHours {
+  return Object.fromEntries(DAYS_OF_WEEK.map((d) => [d, { ...DEFAULT_OPEN_HOURS }]))
+}
+
+function hasAnyOpenDay(hours: OpeningHours | null | undefined): boolean {
+  if (!hours) return false
+  return Object.values(hours).some((d) => d?.open)
+}
 
 const listingSchema = z.object({
   name: z.string().min(2, 'Business name must be at least 2 characters'),
@@ -142,6 +163,14 @@ export function ListPage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const logoInputRef = useRef<HTMLInputElement>(null)
   const [showAllCategories, setShowAllCategories] = useState(false)
+  const [openingHours, setOpeningHours] = useState<OpeningHours>(getDefaultOpeningHours)
+
+  function setDayOpen(day: string, open: boolean) {
+    setOpeningHours((prev) => ({ ...prev, [day]: { ...prev[day], open } }))
+  }
+  function setDayTime(day: string, field: 'start' | 'end', value: string) {
+    setOpeningHours((prev) => ({ ...prev, [day]: { ...prev[day], [field]: value } }))
+  }
 
   const form = useForm<ListingFormData>({
     resolver: zodResolver(listingSchema),
@@ -179,7 +208,12 @@ export function ListPage() {
     if (!raw) return
     let cancelled = false
     ;(async () => {
-      let parsed: { data: ListingFormData; photoUrls: string[]; logoUrl: string | null }
+      let parsed: {
+        data: ListingFormData
+        photoUrls: string[]
+        logoUrl: string | null
+        openingHours?: OpeningHours | null
+      }
       try {
         parsed = JSON.parse(raw)
       } catch {
@@ -187,7 +221,7 @@ export function ListPage() {
         return
       }
       localStorage.removeItem('listmio_pending_listing')
-      const { data, photoUrls, logoUrl } = parsed
+      const { data, photoUrls, logoUrl, openingHours: pendingHours } = parsed
       const addr = (data.location || '').trim()
       const cty = (data.city || '').trim()
       const combinedLocation =
@@ -218,6 +252,7 @@ export function ListPage() {
             price: (s.price || '').trim() || undefined,
           }))
           .filter((s) => s.title),
+        opening_hours: hasAnyOpenDay(pendingHours) ? pendingHours : null,
         photos: photoUrls || [],
         image_url: photoUrls?.[0] || null,
         logo_url: logoUrl ?? null,
@@ -293,6 +328,17 @@ export function ListPage() {
       })
       setExistingPhotoUrls(data.photos ?? [])
       setExistingLogoUrl(data.logo_url ?? null)
+      if (data.opening_hours && typeof data.opening_hours === 'object') {
+        // Merge stored values onto a default skeleton so missing days fall back gracefully.
+        const defaults = getDefaultOpeningHours()
+        const merged = Object.fromEntries(
+          DAYS_OF_WEEK.map((d) => [
+            d,
+            { ...defaults[d], ...((data.opening_hours as OpeningHours)[d] ?? {}) },
+          ]),
+        ) as OpeningHours
+        setOpeningHours(merged)
+      }
       setEditLoading(false)
     })()
     return () => { cancelled = true }
@@ -427,7 +473,12 @@ export function ListPage() {
       if (!user && !isEditMode) {
         localStorage.setItem(
           'listmio_pending_listing',
-          JSON.stringify({ data, photoUrls: finalPhotoUrls, logoUrl: finalLogoUrl }),
+          JSON.stringify({
+            data,
+            photoUrls: finalPhotoUrls,
+            logoUrl: finalLogoUrl,
+            openingHours: hasAnyOpenDay(openingHours) ? openingHours : null,
+          }),
         )
         toast.info('Sign in to publish — your details are saved.', {
           description: 'Signing in lets you manage and update your listing later.',
@@ -469,6 +520,7 @@ export function ListPage() {
         social_linkedin: data.social_linkedin || null,
         social_facebook: data.social_facebook || null,
         services: cleanedServices,
+        opening_hours: hasAnyOpenDay(openingHours) ? openingHours : null,
         photos: finalPhotoUrls,
         image_url: finalPhotoUrls[0] || null,
         logo_url: finalLogoUrl,
@@ -592,7 +644,14 @@ export function ListPage() {
                     servicesField={servicesField}
                   />
                 )}
-                {step === 1 && <StepContact form={form} />}
+                {step === 1 && (
+                  <StepContact
+                    form={form}
+                    openingHours={openingHours}
+                    onDayOpen={setDayOpen}
+                    onDayTime={setDayTime}
+                  />
+                )}
                 {step === 2 && (
                   <StepDetails
                     form={form}
@@ -996,8 +1055,14 @@ function StepBasics({
 
 function StepContact({
   form,
+  openingHours,
+  onDayOpen,
+  onDayTime,
 }: {
   form: ReturnType<typeof useForm<ListingFormData>>
+  openingHours: OpeningHours
+  onDayOpen: (day: string, open: boolean) => void
+  onDayTime: (day: string, field: 'start' | 'end', value: string) => void
 }) {
   return (
     <div className="space-y-6">
@@ -1132,6 +1197,52 @@ function StepContact({
           className="h-12"
           {...form.register('location')}
         />
+      </div>
+
+      {/* Opening hours */}
+      <div className="space-y-3">
+        <div>
+          <Label className="text-sm font-medium text-foreground">
+            Opening hours <span className="text-muted-foreground font-normal">(optional)</span>
+          </Label>
+          <p className="text-xs text-muted-foreground mt-1">
+            Toggle a day on to set its hours.
+          </p>
+        </div>
+        <div className="bg-muted/40 border border-border rounded-xl divide-y divide-border">
+          {DAYS_OF_WEEK.map((day) => {
+            const d = openingHours[day]
+            return (
+              <div key={day} className="flex items-center gap-3 px-3 py-2.5">
+                <span className="w-20 text-sm font-medium shrink-0">{day.slice(0, 3)}</span>
+                <Switch
+                  checked={d?.open ?? false}
+                  onCheckedChange={(v) => onDayOpen(day, v)}
+                  aria-label={`${day} open`}
+                />
+                {d?.open ? (
+                  <div className="flex items-center gap-2 text-sm">
+                    <input
+                      type="time"
+                      value={d.start}
+                      onChange={(e) => onDayTime(day, 'start', e.target.value)}
+                      className="bg-card border border-input rounded-md px-2 py-1 h-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
+                    />
+                    <span className="text-muted-foreground">to</span>
+                    <input
+                      type="time"
+                      value={d.end}
+                      onChange={(e) => onDayTime(day, 'end', e.target.value)}
+                      className="bg-card border border-input rounded-md px-2 py-1 h-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
+                    />
+                  </div>
+                ) : (
+                  <span className="text-sm text-muted-foreground">Closed</span>
+                )}
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
