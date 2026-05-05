@@ -70,7 +70,15 @@ export function CategoriesPage() {
         return (
           <section className="bg-card border-b border-border px-4 py-8 md:py-10">
             <div className="container max-w-6xl mx-auto">
-              <div className="flex gap-5 md:gap-7 overflow-x-auto pb-2 -mb-2 scrollbar-thin justify-start md:justify-center">
+              <div
+                className="flex gap-5 md:gap-7 overflow-x-auto pb-2 -mb-2 scrollbar-thin px-1"
+                style={{
+                  WebkitMaskImage:
+                    'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
+                  maskImage:
+                    'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
+                }}
+              >
                 {withIllustration.map((category) => (
                   <Link
                     key={category}
