@@ -24,6 +24,9 @@ export function BusinessProfilePage() {
   const [relatedBusinesses, setRelatedBusinesses] = useState<Business[]>([])
   const [loading, setLoading] = useState(true)
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<
+    'about' | 'services' | 'gallery' | 'posts' | 'contact' | null
+  >(null)
 
   useEffect(() => {
     if (id) {
@@ -132,7 +135,10 @@ export function BusinessProfilePage() {
             <div className="flex-1">
               <div className="flex flex-wrap gap-2 mb-3">
                 {(business.categories ?? []).map((cat) => (
-                  <Badge key={cat} variant="secondary" className="rounded-full">
+                  <Badge
+                    key={cat}
+                    className="rounded-full bg-emerald-100 text-emerald-800 hover:bg-emerald-100 border border-emerald-200"
+                  >
                     {cat}
                   </Badge>
                 ))}
@@ -155,137 +161,293 @@ export function BusinessProfilePage() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-xl font-medium mb-4">About</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              {business.description || 'No additional information available.'}
-            </p>
-          </div>
+        {(() => {
+          const hasServices = !!(business.services && business.services.length > 0)
+          const hasHours =
+            !!business.opening_hours &&
+            Object.values(business.opening_hours).some((d) => d?.open)
+          const hasGallery = !!(business.photos && business.photos.length > 0)
+          const hasContact = !!(
+            business.email ||
+            business.phone ||
+            business.website ||
+            business.social_facebook ||
+            business.social_twitter ||
+            business.social_instagram ||
+            business.social_linkedin
+          )
+          const tabs: {
+            key: 'about' | 'services' | 'gallery' | 'posts' | 'contact'
+            label: string
+            show: boolean
+          }[] = [
+            { key: 'about', label: 'About', show: true },
+            { key: 'services', label: 'Services', show: hasServices },
+            { key: 'gallery', label: 'Gallery', show: hasGallery },
+            { key: 'posts', label: 'Posts', show: true },
+            { key: 'contact', label: 'Contact & links', show: hasContact },
+          ]
+          const visible = tabs.filter((t) => t.show)
+          const current =
+            activeTab && visible.some((t) => t.key === activeTab) ? activeTab : 'about'
 
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-xl font-medium mb-4">Contact & Links</h2>
-            <div className="space-y-3">
-              {business.email && (
-                <div className="flex items-start gap-3">
-                  <Mail className="size-5 text-primary mt-0.5" />
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Email</p>
-                    <a
-                      href={`mailto:${business.email}`}
-                      className="text-foreground hover:text-primary transition-colors"
+          return (
+            <div className="mb-12">
+              <div
+                role="tablist"
+                className="flex gap-1 border-b border-border mb-6 overflow-x-auto scrollbar-thin"
+              >
+                {visible.map((t) => {
+                  const isActive = current === t.key
+                  return (
+                    <button
+                      key={t.key}
+                      role="tab"
+                      aria-selected={isActive}
+                      onClick={() => setActiveTab(t.key)}
+                      className={`relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
+                        isActive
+                          ? 'text-foreground'
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
                     >
-                      {business.email}
-                    </a>
-                  </div>
-                </div>
-              )}
-              {business.phone && (
-                <div className="flex items-start gap-3">
-                  <Phone className="size-5 text-primary mt-0.5" />
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Phone</p>
-                    <a
-                      href={`tel:${business.phone}`}
-                      className="text-foreground hover:text-primary transition-colors"
-                    >
-                      {business.phone}
-                    </a>
-                  </div>
-                </div>
-              )}
-              {business.website && (
-                <div className="flex items-start gap-3">
-                  <Globe className="size-5 text-primary mt-0.5" />
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Website</p>
-                    <a
-                      href={business.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
-                    >
-                      {business.website.replace(/^https?:\/\//, '')}
-                      <ExternalLink className="size-3" />
-                    </a>
-                  </div>
-                </div>
-              )}
-              {!business.email && !business.phone && !business.website && (
-                <p className="text-sm text-muted-foreground">No contact information available</p>
-              )}
-            </div>
-          </div>
-        </div>
+                      {t.label}
+                      {isActive && (
+                        <span className="absolute -bottom-px left-2 right-2 h-0.5 bg-primary rounded-full" />
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
 
-        {business.services && business.services.length > 0 && (
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-medium mb-4" style={{ fontFamily: 'Fraunces, serif' }}>
-              Services
-            </h2>
-            <ul className="divide-y divide-border">
-              {business.services.map((s, i) => (
-                <li key={i} className="py-3 first:pt-0 last:pb-0">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <p className="font-medium text-foreground">{s.title}</p>
-                    {s.price && (
-                      <p className="text-sm font-medium text-primary whitespace-nowrap">{s.price}</p>
-                    )}
+              {current === 'about' && (
+                <div className="space-y-6">
+                  <div className="bg-card border border-border rounded-xl p-6">
+                    <h2
+                      className="text-xl font-medium mb-3"
+                      style={{ fontFamily: 'Fraunces, serif' }}
+                    >
+                      About
+                    </h2>
+                    <p className="text-foreground/85 leading-relaxed whitespace-pre-line">
+                      {business.description || 'No additional information available.'}
+                    </p>
                   </div>
-                  {s.description && (
-                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{s.description}</p>
+
+                  {hasHours && (
+                    <div className="bg-card border border-border rounded-xl p-6">
+                      <h3
+                        className="text-lg font-medium mb-3"
+                        style={{ fontFamily: 'Fraunces, serif' }}
+                      >
+                        Opening hours
+                      </h3>
+                      <ul className="divide-y divide-border">
+                        {(
+                          [
+                            'Monday',
+                            'Tuesday',
+                            'Wednesday',
+                            'Thursday',
+                            'Friday',
+                            'Saturday',
+                            'Sunday',
+                          ] as const
+                        ).map((day) => {
+                          const d = business.opening_hours?.[day]
+                          return (
+                            <li
+                              key={day}
+                              className="flex items-center justify-between py-2 text-sm"
+                            >
+                              <span className="font-medium">{day}</span>
+                              {d?.open ? (
+                                <span className="text-foreground/80 tabular-nums">
+                                  {d.start} – {d.end}
+                                </span>
+                              ) : (
+                                <span className="text-muted-foreground">Closed</span>
+                              )}
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
                   )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+                </div>
+              )}
 
-        {business.opening_hours && Object.values(business.opening_hours).some((d) => d?.open) && (
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-medium mb-4" style={{ fontFamily: 'Fraunces, serif' }}>
-              Opening hours
-            </h2>
-            <ul className="divide-y divide-border">
-              {(['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] as const).map((day) => {
-                const d = business.opening_hours?.[day]
-                return (
-                  <li key={day} className="flex items-center justify-between py-2 text-sm">
-                    <span className="font-medium">{day}</span>
-                    {d?.open ? (
-                      <span className="text-foreground/80 tabular-nums">{d.start} – {d.end}</span>
-                    ) : (
-                      <span className="text-muted-foreground">Closed</span>
-                    )}
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        )}
+              {current === 'services' && hasServices && (
+                <div className="bg-card border border-border rounded-xl p-6">
+                  <ul className="divide-y divide-border">
+                    {business.services!.map((s, i) => (
+                      <li key={i} className="py-3 first:pt-0 last:pb-0">
+                        <div className="flex items-baseline justify-between gap-3">
+                          <p className="font-medium text-foreground">{s.title}</p>
+                          {s.price && (
+                            <p className="text-sm font-medium text-primary whitespace-nowrap">
+                              {s.price}
+                            </p>
+                          )}
+                        </div>
+                        {s.description && (
+                          <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                            {s.description}
+                          </p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-        {business.photos && business.photos.length > 0 && (
-          <div className="bg-card border border-border rounded-xl p-6 mb-12">
-            <h2 className="text-xl font-medium mb-4">Gallery</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {business.photos.map((url, i) => (
-                <button
-                  key={url}
-                  type="button"
-                  onClick={() => setLightboxUrl(url)}
-                  className="block aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-90 transition-opacity cursor-zoom-in"
-                >
-                  <img
-                    src={url}
-                    alt={`${business.name} photo ${i + 1}`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </button>
-              ))}
+              {current === 'gallery' && hasGallery && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {business.photos!.map((url, i) => (
+                    <button
+                      key={url}
+                      type="button"
+                      onClick={() => setLightboxUrl(url)}
+                      className="block aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-90 transition-opacity cursor-zoom-in"
+                    >
+                      <img
+                        src={url}
+                        alt={`${business.name} photo ${i + 1}`}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {current === 'posts' && (
+                <div className="bg-card border border-border rounded-xl p-10 text-center">
+                  <p className="text-sm font-semibold tracking-[0.10em] uppercase text-muted-foreground mb-2">
+                    Coming soon
+                  </p>
+                  <h3
+                    className="text-xl font-medium mb-2"
+                    style={{ fontFamily: 'Fraunces, serif' }}
+                  >
+                    No posts yet
+                  </h3>
+                  <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                    Soon, businesses will be able to share offers, news and
+                    events from their listing here.
+                  </p>
+                </div>
+              )}
+
+              {current === 'contact' && hasContact && (
+                <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+                  {business.email && (
+                    <div className="flex items-start gap-3">
+                      <Mail className="size-5 text-primary mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-0.5">Email</p>
+                        <a
+                          href={`mailto:${business.email}`}
+                          className="text-foreground hover:text-primary transition-colors"
+                        >
+                          {business.email}
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                  {business.phone && (
+                    <div className="flex items-start gap-3">
+                      <Phone className="size-5 text-primary mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-0.5">Phone</p>
+                        <a
+                          href={`tel:${business.phone}`}
+                          className="text-foreground hover:text-primary transition-colors"
+                        >
+                          {business.phone}
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                  {business.website && (
+                    <div className="flex items-start gap-3">
+                      <Globe className="size-5 text-primary mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-0.5">Website</p>
+                        <a
+                          href={business.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+                        >
+                          {business.website.replace(/^https?:\/\//, '')}
+                          <ExternalLink className="size-3" />
+                        </a>
+                      </div>
+                    </div>
+                  )}
+
+                  {(business.social_facebook ||
+                    business.social_twitter ||
+                    business.social_instagram ||
+                    business.social_linkedin) && (
+                    <div className="pt-4 border-t border-border">
+                      <p className="text-xs font-semibold tracking-[0.10em] uppercase text-muted-foreground mb-3">
+                        Follow
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {business.social_facebook && (
+                          <Button asChild variant="outline" size="sm" className="rounded-full">
+                            <a
+                              href={business.social_facebook}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Facebook
+                            </a>
+                          </Button>
+                        )}
+                        {business.social_twitter && (
+                          <Button asChild variant="outline" size="sm" className="rounded-full">
+                            <a
+                              href={business.social_twitter}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Twitter
+                            </a>
+                          </Button>
+                        )}
+                        {business.social_instagram && (
+                          <Button asChild variant="outline" size="sm" className="rounded-full">
+                            <a
+                              href={business.social_instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Instagram
+                            </a>
+                          </Button>
+                        )}
+                        {business.social_linkedin && (
+                          <Button asChild variant="outline" size="sm" className="rounded-full">
+                            <a
+                              href={business.social_linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              LinkedIn
+                            </a>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          )
+        })()}
 
         <Dialog open={lightboxUrl !== null} onOpenChange={(open) => !open && setLightboxUrl(null)}>
           <DialogContent className="max-w-4xl p-0 bg-transparent border-0 shadow-none">
@@ -298,42 +460,6 @@ export function BusinessProfilePage() {
             )}
           </DialogContent>
         </Dialog>
-
-        {(business.social_facebook || business.social_twitter || business.social_instagram || business.social_linkedin) && (
-          <div className="bg-muted/30 rounded-xl p-6 mb-12">
-            <h2 className="text-lg font-medium mb-4">Follow on social media</h2>
-            <div className="flex flex-wrap gap-3">
-              {business.social_facebook && (
-                <Button asChild variant="outline" size="sm" className="rounded-full">
-                  <a href={business.social_facebook} target="_blank" rel="noopener noreferrer">
-                    Facebook
-                  </a>
-                </Button>
-              )}
-              {business.social_twitter && (
-                <Button asChild variant="outline" size="sm" className="rounded-full">
-                  <a href={business.social_twitter} target="_blank" rel="noopener noreferrer">
-                    Twitter
-                  </a>
-                </Button>
-              )}
-              {business.social_instagram && (
-                <Button asChild variant="outline" size="sm" className="rounded-full">
-                  <a href={business.social_instagram} target="_blank" rel="noopener noreferrer">
-                    Instagram
-                  </a>
-                </Button>
-              )}
-              {business.social_linkedin && (
-                <Button asChild variant="outline" size="sm" className="rounded-full">
-                  <a href={business.social_linkedin} target="_blank" rel="noopener noreferrer">
-                    LinkedIn
-                  </a>
-                </Button>
-              )}
-            </div>
-          </div>
-        )}
 
         {relatedBusinesses.length > 0 && (
           <div className="py-12 border-t">
