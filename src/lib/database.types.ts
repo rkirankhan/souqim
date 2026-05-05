@@ -21,6 +21,7 @@ export interface Database {
         Relationships: []
         Row: {
           id: string
+          slug: string | null
           name: string
           owner_name: string | null
           owner_id: string | null
@@ -54,6 +55,7 @@ export interface Database {
         }
         Insert: {
           id?: string
+          slug?: string | null
           name: string
           owner_name?: string | null
           owner_id?: string | null
@@ -87,6 +89,7 @@ export interface Database {
         }
         Update: {
           id?: string
+          slug?: string | null
           name?: string
           owner_name?: string | null
           owner_id?: string | null

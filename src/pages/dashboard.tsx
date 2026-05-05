@@ -230,7 +230,7 @@ function BusinessListingCard({ business, toggling, onToggleStatus }: BusinessLis
                 </Link>
               </Button>
               <Button asChild size="sm" variant="ghost" className="rounded-full h-8">
-                <a href={`/business/${business.id}`} target="_blank" rel="noopener noreferrer">
+                <a href={`/business/${business.slug || business.id}`} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="size-3.5" />
                   Preview
                 </a>

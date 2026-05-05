@@ -269,7 +269,7 @@ export function AdminPage() {
                               </Button>
                             )}
                             <Button asChild size="sm" variant="ghost" className="h-8" title="View public page">
-                              <a href={`/business/${b.id}`} target="_blank" rel="noopener noreferrer">
+                              <a href={`/business/${b.slug || b.id}`} target="_blank" rel="noopener noreferrer">
                                 <ExternalLink className="size-3.5" />
                               </a>
                             </Button>

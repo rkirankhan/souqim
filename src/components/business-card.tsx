@@ -13,7 +13,7 @@ export function BusinessCard({ business, compact = false }: BusinessCardProps) {
   const accent = (primaryCat && CATEGORY_ACCENTS[primaryCat]) || DEFAULT_CATEGORY_ACCENT
 
   return (
-    <Link to={`/business/${business.id}`} className="block">
+    <Link to={`/business/${business.slug || business.id}`} className="block">
       <div className="group h-full bg-card border rounded-[14px] overflow-hidden transition-all duration-200 hover:-translate-y-[3px] hover:shadow-[0_8px_28px_rgba(0,0,0,0.09)] hover:border-[#D1CBC4]">
         <div
           className={`${compact ? 'h-[130px]' : 'h-[150px]'} relative flex items-center justify-center overflow-hidden`}

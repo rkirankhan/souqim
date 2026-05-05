@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { BusinessCard } from '@/components/business-card'
 import { supabase } from '@/lib/supabase'
+import { isUuid } from '@/lib/slug'
 import type { Business } from '@/lib/database.types'
 
 function getInitials(name: string) {
@@ -30,13 +31,14 @@ export function BusinessProfilePage() {
     }
   }, [id])
 
-  async function loadBusiness(businessId: string) {
+  async function loadBusiness(slugOrId: string) {
     setLoading(true)
     try {
+      const lookupColumn = isUuid(slugOrId) ? 'id' : 'slug'
       const { data, error } = await supabase
         .from('businesses')
         .select('*')
-        .eq('id', businessId)
+        .eq(lookupColumn, slugOrId)
         .maybeSingle()
 
       if (error) throw error
@@ -49,7 +51,7 @@ export function BusinessProfilePage() {
           .from('businesses')
           .select('*')
           .contains('categories', [businessData.categories[0]])
-          .neq('id', businessId)
+          .neq('id', businessData.id)
           .limit(3)
 
         if (related) {

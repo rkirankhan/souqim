@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { generateUniqueSlug } from '@/lib/slug'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -178,7 +179,9 @@ export function ListPage() {
       const cty = (data.city || '').trim()
       const combinedLocation =
         addr && cty ? `${addr}, ${cty}` : addr || cty || data.postcode
+      const slug = await generateUniqueSlug(data.name)
       const insertPayload = {
+        slug,
         name: data.name,
         categories: data.categories,
         tagline: data.tagline || null,
@@ -438,16 +441,19 @@ export function ListPage() {
       }
 
       if (isEditMode && editId) {
+        const slug = await generateUniqueSlug(data.name, editId)
         const { error } = await supabase
           .from('businesses')
-          .update({ ...basePayload, updated_at: new Date().toISOString() } as any)
+          .update({ ...basePayload, slug, updated_at: new Date().toISOString() } as any)
           .eq('id', editId)
         if (error) throw error
         toast.success('Listing updated.')
         setTimeout(() => navigate('/dashboard'), 600)
       } else {
+        const slug = await generateUniqueSlug(data.name)
         const insertPayload = {
           ...basePayload,
+          slug,
           owner_id: user!.id,
           // Admins publish straight to live; everyone else goes through review.
           status: (isAdmin ? 'live' : 'pending') as 'live' | 'pending',
@@ -455,12 +461,12 @@ export function ListPage() {
         const { data: business, error } = await supabase
           .from('businesses')
           .insert(insertPayload as any)
-          .select('id')
+          .select('id, slug')
           .single()
         if (error) throw error
         if (isAdmin) {
           toast.success('Your business has been published!')
-          setTimeout(() => navigate(`/business/${business.id}`), 600)
+          setTimeout(() => navigate(`/business/${business.slug || business.id}`), 600)
         } else {
           toast.success("Submitted! We'll review it shortly and let you know.")
           setTimeout(() => navigate('/dashboard'), 600)
