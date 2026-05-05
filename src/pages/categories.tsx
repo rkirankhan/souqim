@@ -146,7 +146,7 @@ export function CategoriesPage() {
           </div>
 
           {filtered.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {filtered.map((category) => {
                 const Icon = CATEGORY_ICONS[category] || DEFAULT_CATEGORY_ICON
                 const illustration = CATEGORY_ILLUSTRATIONS[category]
@@ -162,25 +162,25 @@ export function CategoriesPage() {
                   <Link
                     key={category}
                     to={`/browse?category=${encodeURIComponent(category)}`}
-                    className="group relative rounded-2xl border border-border bg-card p-4 md:p-5 transition-all hover:border-primary/40 hover:shadow-lg hover:-translate-y-1"
+                    className="group relative rounded-2xl border border-border bg-card p-6 md:p-8 transition-all hover:border-primary/40 hover:shadow-lg hover:-translate-y-1"
                   >
                     {showIllustration ? (
                       <img
                         src={illustration}
                         alt=""
-                        className="size-14 md:size-16 object-contain select-none mb-3 transition-transform group-hover:scale-[1.06]"
+                        className="size-20 md:size-24 object-contain select-none mb-4 transition-transform group-hover:scale-[1.06]"
                         loading="lazy"
                         onError={() => markMissing(category)}
                       />
                     ) : (
-                      <div className="size-14 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-3 transition-colors group-hover:bg-primary/15">
-                        <Icon className="size-6 text-primary" />
+                      <div className="size-20 md:size-24 rounded-full bg-primary/10 flex items-center justify-center mb-4 transition-colors group-hover:bg-primary/15">
+                        <Icon className="size-9 text-primary" />
                       </div>
                     )}
-                    <h3 className="text-[15px] md:text-base font-medium leading-tight mb-1 group-hover:text-primary transition-colors">
+                    <h3 className="text-lg md:text-xl font-medium leading-tight mb-1.5 group-hover:text-primary transition-colors" style={{ fontFamily: 'Fraunces, serif' }}>
                       {category}
                     </h3>
-                    <p className="text-xs md:text-sm text-muted-foreground">{countLabel}</p>
+                    <p className="text-sm md:text-[15px] text-muted-foreground">{countLabel}</p>
                   </Link>
                 )
               })}
