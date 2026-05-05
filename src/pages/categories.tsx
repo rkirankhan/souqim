@@ -68,8 +68,15 @@ export function CategoriesPage() {
         )
         if (withIllustration.length === 0) return null
         return (
-          <section className="bg-card border-b border-border px-4 py-8 md:py-10">
-            <div className="container max-w-6xl mx-auto">
+          <section className="relative overflow-hidden border-y border-white/40 px-4 py-8 md:py-10">
+            {/* Decorative colour blobs behind the glass */}
+            <div aria-hidden className="absolute -top-24 -left-12 size-[320px] rounded-full blur-3xl" style={{ backgroundColor: '#C2410C', opacity: 0.18 }} />
+            <div aria-hidden className="absolute -bottom-16 right-1/3 size-[300px] rounded-full blur-3xl" style={{ backgroundColor: '#F59E0B', opacity: 0.22 }} />
+            <div aria-hidden className="absolute -top-8 right-0 size-[260px] rounded-full blur-3xl" style={{ backgroundColor: '#0F766E', opacity: 0.12 }} />
+            {/* Frosted-glass overlay */}
+            <div aria-hidden className="absolute inset-0 backdrop-blur-2xl" style={{ backgroundColor: 'rgba(255,255,255,0.55)' }} />
+
+            <div className="container max-w-6xl mx-auto relative z-10">
               <div
                 className="flex gap-5 md:gap-7 overflow-x-auto pb-2 -mb-2 scrollbar-thin px-1"
                 style={{
