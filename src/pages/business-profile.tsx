@@ -153,47 +153,62 @@ export function BusinessProfilePage() {
           </Button>
         </div>
       </div>
-      <div className="relative h-20 md:h-24 bg-gradient-to-br from-primary/20 to-primary/5" />
+      <div className="relative h-32 md:h-40 overflow-hidden" style={{ backgroundColor: '#FEF3E8' }}>
+        <div aria-hidden className="absolute -top-16 -left-12 w-[420px] h-[420px] rounded-full blur-3xl" style={{ backgroundColor: '#C2410C', opacity: 0.18 }} />
+        <div aria-hidden className="absolute -bottom-20 right-1/4 w-[360px] h-[360px] rounded-full blur-3xl" style={{ backgroundColor: '#F59E0B', opacity: 0.22 }} />
+        <div aria-hidden className="absolute -top-8 right-0 w-[280px] h-[280px] rounded-full blur-3xl" style={{ backgroundColor: '#0F766E', opacity: 0.10 }} />
+      </div>
 
-      <div className="container max-w-4xl mx-auto px-4 -mt-6 relative z-10">
-        <div className="bg-card border border-border rounded-xl p-8 shadow-lg mb-6">
-          <div className="flex flex-col md:flex-row gap-6 items-start">
+      <div className="container max-w-4xl mx-auto px-4 -mt-16 md:-mt-20 relative z-10">
+        <div className="bg-card border border-border rounded-3xl p-6 md:p-10 mb-6">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
             {(business.logo_url || business.image_url) ? (
               <img
                 src={business.logo_url || business.image_url!}
                 alt={business.name}
-                className="w-24 h-24 rounded-full object-cover border-4 border-card shadow-md"
+                className="size-24 md:size-28 rounded-full object-cover ring-4 ring-card shrink-0"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center border-4 border-card shadow-md">
-                <span className="text-2xl font-medium text-primary">{getInitials(business.name)}</span>
+              <div className="size-24 md:size-28 rounded-full bg-primary/10 flex items-center justify-center ring-4 ring-card shrink-0">
+                <span className="text-2xl md:text-3xl font-medium text-primary" style={{ fontFamily: 'Fraunces, serif' }}>
+                  {getInitials(business.name)}
+                </span>
               </div>
             )}
 
-            <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-medium mb-2">{business.name}</h1>
-              <p className="text-lg text-muted-foreground mb-4">
-                {business.description || 'Building something amazing'}
-              </p>
-              <div className="flex items-center gap-2 text-muted-foreground mb-5">
-                <MapPin className="size-4" />
-                <span>{business.location}</span>
+            <div className="flex-1 min-w-0">
+              <h1
+                className="text-3xl md:text-[40px] font-medium mb-2 leading-tight tracking-tight"
+                style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em' }}
+              >
+                {business.name}
+              </h1>
+              {business.tagline && (
+                <p className="text-base md:text-lg text-muted-foreground mb-4 leading-relaxed">
+                  {business.tagline}
+                </p>
+              )}
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mb-5">
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="size-4" />
+                  {business.location}
+                </span>
+                {business.is_women_owned && (
+                  <span className="inline-flex items-center gap-1.5 text-amber-foreground">
+                    <Sparkles className="size-3.5" />
+                    Women-led
+                  </span>
+                )}
               </div>
-              <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
+              <div className="flex flex-wrap gap-2 pt-5 border-t border-border">
                 {(business.categories ?? []).map((cat) => (
                   <Badge
                     key={cat}
-                    className="rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-50 border border-indigo-100"
+                    className="rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-50 border border-indigo-100 font-medium"
                   >
                     {cat}
                   </Badge>
                 ))}
-                {business.is_women_owned && (
-                  <Badge className="rounded-full bg-amber text-amber-foreground hover:bg-amber">
-                    <Sparkles className="size-3 shrink-0" />
-                    Women-Led Business
-                  </Badge>
-                )}
               </div>
             </div>
           </div>
@@ -206,7 +221,7 @@ export function BusinessProfilePage() {
           business.social_instagram ||
           business.social_tiktok ||
           business.social_linkedin) && (
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
+          <div className="bg-card border border-border rounded-2xl p-6 mb-8">
             <p className="text-xs font-semibold tracking-[0.10em] uppercase text-muted-foreground mb-4">
               Contact &amp; links
             </p>
@@ -336,7 +351,7 @@ export function BusinessProfilePage() {
             <div className="mb-12">
               <div
                 role="tablist"
-                className="flex gap-1 border-b border-border mb-6 overflow-x-auto scrollbar-thin"
+                className="inline-flex p-1 rounded-full bg-muted/60 mb-6 overflow-x-auto scrollbar-thin"
               >
                 {visible.map((t) => {
                   const isActive = current === t.key
@@ -346,16 +361,13 @@ export function BusinessProfilePage() {
                       role="tab"
                       aria-selected={isActive}
                       onClick={() => setActiveTab(t.key)}
-                      className={`relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
+                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                         isActive
-                          ? 'text-foreground'
+                          ? 'bg-card text-foreground'
                           : 'text-muted-foreground hover:text-foreground'
                       }`}
                     >
                       {t.label}
-                      {isActive && (
-                        <span className="absolute -bottom-px left-2 right-2 h-0.5 bg-primary rounded-full" />
-                      )}
                     </button>
                   )
                 })}
@@ -363,7 +375,7 @@ export function BusinessProfilePage() {
 
               {current === 'about' && (
                 <div className="space-y-6">
-                  <div className="bg-card border border-border rounded-xl p-6">
+                  <div className="bg-card border border-border rounded-2xl p-6">
                     <h2
                       className="text-xl font-medium mb-3"
                       style={{ fontFamily: 'Fraunces, serif' }}
@@ -376,7 +388,7 @@ export function BusinessProfilePage() {
                   </div>
 
                   {hasHours && (
-                    <div className="bg-card border border-border rounded-xl p-6">
+                    <div className="bg-card border border-border rounded-2xl p-6">
                       <h3
                         className="text-lg font-medium mb-3"
                         style={{ fontFamily: 'Fraunces, serif' }}
@@ -463,7 +475,7 @@ export function BusinessProfilePage() {
               )}
 
               {current === 'posts' && (
-                <div className="bg-card border border-border rounded-xl p-10 text-center">
+                <div className="bg-card border border-border rounded-2xl p-10 text-center">
                   <p className="text-sm font-semibold tracking-[0.10em] uppercase text-muted-foreground mb-2">
                     Coming soon
                   </p>
