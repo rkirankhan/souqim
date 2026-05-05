@@ -63,6 +63,30 @@ export const CATEGORY_ICONS: Record<string, LucideIcon> = {
 
 export const DEFAULT_CATEGORY_ICON = Briefcase
 
+// Optional persona illustrations. Drop PNGs into public/categories/<file>
+// matching these paths and they'll show as circular avatars on the
+// Categories page. Categories without files (or with files that 404)
+// are silently skipped — no broken images.
+export const CATEGORY_ILLUSTRATIONS: Record<string, string> = {
+  'IT & Technology': '/categories/it-technology.png',
+  'Marketing & Social Media': '/categories/marketing-social-media.png',
+  'Makeup Artist': '/categories/makeup-artist.png',
+  'Beauty & Salon': '/categories/beauty-salon.png',
+  'Fashion & Clothing': '/categories/fashion-clothing.png',
+  'Writers & Content Creators': '/categories/writers-content.png',
+  'Photography': '/categories/photography.png',
+  'Education & Tutors': '/categories/education-tutors.png',
+  'Coaching & Consulting': '/categories/coaching-consulting.png',
+  'Health & Wellness': '/categories/health-wellness.png',
+  'Food & Catering': '/categories/food-catering.png',
+  'Home Services': '/categories/home-services.png',
+  'Handmade & Crafts': '/categories/handmade-crafts.png',
+  'Events & Planning': '/categories/events-planning.png',
+  'Local Services': '/categories/local-services.png',
+  'Startups': '/categories/startups.png',
+  'Freelancers': '/categories/freelancers.png',
+}
+
 export const CATEGORY_ACCENTS: Record<string, { bg: string; fg: string; grad: [string, string] }> = {
   'Food & Catering':     { bg: '#FEF3E8', fg: '#C2410C', grad: ['#FEF3E8', '#FDE8D3'] },
   'Beauty & Salon':      { bg: '#FDF4FF', fg: '#9333EA', grad: ['#FDF4FF', '#F3E8FF'] },

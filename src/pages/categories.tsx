@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Search } from 'lucide-react'
-import { CATEGORIES, CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
+import { CATEGORIES, CATEGORY_ICONS, CATEGORY_ILLUSTRATIONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import { supabase } from '@/lib/supabase'
 import { Input } from '@/components/ui/input'
 
 export function CategoriesPage() {
   const [counts, setCounts] = useState<Record<string, number>>({})
   const [search, setSearch] = useState('')
+  const [missingIllustrations, setMissingIllustrations] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     let cancelled = false
@@ -60,6 +61,50 @@ export function CategoriesPage() {
           </div>
         </div>
       </section>
+
+      {(() => {
+        const withIllustration = CATEGORIES.filter(
+          (c) => CATEGORY_ILLUSTRATIONS[c] && !missingIllustrations.has(c),
+        )
+        if (withIllustration.length === 0) return null
+        return (
+          <section className="bg-card border-b border-border px-4 py-8 md:py-10">
+            <div className="container max-w-6xl mx-auto">
+              <div className="flex gap-5 md:gap-7 overflow-x-auto pb-2 -mb-2 scrollbar-thin justify-start md:justify-center">
+                {withIllustration.map((category) => (
+                  <Link
+                    key={category}
+                    to={`/browse?category=${encodeURIComponent(category)}`}
+                    className="group flex-shrink-0 flex flex-col items-center gap-2 w-[88px]"
+                    title={category}
+                  >
+                    <div
+                      className="size-[80px] md:size-[96px] rounded-full overflow-hidden ring-1 ring-border bg-muted transition-transform group-hover:scale-[1.04] group-hover:ring-primary/40"
+                    >
+                      <img
+                        src={CATEGORY_ILLUSTRATIONS[category]}
+                        alt={category}
+                        className="w-full h-full object-cover select-none"
+                        loading="lazy"
+                        onError={() =>
+                          setMissingIllustrations((prev) => {
+                            const next = new Set(prev)
+                            next.add(category)
+                            return next
+                          })
+                        }
+                      />
+                    </div>
+                    <span className="text-[11px] md:text-xs font-medium text-foreground/80 text-center leading-tight line-clamp-2">
+                      {category}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )
+      })()}
 
       <section className="py-12 md:py-16 px-4">
         <div className="container max-w-6xl mx-auto">
