@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { generateUniqueSlug } from '@/lib/slug'
-import { useForm } from 'react-hook-form'
+import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
@@ -42,6 +42,16 @@ const listingSchema = z.object({
   social_tiktok: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_linkedin: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_facebook: z.string().url('Invalid URL').optional().or(z.literal('')),
+  services: z
+    .array(
+      z.object({
+        title: z.string().min(1, 'Title required'),
+        description: z.string().optional().or(z.literal('')),
+        price: z.string().optional().or(z.literal('')),
+      }),
+    )
+    .max(20, 'Up to 20 services')
+    .optional(),
 })
 
 type ListingFormData = z.infer<typeof listingSchema>
@@ -104,7 +114,7 @@ function SocialInput({
 }
 
 const STEP_FIELDS: (keyof ListingFormData)[][] = [
-  ['name', 'categories', 'tagline', 'description'],
+  ['name', 'categories', 'tagline', 'description', 'services'],
   ['location', 'city', 'postcode', 'phone', 'email', 'website', 'social_instagram', 'social_tiktok', 'social_linkedin', 'social_facebook'],
   ['is_women_owned', 'is_home_based', 'is_startup'],
 ]
@@ -154,10 +164,13 @@ export function ListPage() {
       social_tiktok: '',
       social_linkedin: '',
       social_facebook: '',
+      services: [],
     },
   })
 
   const selectedCategories = form.watch('categories')
+
+  const servicesField = useFieldArray({ control: form.control, name: 'services' })
 
   // After sign-in, publish the pending listing inline and go to the dashboard.
   useEffect(() => {
@@ -198,6 +211,13 @@ export function ListPage() {
         social_tiktok: data.social_tiktok || null,
         social_linkedin: data.social_linkedin || null,
         social_facebook: data.social_facebook || null,
+        services: (data.services || [])
+          .map((s) => ({
+            title: (s.title || '').trim(),
+            description: (s.description || '').trim() || undefined,
+            price: (s.price || '').trim() || undefined,
+          }))
+          .filter((s) => s.title),
         photos: photoUrls || [],
         image_url: photoUrls?.[0] || null,
         logo_url: logoUrl ?? null,
@@ -265,6 +285,11 @@ export function ListPage() {
         social_tiktok: data.social_tiktok ?? '',
         social_linkedin: data.social_linkedin ?? '',
         social_facebook: data.social_facebook ?? '',
+        services: (data.services ?? []).map((s) => ({
+          title: s?.title ?? '',
+          description: s?.description ?? '',
+          price: s?.price ?? '',
+        })),
       })
       setExistingPhotoUrls(data.photos ?? [])
       setExistingLogoUrl(data.logo_url ?? null)
@@ -418,6 +443,14 @@ export function ListPage() {
       const combinedLocation =
         addr && cty ? `${addr}, ${cty}` : addr || cty || data.postcode
 
+      const cleanedServices = (data.services || [])
+        .map((s) => ({
+          title: (s.title || '').trim(),
+          description: (s.description || '').trim() || undefined,
+          price: (s.price || '').trim() || undefined,
+        }))
+        .filter((s) => s.title)
+
       const basePayload = {
         name: data.name,
         categories: data.categories,
@@ -435,6 +468,7 @@ export function ListPage() {
         social_tiktok: data.social_tiktok || null,
         social_linkedin: data.social_linkedin || null,
         social_facebook: data.social_facebook || null,
+        services: cleanedServices,
         photos: finalPhotoUrls,
         image_url: finalPhotoUrls[0] || null,
         logo_url: finalLogoUrl,
@@ -555,6 +589,7 @@ export function ListPage() {
                     onLogoSelect={handleLogoSelect}
                     onLogoRemove={removeLogo}
                     logoInputRef={logoInputRef}
+                    servicesField={servicesField}
                   />
                 )}
                 {step === 1 && <StepContact form={form} />}
@@ -695,6 +730,7 @@ function StepBasics({
   onLogoSelect,
   onLogoRemove,
   logoInputRef,
+  servicesField,
 }: {
   form: ReturnType<typeof useForm<ListingFormData>>
   selectedCategories: string[]
@@ -706,6 +742,7 @@ function StepBasics({
   onLogoSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
   onLogoRemove: () => void
   logoInputRef: React.RefObject<HTMLInputElement | null>
+  servicesField: ReturnType<typeof useFieldArray<ListingFormData, 'services'>>
 }) {
   const logoPreviewSrc = logo?.preview ?? existingLogoUrl
   const logoLabel = logo?.file.name ?? (existingLogoUrl ? 'Current logo' : null)
@@ -887,6 +924,70 @@ function StepBasics({
           <p className="text-sm text-destructive">
             {form.formState.errors.description.message}
           </p>
+        )}
+      </div>
+
+      {/* Services / menu */}
+      <div className="space-y-3">
+        <div>
+          <Label className="text-sm font-medium text-foreground">
+            Services or menu <span className="text-muted-foreground font-normal">(optional)</span>
+          </Label>
+          <p className="text-xs text-muted-foreground mt-1">
+            List what you offer — each one with an optional price.
+          </p>
+        </div>
+
+        {servicesField.fields.length > 0 && (
+          <div className="space-y-3">
+            {servicesField.fields.map((field, index) => (
+              <div key={field.id} className="bg-muted/40 border border-border rounded-xl p-3 space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-[1fr_180px_auto] gap-2 items-start">
+                  <Input
+                    placeholder="Service title (e.g. Birthday cake)"
+                    className="h-10"
+                    {...form.register(`services.${index}.title` as const)}
+                  />
+                  <Input
+                    placeholder="Price (e.g. from £45)"
+                    className="h-10"
+                    {...form.register(`services.${index}.price` as const)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => servicesField.remove(index)}
+                    className="text-muted-foreground hover:text-destructive transition-colors p-2 rounded-md hover:bg-destructive/10"
+                    aria-label="Remove service"
+                  >
+                    <X className="size-4" />
+                  </button>
+                </div>
+                <Textarea
+                  placeholder="Short description (optional)"
+                  rows={2}
+                  className="text-sm"
+                  {...form.register(`services.${index}.description` as const)}
+                />
+                {form.formState.errors.services?.[index]?.title && (
+                  <p className="text-xs text-destructive">
+                    {form.formState.errors.services[index]?.title?.message}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {servicesField.fields.length < 20 && (
+          <button
+            type="button"
+            onClick={() =>
+              servicesField.append({ title: '', description: '', price: '' })
+            }
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline underline-offset-2"
+          >
+            + Add a service
+          </button>
         )}
       </div>
     </div>

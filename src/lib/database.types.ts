@@ -14,6 +14,12 @@ export interface OpeningHoursDay {
 
 export type OpeningHours = Record<string, OpeningHoursDay>
 
+export interface Service {
+  title: string
+  description?: string
+  price?: string
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -44,6 +50,7 @@ export interface Database {
           logo_url: string | null
           photos: string[]
           opening_hours: OpeningHours | null
+          services: Service[] | null
           is_women_owned: boolean
           is_home_based: boolean
           is_startup: boolean
@@ -78,6 +85,7 @@ export interface Database {
           logo_url?: string | null
           photos?: string[]
           opening_hours?: OpeningHours | null
+          services?: Service[] | null
           is_women_owned?: boolean
           is_home_based?: boolean
           is_startup?: boolean
@@ -112,6 +120,7 @@ export interface Database {
           logo_url?: string | null
           photos?: string[]
           opening_hours?: OpeningHours | null
+          services?: Service[] | null
           is_women_owned?: boolean
           is_home_based?: boolean
           is_startup?: boolean

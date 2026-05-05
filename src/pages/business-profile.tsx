@@ -218,6 +218,29 @@ export function BusinessProfilePage() {
           </div>
         </div>
 
+        {business.services && business.services.length > 0 && (
+          <div className="bg-card border border-border rounded-xl p-6 mb-8">
+            <h2 className="text-xl font-medium mb-4" style={{ fontFamily: 'Fraunces, serif' }}>
+              Services
+            </h2>
+            <ul className="divide-y divide-border">
+              {business.services.map((s, i) => (
+                <li key={i} className="py-3 first:pt-0 last:pb-0">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <p className="font-medium text-foreground">{s.title}</p>
+                    {s.price && (
+                      <p className="text-sm font-medium text-primary whitespace-nowrap">{s.price}</p>
+                    )}
+                  </div>
+                  {s.description && (
+                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{s.description}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {business.photos && business.photos.length > 0 && (
           <div className="bg-card border border-border rounded-xl p-6 mb-12">
             <h2 className="text-xl font-medium mb-4">Gallery</h2>
