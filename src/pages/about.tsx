@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
-import { Heart, Shield, MapPin, Paintbrush } from 'lucide-react'
+import { Heart, Shield, MapPin, Paintbrush, Sparkles } from 'lucide-react'
 
 const beliefs = [
   {
@@ -11,7 +11,7 @@ const beliefs = [
   {
     icon: MapPin,
     title: 'Local is worth protecting.',
-    body: 'The businesses holding neighbourhoods together \u2014 the independent caf\u00e9, the one-woman florist, the careful joiner \u2014 deserve to be found by the people living ten minutes away.',
+    body: 'The businesses holding neighbourhoods together — the independent café, the one-woman florist, the careful joiner — deserve to be found by the people living ten minutes away.',
   },
   {
     icon: Heart,
@@ -21,45 +21,68 @@ const beliefs = [
   {
     icon: Paintbrush,
     title: 'Design matters here.',
-    body: 'How a platform feels shapes who feels welcome on it. Warm over corporate. Plain language over jargon. A listing flow that respects a small business owner\u2019s time.',
+    body: 'How a platform feels shapes who feels welcome on it. Warm over corporate. Plain language over jargon. A listing flow that respects a small business owner’s time.',
   },
+]
+
+const founderCompanies = [
+  'Scale AI',
+  'American Express',
+  'Mapp Digital',
+  'McCann Worldgroup',
+  'Toptal',
+  'Momentum',
+  'Verizon',
+  'SAP',
+  'McKinsey',
 ]
 
 export function AboutPage() {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="py-20 md:py-28 px-4">
-        <div className="container max-w-3xl mx-auto text-center">
+      <section className="relative overflow-hidden px-4 pt-16 md:pt-24 pb-12 md:pb-16" style={{ backgroundColor: '#FEF3E8' }}>
+        <div aria-hidden className="absolute -top-32 -right-20 w-[440px] h-[440px] rounded-full blur-3xl" style={{ backgroundColor: '#C2410C', opacity: 0.12 }} />
+        <div aria-hidden className="absolute -bottom-24 -left-12 w-[360px] h-[360px] rounded-full blur-3xl" style={{ backgroundColor: '#F59E0B', opacity: 0.18 }} />
+        <div aria-hidden className="absolute inset-0" style={{ backgroundColor: 'rgba(254,243,232,0.35)' }} />
+
+        <div className="container max-w-3xl mx-auto text-center relative z-10">
+          <div className="inline-flex items-center gap-1.5 bg-amber text-amber-foreground rounded-full px-3.5 py-1.5 text-xs font-medium mb-6">
+            <Sparkles className="size-3" />
+            Our story
+          </div>
+
           <h1
-            className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-6"
-            style={{ fontFamily: 'Fraunces, serif' }}
+            className="text-4xl md:text-5xl lg:text-[58px] font-medium tracking-tight mb-6"
+            style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
           >
-            About ListMio
+            A directory built for the{' '}
+            <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
+              businesses we love
+            </em>
+            .
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-[color:#5C4E46] leading-[1.65] max-w-2xl mx-auto">
             We&rsquo;re building the local directory small businesses actually
-            deserve
+            deserve &mdash; free, fair, and designed with care.
           </p>
         </div>
       </section>
 
-      {/* Problem / Solution */}
-      <section className="bg-card border-y border-border px-4 py-16 md:py-20">
-        <div className="container max-w-2xl mx-auto space-y-6 text-foreground leading-7">
-          <p>
+      {/* Why we exist — pull-quote callout */}
+      <section className="px-4 py-16 md:py-24">
+        <div className="container max-w-3xl mx-auto text-center space-y-6">
+          <p className="text-2xl md:text-3xl font-medium leading-snug" style={{ fontFamily: 'Fraunces, serif' }}>
             Most directories are built for advertisers. Listings get buried
-            under paid placements. Sign-up flows assume you have a marketing
-            team. The design rewards whoever spends the most, not whoever does
-            the best work.
+            under paid placements.
           </p>
-          <p
-            className="text-xl md:text-2xl font-medium"
-            style={{ fontFamily: 'Fraunces, serif' }}
-          >
-            Listmio is built differently.
-          </p>
-          <p>
+          <div>
+            <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary rounded-full px-3.5 py-1.5 text-xs md:text-sm font-medium">
+              <Sparkles className="size-3" />
+              Listmio is built differently
+            </span>
+          </div>
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             We&rsquo;re a directory for small, independent businesses &mdash;
             free to list, free to find, designed with the people actually using
             it in mind. We give pride of place to women-led businesses through
@@ -70,33 +93,46 @@ export function AboutPage() {
       </section>
 
       {/* What we believe */}
-      <section className="px-4 py-16 md:py-24">
-        <div className="container max-w-4xl mx-auto">
-          <h2
-            className="text-3xl md:text-4xl font-medium text-center mb-14"
-            style={{ fontFamily: 'Fraunces, serif' }}
-          >
-            What we believe
-          </h2>
+      <section className="px-4 py-16 md:py-24" style={{ backgroundColor: '#FAF6F1' }}>
+        <div className="container max-w-5xl mx-auto">
+          <div className="text-center mb-12 md:mb-14">
+            <p className="text-xs font-semibold tracking-[0.10em] uppercase text-[#9D8E87] mb-3">
+              What we believe
+            </p>
+            <h2
+              className="text-3xl md:text-4xl font-medium tracking-tight"
+              style={{ fontFamily: 'Fraunces, serif' }}
+            >
+              Four principles, no fine print.
+            </h2>
+          </div>
 
-          <div className="grid md:grid-cols-2 gap-8 md:gap-10">
-            {beliefs.map((b) => {
+          <div className="grid md:grid-cols-2 gap-5 md:gap-6">
+            {beliefs.map((b, i) => {
               const Icon = b.icon
               return (
                 <div
                   key={b.title}
-                  className="bg-card border border-border rounded-xl p-6 md:p-8"
+                  className="group bg-card border border-border rounded-2xl p-7 md:p-8 transition-all hover:border-primary/30 hover:shadow-md hover:-translate-y-0.5"
                 >
-                  <div className="rounded-lg bg-primary/10 p-2.5 w-fit mb-4">
-                    <Icon className="size-5 text-primary" />
+                  <div className="flex items-start justify-between mb-5">
+                    <div className="rounded-lg bg-primary/10 p-2.5 transition-colors group-hover:bg-primary/15">
+                      <Icon className="size-5 text-primary" />
+                    </div>
+                    <span
+                      className="text-3xl font-medium text-primary/30 leading-none tabular-nums"
+                      style={{ fontFamily: 'Fraunces, serif' }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
                   </div>
                   <h3
-                    className="text-lg font-medium mb-2"
+                    className="text-lg md:text-xl font-medium mb-2"
                     style={{ fontFamily: 'Fraunces, serif' }}
                   >
                     {b.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm">
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-[15px]">
                     {b.body}
                   </p>
                 </div>
@@ -107,64 +143,125 @@ export function AboutPage() {
       </section>
 
       {/* About the founder */}
-      <section className="bg-card border-y border-border px-4 py-16 md:py-20">
-        <div className="container max-w-2xl mx-auto">
-          <h2
-            className="text-3xl md:text-4xl font-medium mb-10"
-            style={{ fontFamily: 'Fraunces, serif' }}
-          >
-            About the founder
-          </h2>
+      <section className="px-4 py-16 md:py-24">
+        <div className="container max-w-4xl mx-auto">
+          <div className="text-center mb-10 md:mb-12">
+            <p className="text-xs font-semibold tracking-[0.10em] uppercase text-[#9D8E87] mb-3">
+              Behind ListMio
+            </p>
+            <h2
+              className="text-3xl md:text-4xl font-medium tracking-tight"
+              style={{ fontFamily: 'Fraunces, serif' }}
+            >
+              About the founder
+            </h2>
+          </div>
 
-          <div className="space-y-6 text-foreground leading-7">
-            <p>
-              ListMio is founded by{' '}
-              <a
-                href="https://www.linkedin.com/in/rkirankhan/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary font-medium hover:underline underline-offset-2"
-              >
-                R. Kir&aacute;n Khan
-              </a>
-              , a lead product design engineer with over 15 years of experience
-              building and launching digital platforms and SaaS products. Her
-              background includes work with companies such as Scale AI,
-              American Express, Mapp Digital, McCann Worldgroup, Toptal,
-              Momentum, Verizon, SAP, and recently with McKinsey.
+          <div className="bg-card border border-border rounded-3xl p-8 md:p-12 max-w-3xl mx-auto shadow-sm">
+            <p
+              className="text-xl md:text-[26px] font-medium leading-snug mb-7"
+              style={{ fontFamily: 'Fraunces, serif' }}
+            >
+              &ldquo;Visibility shouldn&rsquo;t depend on who already has a
+              network.&rdquo;
             </p>
-            <p>
-              She created ListMio after noticing how many thoughtful,
-              independently run businesses in her community struggled to be
-              discovered &mdash; not due to a lack of quality, but because
-              existing platforms weren&rsquo;t designed with them in mind.
-              Within this already crowded landscape, women-led businesses often
-              faced an additional layer of invisibility.
-            </p>
-            <p>
-              ListMio is her response to that gap: a directory built around the
-              needs of those listing on it, with a focus on giving women-led
-              ventures the visibility they deserve.
-            </p>
+
+            <div className="space-y-4 text-foreground leading-7 text-[15px] md:text-base">
+              <p>
+                ListMio is founded by{' '}
+                <a
+                  href="https://www.linkedin.com/in/rkirankhan/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary font-medium hover:underline underline-offset-2"
+                >
+                  R. Kir&aacute;n Khan
+                </a>
+                , a lead product design engineer with over 15 years of
+                experience building and launching digital platforms and SaaS
+                products.
+              </p>
+              <p>
+                She created ListMio after noticing how many thoughtful,
+                independently run businesses in her community struggled to be
+                discovered &mdash; not due to a lack of quality, but because
+                existing platforms weren&rsquo;t designed with them in mind.
+                Within this already crowded landscape, women-led businesses
+                often faced an additional layer of invisibility.
+              </p>
+              <p>
+                ListMio is her response to that gap: a directory built around
+                the needs of those listing on it, with a focus on giving
+                women-led ventures the visibility they deserve.
+              </p>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-border">
+              <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-muted-foreground mb-3">
+                Previously
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {founderCompanies.map((c) => (
+                  <span
+                    key={c}
+                    className="text-xs font-medium px-2.5 py-1 rounded-full bg-muted text-foreground/80"
+                  >
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="px-4 py-16 md:py-24">
-        <div className="container max-w-xl mx-auto text-center space-y-5">
-          <h2
-            className="text-3xl md:text-4xl font-medium"
-            style={{ fontFamily: 'Fraunces, serif' }}
+      <section className="px-4 pb-16 md:pb-24">
+        <div className="container max-w-4xl mx-auto">
+          <div
+            className="relative overflow-hidden rounded-3xl px-8 py-14 md:px-16 md:py-20 text-center text-white"
+            style={{
+              backgroundImage:
+                'linear-gradient(135deg, #C2410C 0%, #AE4024 60%, #8A2D14 100%)',
+            }}
           >
-            List your business
-          </h2>
-          <p className="text-muted-foreground text-lg">
-            Free to list. Built for businesses like yours.
-          </p>
-          <Button size="lg" asChild>
-            <Link to="/list">Get started</Link>
-          </Button>
+            <div aria-hidden className="absolute -top-20 -left-12 w-[280px] h-[280px] rounded-full bg-amber/30 blur-3xl" />
+            <div aria-hidden className="absolute -bottom-20 -right-10 w-[260px] h-[260px] rounded-full bg-white/10 blur-3xl" />
+
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-1.5 bg-white/15 text-white/90 rounded-full px-3.5 py-1.5 text-xs font-medium mb-6 ring-1 ring-white/20">
+                <Sparkles className="size-3" />
+                Free forever
+              </div>
+              <h2
+                className="text-3xl md:text-[42px] font-medium mb-4"
+                style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.01em' }}
+              >
+                List your business
+              </h2>
+              <p className="text-white/85 text-base md:text-lg mb-8 max-w-md mx-auto leading-relaxed">
+                Free to list. Built for businesses like yours. Be found by your
+                community.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Button
+                  size="lg"
+                  asChild
+                  className="bg-white text-primary hover:bg-white/90 rounded-full"
+                >
+                  <Link to="/list">Get started</Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  asChild
+                  className="text-white hover:bg-white/10 hover:text-white rounded-full"
+                >
+                  <Link to="/browse">Explore listings</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
