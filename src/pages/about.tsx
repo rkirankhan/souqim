@@ -198,7 +198,7 @@ export function AboutPage() {
 
             <div className="mt-8 pt-6 border-t border-border">
               <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-muted-foreground mb-3">
-                Previously
+                Worked for global companies
               </p>
               <div className="flex flex-wrap gap-2">
                 {founderCompanies.map((c) => (
