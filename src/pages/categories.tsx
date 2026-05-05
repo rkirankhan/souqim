@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Search } from 'lucide-react'
+import { Search, ArrowRight } from 'lucide-react'
 import { CATEGORIES, CATEGORY_ICONS, CATEGORY_ILLUSTRATIONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import { supabase } from '@/lib/supabase'
 import { Input } from '@/components/ui/input'
@@ -30,25 +30,41 @@ export function CategoriesPage() {
   }, [])
 
   const totalListings = Object.values(counts).reduce((s, n) => s + n, 0)
+  const totalCategories = CATEGORIES.length
   const q = search.trim().toLowerCase()
   const filtered = q
     ? CATEGORIES.filter((c) => c.toLowerCase().includes(q))
     : CATEGORIES
 
+  const markMissing = (category: string) =>
+    setMissingIllustrations((prev) => {
+      const next = new Set(prev)
+      next.add(category)
+      return next
+    })
+
   return (
     <div className="min-h-screen">
-      <section className="bg-gradient-to-br from-primary/10 via-background to-background border-b border-border py-14 md:py-20 px-4">
-        <div className="container max-w-3xl mx-auto text-center">
+      {/* Hero */}
+      <section className="relative overflow-hidden px-4 pt-12 md:pt-16 pb-12 md:pb-14" style={{ backgroundColor: '#FEF3E8' }}>
+        <div aria-hidden className="absolute -top-24 -left-12 w-[440px] h-[440px] rounded-full blur-3xl" style={{ backgroundColor: '#C2410C', opacity: 0.14 }} />
+        <div aria-hidden className="absolute -bottom-20 -right-12 w-[360px] h-[360px] rounded-full blur-3xl" style={{ backgroundColor: '#F59E0B', opacity: 0.18 }} />
+
+        <div className="container max-w-3xl mx-auto text-center relative z-10">
+          <p className="text-xs font-semibold tracking-[0.10em] uppercase text-[#9D8E87] mb-3">
+            {totalCategories} categories &middot; {totalListings || 0} live listings
+          </p>
           <h1
-            className="text-4xl md:text-5xl font-medium tracking-tight mb-4"
-            style={{ fontFamily: 'Fraunces, serif' }}
+            className="text-4xl md:text-[52px] font-medium tracking-tight mb-4"
+            style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
           >
-            Browse by category
+            Browse by{' '}
+            <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
+              category
+            </em>
           </h1>
-          <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-            {totalListings > 0
-              ? `Discover local businesses across ${totalListings} live listings — from food and coffee to tech, design and beyond.`
-              : 'Discover local businesses across food, coffee, tech, design and beyond.'}
+          <p className="text-base md:text-lg text-[color:#5C4E46] mb-7 max-w-xl mx-auto leading-relaxed">
+            Discover small, independent businesses &mdash; from food and coffee to tech, design and beyond.
           </p>
           <div className="relative max-w-md mx-auto">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
@@ -62,6 +78,7 @@ export function CategoriesPage() {
         </div>
       </section>
 
+      {/* Glass-effect circle row */}
       {(() => {
         const withIllustration = CATEGORIES.filter(
           (c) => CATEGORY_ILLUSTRATIONS[c] && !missingIllustrations.has(c),
@@ -69,11 +86,9 @@ export function CategoriesPage() {
         if (withIllustration.length === 0) return null
         return (
           <section className="relative overflow-hidden border-y border-white/40 px-4 py-8 md:py-10">
-            {/* Decorative colour blobs behind the glass */}
             <div aria-hidden className="absolute -top-24 -left-12 size-[320px] rounded-full blur-3xl" style={{ backgroundColor: '#C2410C', opacity: 0.18 }} />
             <div aria-hidden className="absolute -bottom-16 right-1/3 size-[300px] rounded-full blur-3xl" style={{ backgroundColor: '#F59E0B', opacity: 0.22 }} />
             <div aria-hidden className="absolute -top-8 right-0 size-[260px] rounded-full blur-3xl" style={{ backgroundColor: '#0F766E', opacity: 0.12 }} />
-            {/* Frosted-glass overlay */}
             <div aria-hidden className="absolute inset-0 backdrop-blur-2xl" style={{ backgroundColor: 'rgba(255,255,255,0.55)' }} />
 
             <div className="container max-w-6xl mx-auto relative z-10">
@@ -93,23 +108,13 @@ export function CategoriesPage() {
                     className="group flex-shrink-0 flex flex-col items-center gap-2 w-[88px]"
                     title={category}
                   >
-                    <div
-                      className="size-[80px] md:size-[96px] rounded-full overflow-hidden ring-1 ring-border bg-muted transition-transform group-hover:scale-[1.04] group-hover:ring-primary/40"
-                    >
-                      <img
-                        src={CATEGORY_ILLUSTRATIONS[category]}
-                        alt={category}
-                        className="w-full h-full object-cover select-none"
-                        loading="lazy"
-                        onError={() =>
-                          setMissingIllustrations((prev) => {
-                            const next = new Set(prev)
-                            next.add(category)
-                            return next
-                          })
-                        }
-                      />
-                    </div>
+                    <img
+                      src={CATEGORY_ILLUSTRATIONS[category]}
+                      alt={category}
+                      className="size-[80px] md:size-[96px] object-contain select-none transition-transform group-hover:scale-[1.06]"
+                      loading="lazy"
+                      onError={() => markMissing(category)}
+                    />
                     <span className="text-[11px] md:text-xs font-medium text-foreground/80 text-center leading-tight line-clamp-2">
                       {category}
                     </span>
@@ -121,12 +126,36 @@ export function CategoriesPage() {
         )
       })()}
 
-      <section className="py-12 md:py-16 px-4">
+      {/* All categories grid */}
+      <section className="py-12 md:py-16 px-4" style={{ backgroundColor: '#FAF6F1' }}>
         <div className="container max-w-6xl mx-auto">
+          <div className="flex items-end justify-between gap-4 mb-8 md:mb-10">
+            <div>
+              <p className="text-xs font-semibold tracking-[0.10em] uppercase text-[#9D8E87] mb-2">
+                All categories
+              </p>
+              <h2
+                className="text-2xl md:text-3xl font-medium tracking-tight"
+                style={{ fontFamily: 'Fraunces, serif' }}
+              >
+                {q ? 'Search results' : 'Find your people'}
+              </h2>
+            </div>
+            <Link
+              to="/browse"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline underline-offset-2 whitespace-nowrap"
+            >
+              Browse all listings
+              <ArrowRight className="size-3.5" />
+            </Link>
+          </div>
+
           {filtered.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
               {filtered.map((category) => {
                 const Icon = CATEGORY_ICONS[category] || DEFAULT_CATEGORY_ICON
+                const illustration = CATEGORY_ILLUSTRATIONS[category]
+                const showIllustration = illustration && !missingIllustrations.has(category)
                 const count = counts[category] || 0
                 const countLabel =
                   count === 0
@@ -138,15 +167,25 @@ export function CategoriesPage() {
                   <Link
                     key={category}
                     to={`/browse?category=${encodeURIComponent(category)}`}
-                    className="group rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5"
+                    className="group relative rounded-2xl border border-border bg-card p-4 md:p-5 transition-all hover:border-primary/40 hover:shadow-lg hover:-translate-y-1"
                   >
-                    <div className="rounded-xl bg-primary/10 p-3 w-fit mb-3 group-hover:bg-primary/15 transition-colors">
-                      <Icon className="size-6 text-primary" />
-                    </div>
-                    <h3 className="text-base font-medium leading-tight mb-1">
+                    {showIllustration ? (
+                      <img
+                        src={illustration}
+                        alt=""
+                        className="size-14 md:size-16 object-contain select-none mb-3 transition-transform group-hover:scale-[1.06]"
+                        loading="lazy"
+                        onError={() => markMissing(category)}
+                      />
+                    ) : (
+                      <div className="size-14 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-3 transition-colors group-hover:bg-primary/15">
+                        <Icon className="size-6 text-primary" />
+                      </div>
+                    )}
+                    <h3 className="text-[15px] md:text-base font-medium leading-tight mb-1 group-hover:text-primary transition-colors">
                       {category}
                     </h3>
-                    <p className="text-sm text-muted-foreground">{countLabel}</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">{countLabel}</p>
                   </Link>
                 )
               })}
@@ -156,6 +195,28 @@ export function CategoriesPage() {
               No categories match &ldquo;{search}&rdquo;
             </div>
           )}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="px-4 py-14 md:py-20" style={{ backgroundColor: '#FEF3E8' }}>
+        <div className="container max-w-3xl mx-auto text-center">
+          <h2
+            className="text-2xl md:text-3xl font-medium mb-3"
+            style={{ fontFamily: 'Fraunces, serif' }}
+          >
+            Don&rsquo;t see your trade?
+          </h2>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            We&rsquo;re still adding categories. List your business now and we&rsquo;ll find the right home for it.
+          </p>
+          <Link
+            to="/list"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity"
+          >
+            List your business &mdash; it&rsquo;s free
+            <ArrowRight className="size-4" />
+          </Link>
         </div>
       </section>
     </div>
