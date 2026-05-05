@@ -18,6 +18,44 @@ function getInitials(name: string) {
     .slice(0, 2)
 }
 
+type IconProps = { className?: string }
+
+function InstagramIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  )
+}
+
+function TikTokIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.16a8.16 8.16 0 0 0 4.77 1.52V6.32a4.85 4.85 0 0 1-1.84-.63z" />
+    </svg>
+  )
+}
+
+function LinkedinIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
+}
+
+function FacebookIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  )
+}
+
 export function BusinessProfilePage() {
   const { id } = useParams<{ id: string }>()
   const [business, setBusiness] = useState<Business | null>(null)
@@ -25,7 +63,7 @@ export function BusinessProfilePage() {
   const [loading, setLoading] = useState(true)
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<
-    'about' | 'services' | 'gallery' | 'posts' | 'contact' | null
+    'about' | 'services' | 'gallery' | 'posts' | null
   >(null)
 
   useEffect(() => {
@@ -118,7 +156,7 @@ export function BusinessProfilePage() {
       <div className="relative h-20 md:h-24 bg-gradient-to-br from-primary/20 to-primary/5" />
 
       <div className="container max-w-4xl mx-auto px-4 -mt-6 relative z-10">
-        <div className="bg-card border border-border rounded-xl p-8 shadow-lg mb-8">
+        <div className="bg-card border border-border rounded-xl p-8 shadow-lg mb-6">
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {(business.logo_url || business.image_url) ? (
               <img
@@ -133,11 +171,19 @@ export function BusinessProfilePage() {
             )}
 
             <div className="flex-1">
-              <div className="flex flex-wrap gap-2 mb-3">
+              <h1 className="text-3xl md:text-4xl font-medium mb-2">{business.name}</h1>
+              <p className="text-lg text-muted-foreground mb-4">
+                {business.description || 'Building something amazing'}
+              </p>
+              <div className="flex items-center gap-2 text-muted-foreground mb-5">
+                <MapPin className="size-4" />
+                <span>{business.location}</span>
+              </div>
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
                 {(business.categories ?? []).map((cat) => (
                   <Badge
                     key={cat}
-                    className="rounded-full bg-emerald-100 text-emerald-800 hover:bg-emerald-100 border border-emerald-200"
+                    className="rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-50 border border-indigo-100"
                   >
                     {cat}
                   </Badge>
@@ -149,17 +195,122 @@ export function BusinessProfilePage() {
                   </Badge>
                 )}
               </div>
-              <h1 className="text-3xl md:text-4xl font-medium mb-2">{business.name}</h1>
-              <p className="text-lg text-muted-foreground mb-4">
-                {business.description || 'Building something amazing'}
-              </p>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <MapPin className="size-4" />
-                <span>{business.location}</span>
-              </div>
             </div>
           </div>
         </div>
+
+        {(business.email ||
+          business.phone ||
+          business.website ||
+          business.social_facebook ||
+          business.social_instagram ||
+          business.social_tiktok ||
+          business.social_linkedin) && (
+          <div className="bg-card border border-border rounded-xl p-6 mb-8">
+            <p className="text-xs font-semibold tracking-[0.10em] uppercase text-muted-foreground mb-4">
+              Contact &amp; links
+            </p>
+            <div className="grid sm:grid-cols-3 gap-4 mb-4">
+              {business.email && (
+                <a
+                  href={`mailto:${business.email}`}
+                  className="flex items-start gap-3 group"
+                >
+                  <Mail className="size-5 text-primary mt-0.5 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-xs text-muted-foreground mb-0.5">Email</p>
+                    <span className="text-sm text-foreground group-hover:text-primary transition-colors break-all">
+                      {business.email}
+                    </span>
+                  </div>
+                </a>
+              )}
+              {business.phone && (
+                <a
+                  href={`tel:${business.phone}`}
+                  className="flex items-start gap-3 group"
+                >
+                  <Phone className="size-5 text-primary mt-0.5 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-xs text-muted-foreground mb-0.5">Phone</p>
+                    <span className="text-sm text-foreground group-hover:text-primary transition-colors">
+                      {business.phone}
+                    </span>
+                  </div>
+                </a>
+              )}
+              {business.website && (
+                <a
+                  href={business.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 group"
+                >
+                  <Globe className="size-5 text-primary mt-0.5 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-xs text-muted-foreground mb-0.5">Website</p>
+                    <span className="text-sm text-foreground group-hover:text-primary transition-colors inline-flex items-center gap-1 truncate">
+                      {business.website.replace(/^https?:\/\//, '')}
+                      <ExternalLink className="size-3 shrink-0" />
+                    </span>
+                  </div>
+                </a>
+              )}
+            </div>
+
+            {(business.social_instagram ||
+              business.social_tiktok ||
+              business.social_linkedin ||
+              business.social_facebook) && (
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
+                {business.social_instagram && (
+                  <a
+                    href={business.social_instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="size-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                  >
+                    <InstagramIcon className="size-4" />
+                  </a>
+                )}
+                {business.social_tiktok && (
+                  <a
+                    href={business.social_tiktok}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="TikTok"
+                    className="size-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                  >
+                    <TikTokIcon className="size-4" />
+                  </a>
+                )}
+                {business.social_linkedin && (
+                  <a
+                    href={business.social_linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    className="size-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                  >
+                    <LinkedinIcon className="size-4" />
+                  </a>
+                )}
+                {business.social_facebook && (
+                  <a
+                    href={business.social_facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="size-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                  >
+                    <FacebookIcon className="size-4" />
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         {(() => {
           const hasServices = !!(business.services && business.services.length > 0)
@@ -167,17 +318,8 @@ export function BusinessProfilePage() {
             !!business.opening_hours &&
             Object.values(business.opening_hours).some((d) => d?.open)
           const hasGallery = !!(business.photos && business.photos.length > 0)
-          const hasContact = !!(
-            business.email ||
-            business.phone ||
-            business.website ||
-            business.social_facebook ||
-            business.social_twitter ||
-            business.social_instagram ||
-            business.social_linkedin
-          )
           const tabs: {
-            key: 'about' | 'services' | 'gallery' | 'posts' | 'contact'
+            key: 'about' | 'services' | 'gallery' | 'posts'
             label: string
             show: boolean
           }[] = [
@@ -185,7 +327,6 @@ export function BusinessProfilePage() {
             { key: 'services', label: 'Services', show: hasServices },
             { key: 'gallery', label: 'Gallery', show: hasGallery },
             { key: 'posts', label: 'Posts', show: true },
-            { key: 'contact', label: 'Contact & links', show: hasContact },
           ]
           const visible = tabs.filter((t) => t.show)
           const current =
@@ -339,112 +480,6 @@ export function BusinessProfilePage() {
                 </div>
               )}
 
-              {current === 'contact' && hasContact && (
-                <div className="bg-card border border-border rounded-xl p-6 space-y-4">
-                  {business.email && (
-                    <div className="flex items-start gap-3">
-                      <Mail className="size-5 text-primary mt-0.5 shrink-0" />
-                      <div>
-                        <p className="text-xs text-muted-foreground mb-0.5">Email</p>
-                        <a
-                          href={`mailto:${business.email}`}
-                          className="text-foreground hover:text-primary transition-colors"
-                        >
-                          {business.email}
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                  {business.phone && (
-                    <div className="flex items-start gap-3">
-                      <Phone className="size-5 text-primary mt-0.5 shrink-0" />
-                      <div>
-                        <p className="text-xs text-muted-foreground mb-0.5">Phone</p>
-                        <a
-                          href={`tel:${business.phone}`}
-                          className="text-foreground hover:text-primary transition-colors"
-                        >
-                          {business.phone}
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                  {business.website && (
-                    <div className="flex items-start gap-3">
-                      <Globe className="size-5 text-primary mt-0.5 shrink-0" />
-                      <div>
-                        <p className="text-xs text-muted-foreground mb-0.5">Website</p>
-                        <a
-                          href={business.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
-                        >
-                          {business.website.replace(/^https?:\/\//, '')}
-                          <ExternalLink className="size-3" />
-                        </a>
-                      </div>
-                    </div>
-                  )}
-
-                  {(business.social_facebook ||
-                    business.social_twitter ||
-                    business.social_instagram ||
-                    business.social_linkedin) && (
-                    <div className="pt-4 border-t border-border">
-                      <p className="text-xs font-semibold tracking-[0.10em] uppercase text-muted-foreground mb-3">
-                        Follow
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {business.social_facebook && (
-                          <Button asChild variant="outline" size="sm" className="rounded-full">
-                            <a
-                              href={business.social_facebook}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Facebook
-                            </a>
-                          </Button>
-                        )}
-                        {business.social_twitter && (
-                          <Button asChild variant="outline" size="sm" className="rounded-full">
-                            <a
-                              href={business.social_twitter}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Twitter
-                            </a>
-                          </Button>
-                        )}
-                        {business.social_instagram && (
-                          <Button asChild variant="outline" size="sm" className="rounded-full">
-                            <a
-                              href={business.social_instagram}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Instagram
-                            </a>
-                          </Button>
-                        )}
-                        {business.social_linkedin && (
-                          <Button asChild variant="outline" size="sm" className="rounded-full">
-                            <a
-                              href={business.social_linkedin}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              LinkedIn
-                            </a>
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
           )
         })()}
