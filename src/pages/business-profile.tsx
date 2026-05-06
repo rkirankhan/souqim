@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, X, Rocket, Hop as Home } from 'lucide-react'
+import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, X, Rocket, Hop as Home, FileText, Images, MessageSquare, type LucideIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -396,11 +396,13 @@ export function BusinessProfilePage() {
             key: 'about' | 'services' | 'gallery' | 'posts'
             label: string
             show: boolean
+            Icon: LucideIcon
+            count?: number
           }[] = [
-            { key: 'about', label: 'About', show: true },
-            { key: 'services', label: 'Services', show: hasServices },
-            { key: 'gallery', label: 'Gallery', show: hasGallery },
-            { key: 'posts', label: 'Posts', show: true },
+            { key: 'about', label: 'About', show: true, Icon: FileText },
+            { key: 'services', label: 'Services', show: hasServices, Icon: Sparkles, count: business.services?.length },
+            { key: 'gallery', label: 'Gallery', show: hasGallery, Icon: Images, count: galleryPhotos.length },
+            { key: 'posts', label: 'Posts', show: true, Icon: MessageSquare },
           ]
           const visible = tabs.filter((t) => t.show)
           const current =
@@ -408,28 +410,39 @@ export function BusinessProfilePage() {
 
           return (
             <div className="mb-12">
-              <div
-                role="tablist"
-                className="inline-flex p-1 rounded-full bg-muted/60 mb-6 overflow-x-auto scrollbar-thin"
-              >
-                {visible.map((t) => {
-                  const isActive = current === t.key
-                  return (
-                    <button
-                      key={t.key}
-                      role="tab"
-                      aria-selected={isActive}
-                      onClick={() => setActiveTab(t.key)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                        isActive
-                          ? 'bg-card text-foreground'
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      {t.label}
-                    </button>
-                  )
-                })}
+              <div className="mb-6 border-b border-border">
+                <div role="tablist" className="flex gap-1 overflow-x-auto scrollbar-thin">
+                  {visible.map((t) => {
+                    const isActive = current === t.key
+                    return (
+                      <button
+                        key={t.key}
+                        role="tab"
+                        aria-selected={isActive}
+                        onClick={() => setActiveTab(t.key)}
+                        className={`relative inline-flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors -mb-px border-b-2 ${
+                          isActive
+                            ? 'border-primary text-primary'
+                            : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+                        }`}
+                      >
+                        <t.Icon className="size-4" />
+                        {t.label}
+                        {t.count !== undefined && (
+                          <span
+                            className={`text-[10.5px] px-1.5 py-0.5 rounded-full font-semibold tabular-nums leading-none ${
+                              isActive
+                                ? 'bg-primary text-primary-foreground'
+                                : 'bg-muted text-muted-foreground'
+                            }`}
+                          >
+                            {t.count}
+                          </span>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
 
               {current === 'about' && (
