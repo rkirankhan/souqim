@@ -7,9 +7,20 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Spinner } from '@/components/ui/spinner'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { toast } from 'sonner'
 import {
-  Store, Eye, Pencil, ExternalLink, Pause, Play, Plus, Sparkles, MapPin,
+  Store, Eye, Pencil, ExternalLink, Pause, Play, Plus, Sparkles, MapPin, Trash,
 } from 'lucide-react'
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
@@ -24,6 +35,7 @@ export function DashboardPage() {
   const [businesses, setBusinesses] = useState<Business[]>([])
   const [loading, setLoading] = useState(true)
   const [togglingId, setTogglingId] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   useEffect(() => {
     if (user) claimAndLoad()
@@ -95,6 +107,21 @@ export function DashboardPage() {
     }
   }
 
+  async function deleteBusiness(business: Business) {
+    setDeletingId(business.id)
+    try {
+      const { error } = await supabase.from('businesses').delete().eq('id', business.id)
+      if (error) throw error
+      setBusinesses((prev) => prev.filter((b) => b.id !== business.id))
+      toast.success(`'${business.name}' has been deleted.`)
+    } catch (err) {
+      console.error('Error deleting listing:', err)
+      toast.error('Failed to delete listing. Please try again.')
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
   const firstName = displayName.split(' ')[0] || displayName
 
   if (loading) {
@@ -124,7 +151,9 @@ export function DashboardPage() {
                 key={business.id}
                 business={business}
                 toggling={togglingId === business.id}
+                deleting={deletingId === business.id}
                 onToggleStatus={() => toggleStatus(business)}
+                onDelete={() => deleteBusiness(business)}
               />
             ))}
 
@@ -167,10 +196,18 @@ function EmptyState() {
 interface BusinessListingCardProps {
   business: Business
   toggling: boolean
+  deleting: boolean
   onToggleStatus: () => void
+  onDelete: () => void
 }
 
-function BusinessListingCard({ business, toggling, onToggleStatus }: BusinessListingCardProps) {
+function BusinessListingCard({
+  business,
+  toggling,
+  deleting,
+  onToggleStatus,
+  onDelete,
+}: BusinessListingCardProps) {
   const status = STATUS_BADGE[business.status] || STATUS_BADGE.draft
 
   const displayImage = business.logo_url || business.image_url
@@ -256,6 +293,47 @@ function BusinessListingCard({ business, toggling, onToggleStatus }: BusinessLis
                   </>
                 )}
               </Button>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="rounded-full h-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-auto"
+                    disabled={deleting}
+                  >
+                    {deleting ? (
+                      <Spinner className="size-3.5" />
+                    ) : (
+                      <>
+                        <Trash className="size-3.5" />
+                        Delete
+                      </>
+                    )}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete this listing?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      <span className="font-medium text-foreground">{business.name}</span>{' '}
+                      will be removed from ListMio for good. This can&rsquo;t be
+                      undone &mdash; the listing, photos and stats will all be
+                      gone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={onDelete}
+                      disabled={deleting}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {deleting ? <Spinner className="size-4" /> : 'Yes, delete it'}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </div>
