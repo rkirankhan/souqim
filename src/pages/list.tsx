@@ -681,6 +681,21 @@ export function ListPage() {
                   <div />
                 )}
                 <div className="flex-1" />
+                {isEditMode && step < 2 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={form.handleSubmit(handleSubmit)}
+                    disabled={submitting || uploadingPhotos}
+                    className="rounded-full h-11 min-w-[140px]"
+                  >
+                    {submitting || uploadingPhotos ? (
+                      <Spinner className="size-4" />
+                    ) : (
+                      'Save changes'
+                    )}
+                  </Button>
+                )}
                 {step < 2 ? (
                   <Button
                     type="button"
