@@ -177,6 +177,12 @@ export function BusinessProfilePage() {
             )}
 
             <div className="flex-1 min-w-0">
+              {business.is_women_owned && (
+                <div className="inline-flex items-center gap-1.5 bg-amber text-amber-foreground rounded-full px-3 py-1 text-xs font-semibold tracking-wide mb-3 ring-1 ring-amber-foreground/10">
+                  <Sparkles className="size-3.5" />
+                  Women-led business
+                </div>
+              )}
               <h1
                 className="text-3xl md:text-[40px] font-medium mb-2 leading-tight tracking-tight"
                 style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em' }}
@@ -193,12 +199,6 @@ export function BusinessProfilePage() {
                   <MapPin className="size-4" />
                   {business.location}
                 </span>
-                {business.is_women_owned && (
-                  <span className="inline-flex items-center gap-1.5 text-amber-foreground">
-                    <Sparkles className="size-3.5" />
-                    Women-led
-                  </span>
-                )}
               </div>
               <div className="flex flex-wrap gap-2 pt-5 border-t border-border">
                 {(business.categories ?? []).map((cat) => (
@@ -387,46 +387,71 @@ export function BusinessProfilePage() {
                     </p>
                   </div>
 
-                  {hasHours && (
-                    <div className="bg-card border border-border rounded-2xl p-6">
-                      <h3
-                        className="text-lg font-medium mb-3"
-                        style={{ fontFamily: 'Fraunces, serif' }}
-                      >
-                        Opening hours
-                      </h3>
-                      <ul className="divide-y divide-border">
-                        {(
-                          [
-                            'Monday',
-                            'Tuesday',
-                            'Wednesday',
-                            'Thursday',
-                            'Friday',
-                            'Saturday',
-                            'Sunday',
-                          ] as const
-                        ).map((day) => {
-                          const d = business.opening_hours?.[day]
-                          return (
-                            <li
-                              key={day}
-                              className="flex items-center justify-between py-2 text-sm"
-                            >
-                              <span className="font-medium">{day}</span>
-                              {d?.open ? (
-                                <span className="text-foreground/80 tabular-nums">
-                                  {d.start} – {d.end}
+                  {hasHours && (() => {
+                    const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] as const
+                    const today = days[(new Date().getDay() + 6) % 7] // JS: 0=Sun -> our index
+                    const now = new Date()
+                    const nowMin = now.getHours() * 60 + now.getMinutes()
+                    const todayHours = business.opening_hours?.[today]
+                    const isOpenNow = (() => {
+                      if (!todayHours?.open) return false
+                      const [sh, sm] = todayHours.start.split(':').map(Number)
+                      const [eh, em] = todayHours.end.split(':').map(Number)
+                      return nowMin >= sh * 60 + sm && nowMin <= eh * 60 + em
+                    })()
+
+                    return (
+                      <div className="bg-card border border-border rounded-2xl p-6">
+                        <div className="flex items-center justify-between mb-5">
+                          <h3
+                            className="text-lg font-medium"
+                            style={{ fontFamily: 'Fraunces, serif' }}
+                          >
+                            Opening hours
+                          </h3>
+                          <span
+                            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                              isOpenNow
+                                ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
+                                : 'bg-muted text-muted-foreground ring-1 ring-border'
+                            }`}
+                          >
+                            <span className={`size-1.5 rounded-full ${isOpenNow ? 'bg-emerald-500' : 'bg-muted-foreground/60'}`} />
+                            {isOpenNow ? 'Open now' : 'Closed'}
+                          </span>
+                        </div>
+
+                        <div className="grid sm:grid-cols-2 gap-2">
+                          {days.map((day) => {
+                            const d = business.opening_hours?.[day]
+                            const isToday = day === today
+                            return (
+                              <div
+                                key={day}
+                                className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-sm ${
+                                  isToday
+                                    ? 'bg-primary/8 ring-1 ring-primary/20'
+                                    : 'bg-muted/40'
+                                }`}
+                              >
+                                <span className={`font-medium ${isToday ? 'text-primary' : ''}`}>
+                                  {day.slice(0, 3)}
+                                  {isToday && <span className="ml-1.5 text-[10px] font-semibold uppercase tracking-wider opacity-70">Today</span>}
                                 </span>
-                              ) : (
-                                <span className="text-muted-foreground">Closed</span>
-                              )}
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    </div>
-                  )}
+                                {d?.open ? (
+                                  <span className="tabular-nums font-medium">
+                                    {d.start} – {d.end}
+                                  </span>
+                                ) : (
+                                  <span className="text-muted-foreground">Closed</span>
+                                )}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  })()}
                 </div>
               )}
 
