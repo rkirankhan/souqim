@@ -16,7 +16,7 @@ import { useAuth } from '@/lib/auth-context'
 import { CATEGORIES, CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import {
   ArrowLeft, ArrowRight, Check, Upload, X,
-  Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Rocket, Share2,
+  Sparkles, Camera, MapPin, Hop as Home, ImagePlus, Rocket, Share2, Star,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -164,6 +164,9 @@ export function ListPage() {
   const logoInputRef = useRef<HTMLInputElement>(null)
   const [showAllCategories, setShowAllCategories] = useState(false)
   const [openingHours, setOpeningHours] = useState<OpeningHours>(getDefaultOpeningHours)
+  // The selected cover/hero photo. Stored as either an existing URL
+  // (already in DB) or a new photo's local preview blob URL.
+  const [coverSelection, setCoverSelection] = useState<string | null>(null)
 
   function setDayOpen(day: string, open: boolean) {
     setOpeningHours((prev) => ({ ...prev, [day]: { ...prev[day], open } }))
@@ -328,6 +331,10 @@ export function ListPage() {
       })
       setExistingPhotoUrls(data.photos ?? [])
       setExistingLogoUrl(data.logo_url ?? null)
+      // Pre-select the existing hero (image_url) if it's one of the gallery photos.
+      if (data.image_url && (data.photos ?? []).includes(data.image_url)) {
+        setCoverSelection(data.image_url)
+      }
       if (data.opening_hours && typeof data.opening_hours === 'object') {
         // Merge stored values onto a default skeleton so missing days fall back gracefully.
         const defaults = getDefaultOpeningHours()
@@ -372,6 +379,7 @@ export function ListPage() {
 
   function removeExistingPhoto(url: string) {
     setExistingPhotoUrls((prev) => prev.filter((u) => u !== url))
+    setCoverSelection((prev) => (prev === url ? null : prev))
   }
 
   function handlePhotoSelect(e: React.ChangeEvent<HTMLInputElement>) {
@@ -389,7 +397,9 @@ export function ListPage() {
 
   function removePhoto(index: number) {
     setPhotos((prev) => {
-      URL.revokeObjectURL(prev[index].preview)
+      const removed = prev[index]
+      if (removed) URL.revokeObjectURL(removed.preview)
+      setCoverSelection((cur) => (cur === removed?.preview ? null : cur))
       return prev.filter((_, i) => i !== index)
     })
   }
@@ -430,10 +440,10 @@ export function ListPage() {
     }
   }
 
-  async function uploadPhotosToStorage(): Promise<string[]> {
+  async function uploadPhotosToStorage(): Promise<Array<{ preview: string; url: string }>> {
     if (photos.length === 0) return []
     setUploadingPhotos(true)
-    const urls: string[] = []
+    const result: Array<{ preview: string; url: string }> = []
     const timestamp = Date.now()
 
     for (let i = 0; i < photos.length; i++) {
@@ -449,23 +459,35 @@ export function ListPage() {
         const { data: urlData } = supabase.storage
           .from('business-photos')
           .getPublicUrl(path)
-        urls.push(urlData.publicUrl)
+        result.push({ preview: photo.preview, url: urlData.publicUrl })
       }
     }
     setUploadingPhotos(false)
-    return urls
+    return result
   }
 
   async function handleSubmit(data: ListingFormData) {
     setSubmitting(true)
     try {
-      const [newPhotoUrls, newLogoUrl] = await Promise.all([
+      const [newPhotoUploads, newLogoUrl] = await Promise.all([
         uploadPhotosToStorage(),
         uploadLogoToStorage(),
       ])
-
+      const newPhotoUrls = newPhotoUploads.map((p) => p.url)
       const finalPhotoUrls = [...existingPhotoUrls, ...newPhotoUrls]
       const finalLogoUrl = newLogoUrl ?? existingLogoUrl
+
+      // Resolve the user's chosen hero image (cover) to a real URL.
+      // - If they picked an existing photo, it's already a URL.
+      // - If they picked a newly-uploaded photo, look it up by preview blob.
+      // - Fallback: first item in finalPhotoUrls.
+      const resolveCover = (): string | null => {
+        if (!coverSelection) return finalPhotoUrls[0] || null
+        if (existingPhotoUrls.includes(coverSelection)) return coverSelection
+        const match = newPhotoUploads.find((p) => p.preview === coverSelection)
+        return match?.url || finalPhotoUrls[0] || null
+      }
+      const coverUrl = resolveCover()
 
       // Anonymous users: save state and redirect to sign in.
       // The listing isn't persisted yet — sign-in unlocks publishing
@@ -522,7 +544,7 @@ export function ListPage() {
         services: cleanedServices,
         opening_hours: hasAnyOpenDay(openingHours) ? openingHours : null,
         photos: finalPhotoUrls,
-        image_url: finalPhotoUrls[0] || null,
+        image_url: coverUrl,
         logo_url: finalLogoUrl,
       }
 
@@ -657,6 +679,8 @@ export function ListPage() {
                     form={form}
                     photos={photos}
                     existingPhotoUrls={existingPhotoUrls}
+                    coverSelection={coverSelection}
+                    onSetCover={setCoverSelection}
                     onPhotoSelect={handlePhotoSelect}
                     onPhotoDrop={handleDrop}
                     onPhotoRemove={removePhoto}
@@ -1267,6 +1291,8 @@ function StepDetails({
   form,
   photos,
   existingPhotoUrls,
+  coverSelection,
+  onSetCover,
   onPhotoSelect,
   onPhotoDrop,
   onPhotoRemove,
@@ -1276,6 +1302,8 @@ function StepDetails({
   form: ReturnType<typeof useForm<ListingFormData>>
   photos: { file: File; preview: string }[]
   existingPhotoUrls: string[]
+  coverSelection: string | null
+  onSetCover: (id: string) => void
   onPhotoSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
   onPhotoDrop: (e: React.DragEvent) => void
   onPhotoRemove: (index: number) => void
@@ -1286,6 +1314,9 @@ function StepDetails({
   const isHomeBased = form.watch('is_home_based')
   const isStartup = form.watch('is_startup')
   const totalPhotos = existingPhotoUrls.length + photos.length
+  // The first photo is the implicit cover when nothing has been picked yet.
+  const effectiveCover =
+    coverSelection ?? existingPhotoUrls[0] ?? photos[0]?.preview ?? null
 
   return (
     <div className="space-y-8">
@@ -1302,40 +1333,103 @@ function StepDetails({
         </div>
 
         {totalPhotos > 0 && (
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-            {existingPhotoUrls.map((url) => (
-              <div key={url} className="relative aspect-square rounded-lg overflow-hidden group">
-                <img
-                  src={url}
-                  alt="Existing photo"
-                  className="w-full h-full object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => onExistingPhotoRemove(url)}
-                  className="absolute top-1 right-1 size-6 rounded-full bg-foreground/70 text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X className="size-3.5" />
-                </button>
-              </div>
-            ))}
-            {photos.map((photo, i) => (
-              <div key={i} className="relative aspect-square rounded-lg overflow-hidden group">
-                <img
-                  src={photo.preview}
-                  alt={`Upload ${i + 1}`}
-                  className="w-full h-full object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => onPhotoRemove(i)}
-                  className="absolute top-1 right-1 size-6 rounded-full bg-foreground/70 text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X className="size-3.5" />
-                </button>
-              </div>
-            ))}
-          </div>
+          <>
+            <p className="text-xs text-muted-foreground">
+              Tap the star on a photo to set it as your cover image — the one shown in search results and at the top of your listing.
+            </p>
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+              {existingPhotoUrls.map((url) => {
+                const isCover = effectiveCover === url
+                return (
+                  <div
+                    key={url}
+                    className={`relative aspect-square rounded-lg overflow-hidden group transition-all ${
+                      isCover ? 'ring-2 ring-primary ring-offset-2 ring-offset-card' : ''
+                    }`}
+                  >
+                    <img
+                      src={url}
+                      alt="Existing photo"
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => onSetCover(url)}
+                      aria-label={isCover ? 'Cover photo' : 'Set as cover photo'}
+                      className={`absolute top-1 left-1 size-6 rounded-full flex items-center justify-center transition-opacity ${
+                        isCover
+                          ? 'bg-primary text-primary-foreground opacity-100'
+                          : 'bg-foreground/70 text-background opacity-0 group-hover:opacity-100'
+                      }`}
+                    >
+                      <Star
+                        className="size-3.5"
+                        fill={isCover ? 'currentColor' : 'none'}
+                        strokeWidth={isCover ? 0 : 2}
+                      />
+                    </button>
+                    {isCover && (
+                      <span className="absolute bottom-1 left-1 right-1 bg-primary text-primary-foreground text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded text-center">
+                        Cover
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => onExistingPhotoRemove(url)}
+                      className="absolute top-1 right-1 size-6 rounded-full bg-foreground/70 text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="size-3.5" />
+                    </button>
+                  </div>
+                )
+              })}
+              {photos.map((photo, i) => {
+                const isCover = effectiveCover === photo.preview
+                return (
+                  <div
+                    key={i}
+                    className={`relative aspect-square rounded-lg overflow-hidden group transition-all ${
+                      isCover ? 'ring-2 ring-primary ring-offset-2 ring-offset-card' : ''
+                    }`}
+                  >
+                    <img
+                      src={photo.preview}
+                      alt={`Upload ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => onSetCover(photo.preview)}
+                      aria-label={isCover ? 'Cover photo' : 'Set as cover photo'}
+                      className={`absolute top-1 left-1 size-6 rounded-full flex items-center justify-center transition-opacity ${
+                        isCover
+                          ? 'bg-primary text-primary-foreground opacity-100'
+                          : 'bg-foreground/70 text-background opacity-0 group-hover:opacity-100'
+                      }`}
+                    >
+                      <Star
+                        className="size-3.5"
+                        fill={isCover ? 'currentColor' : 'none'}
+                        strokeWidth={isCover ? 0 : 2}
+                      />
+                    </button>
+                    {isCover && (
+                      <span className="absolute bottom-1 left-1 right-1 bg-primary text-primary-foreground text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded text-center">
+                        Cover
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => onPhotoRemove(i)}
+                      className="absolute top-1 right-1 size-6 rounded-full bg-foreground/70 text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="size-3.5" />
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          </>
         )}
 
         {totalPhotos < 5 && (
