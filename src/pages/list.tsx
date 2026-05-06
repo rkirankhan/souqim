@@ -354,11 +354,15 @@ export function ListPage() {
   async function goNext() {
     const fields = STEP_FIELDS[step]
     const valid = await form.trigger(fields)
-    if (valid) setStep((s) => Math.min(s + 1, 2))
+    if (valid) {
+      setStep((s) => Math.min(s + 1, 2))
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   }
 
   function goBack() {
     setStep((s) => Math.max(s - 1, 0))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   function handleLogoSelect(e: React.ChangeEvent<HTMLInputElement>) {
@@ -634,7 +638,15 @@ export function ListPage() {
           )}
         </div>
 
-        <Stepper step={step} onStepClick={(i) => { if (i < step) setStep(i) }} />
+        <Stepper
+          step={step}
+          onStepClick={(i) => {
+            if (i < step) {
+              setStep(i)
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }
+          }}
+        />
 
         <Card className="rounded-2xl shadow-sm mt-6">
           <CardContent className="p-6 sm:p-12">
