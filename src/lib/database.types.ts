@@ -131,6 +131,45 @@ export interface Database {
           updated_at?: string
         }
       }
+      service_inquiries: {
+        Relationships: []
+        Row: {
+          id: string
+          created_at: string
+          status: 'new' | 'contacted' | 'closed'
+          name: string
+          email: string
+          phone: string | null
+          business_name: string | null
+          business_stage: string[]
+          services_interested: string[]
+          brief: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          status?: 'new' | 'contacted' | 'closed'
+          name: string
+          email: string
+          phone?: string | null
+          business_name?: string | null
+          business_stage?: string[]
+          services_interested?: string[]
+          brief?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          status?: 'new' | 'contacted' | 'closed'
+          name?: string
+          email?: string
+          phone?: string | null
+          business_name?: string | null
+          business_stage?: string[]
+          services_interested?: string[]
+          brief?: string | null
+        }
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -140,3 +179,5 @@ export interface Database {
 export type Business = Database['public']['Tables']['businesses']['Row']
 export type BusinessInsert = Database['public']['Tables']['businesses']['Insert']
 export type BusinessUpdate = Database['public']['Tables']['businesses']['Update']
+export type ServiceInquiry = Database['public']['Tables']['service_inquiries']['Row']
+export type ServiceInquiryInsert = Database['public']['Tables']['service_inquiries']['Insert']

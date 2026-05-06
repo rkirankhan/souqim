@@ -14,6 +14,7 @@ const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Explore', path: '/browse' },
   { label: 'Categories', path: '/categories' },
+  { label: 'Services', path: '/services' },
   { label: 'About', path: '/about' },
 ]
 
@@ -252,6 +253,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 Support
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link to="/services" className="hover:text-foreground transition-colors">Services</Link></li>
                 <li><Link to="/contact" className="hover:text-foreground transition-colors">Contact us</Link></li>
                 <li><Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link></li>
               </ul>

@@ -8,6 +8,7 @@ import { BrowsePage } from '@/pages/browse'
 import { CategoriesPage } from '@/pages/categories'
 import { BusinessProfilePage } from '@/pages/business-profile'
 import { ListPage } from '@/pages/list'
+import { ServicesPage } from '@/pages/services'
 import { AboutPage } from '@/pages/about'
 import { ContactPage } from '@/pages/contact'
 import { FaqPage } from '@/pages/faq'
@@ -31,6 +32,7 @@ export function App() {
           <Route path="/business/:id" element={<BusinessProfilePage />} />
           <Route path="/list" element={<ListPage />} />
           <Route path="/add-business" element={<Navigate to="/list" replace />} />
+          <Route path="/services" element={<ServicesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/faq" element={<FaqPage />} />
