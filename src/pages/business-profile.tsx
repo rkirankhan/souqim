@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles } from 'lucide-react'
+import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { BusinessCard } from '@/components/business-card'
 import { supabase } from '@/lib/supabase'
 import { isUuid } from '@/lib/slug'
@@ -61,16 +61,40 @@ export function BusinessProfilePage() {
   const [business, setBusiness] = useState<Business | null>(null)
   const [relatedBusinesses, setRelatedBusinesses] = useState<Business[]>([])
   const [loading, setLoading] = useState(true)
-  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [activeTab, setActiveTab] = useState<
     'about' | 'services' | 'gallery' | 'posts' | null
   >(null)
+
+  // Cover image leads the gallery, then the rest in their original order.
+  const galleryPhotos = (() => {
+    const list = business?.photos ?? []
+    const cover = business?.image_url
+    if (!cover || !list.includes(cover)) return list
+    return [cover, ...list.filter((u) => u !== cover)]
+  })()
 
   useEffect(() => {
     if (id) {
       loadBusiness(id)
     }
   }, [id])
+
+  // Keyboard navigation for the lightbox.
+  useEffect(() => {
+    if (lightboxIndex === null) return
+    const total = galleryPhotos.length
+    if (total === 0) return
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'ArrowLeft') {
+        setLightboxIndex((i) => (i === null ? null : (i - 1 + total) % total))
+      } else if (e.key === 'ArrowRight') {
+        setLightboxIndex((i) => (i === null ? null : (i + 1) % total))
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightboxIndex, galleryPhotos.length])
 
   async function loadBusiness(slugOrId: string) {
     setLoading(true)
@@ -153,20 +177,39 @@ export function BusinessProfilePage() {
           </Button>
         </div>
       </div>
-      <div className="relative h-32 md:h-40 overflow-hidden" style={{ backgroundColor: '#FEF3E8' }}>
-        <div aria-hidden className="absolute -top-16 -left-12 w-[420px] h-[420px] rounded-full blur-3xl" style={{ backgroundColor: '#C2410C', opacity: 0.18 }} />
-        <div aria-hidden className="absolute -bottom-20 right-1/4 w-[360px] h-[360px] rounded-full blur-3xl" style={{ backgroundColor: '#F59E0B', opacity: 0.22 }} />
-        <div aria-hidden className="absolute -top-8 right-0 w-[280px] h-[280px] rounded-full blur-3xl" style={{ backgroundColor: '#0F766E', opacity: 0.10 }} />
-      </div>
+      {business.image_url ? (
+        <button
+          type="button"
+          onClick={() => {
+            const idx = galleryPhotos.findIndex((u) => u === business.image_url)
+            setLightboxIndex(idx >= 0 ? idx : 0)
+          }}
+          aria-label="Open cover photo"
+          className="block w-full h-56 sm:h-72 md:h-[380px] overflow-hidden bg-muted relative cursor-zoom-in group"
+        >
+          <img
+            src={business.image_url}
+            alt={business.name}
+            className="w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-500"
+          />
+          <div aria-hidden className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background/80 via-background/20 to-transparent" />
+        </button>
+      ) : (
+        <div className="relative h-32 md:h-40 overflow-hidden" style={{ backgroundColor: '#FEF3E8' }}>
+          <div aria-hidden className="absolute -top-16 -left-12 w-[420px] h-[420px] rounded-full blur-3xl" style={{ backgroundColor: '#C2410C', opacity: 0.18 }} />
+          <div aria-hidden className="absolute -bottom-20 right-1/4 w-[360px] h-[360px] rounded-full blur-3xl" style={{ backgroundColor: '#F59E0B', opacity: 0.22 }} />
+          <div aria-hidden className="absolute -top-8 right-0 w-[280px] h-[280px] rounded-full blur-3xl" style={{ backgroundColor: '#0F766E', opacity: 0.10 }} />
+        </div>
+      )}
 
       <div className="container max-w-4xl mx-auto px-4 -mt-16 md:-mt-20 relative z-10">
         <div className="bg-card border border-border rounded-3xl p-6 md:p-10 mb-6">
           <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
-            {(business.logo_url || business.image_url) ? (
+            {business.logo_url ? (
               <img
-                src={business.logo_url || business.image_url!}
+                src={business.logo_url}
                 alt={business.name}
-                className="size-24 md:size-28 rounded-full object-cover ring-4 ring-card shrink-0"
+                className="size-24 md:size-28 rounded-full object-cover ring-4 ring-card shrink-0 bg-card"
               />
             ) : (
               <div className="size-24 md:size-28 rounded-full bg-primary/10 flex items-center justify-center ring-4 ring-card shrink-0">
@@ -481,21 +524,29 @@ export function BusinessProfilePage() {
 
               {current === 'gallery' && hasGallery && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {business.photos!.map((url, i) => (
-                    <button
-                      key={url}
-                      type="button"
-                      onClick={() => setLightboxUrl(url)}
-                      className="block aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-90 transition-opacity cursor-zoom-in"
-                    >
-                      <img
-                        src={url}
-                        alt={`${business.name} photo ${i + 1}`}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </button>
-                  ))}
+                  {galleryPhotos.map((url, i) => {
+                    const isCover = url === business.image_url
+                    return (
+                      <button
+                        key={url}
+                        type="button"
+                        onClick={() => setLightboxIndex(i)}
+                        className="relative block aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-90 transition-opacity cursor-zoom-in"
+                      >
+                        <img
+                          src={url}
+                          alt={`${business.name} photo ${i + 1}`}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                        {isCover && (
+                          <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full">
+                            Cover
+                          </span>
+                        )}
+                      </button>
+                    )
+                  })}
                 </div>
               )}
 
@@ -521,14 +572,64 @@ export function BusinessProfilePage() {
           )
         })()}
 
-        <Dialog open={lightboxUrl !== null} onOpenChange={(open) => !open && setLightboxUrl(null)}>
-          <DialogContent className="max-w-4xl p-0 bg-transparent border-0 shadow-none">
-            {lightboxUrl && (
-              <img
-                src={lightboxUrl}
-                alt={business.name}
-                className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
-              />
+        <Dialog open={lightboxIndex !== null} onOpenChange={(open) => !open && setLightboxIndex(null)}>
+          <DialogContent className="max-w-5xl p-0 bg-transparent border-0 shadow-none [&>button]:hidden">
+            <DialogTitle className="sr-only">
+              {business.name} photo gallery
+            </DialogTitle>
+            <DialogDescription className="sr-only">
+              Use the previous and next buttons or arrow keys to browse photos.
+            </DialogDescription>
+            {lightboxIndex !== null && galleryPhotos[lightboxIndex] && (
+              <div className="relative">
+                <img
+                  src={galleryPhotos[lightboxIndex]}
+                  alt={`${business.name} photo ${lightboxIndex + 1}`}
+                  className="w-full h-auto max-h-[85vh] object-contain rounded-lg select-none"
+                  draggable={false}
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setLightboxIndex(null)}
+                  aria-label="Close"
+                  className="absolute top-3 right-3 size-9 rounded-full bg-foreground/70 text-background flex items-center justify-center hover:bg-foreground/85 transition-colors"
+                >
+                  <X className="size-4" />
+                </button>
+
+                {galleryPhotos.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setLightboxIndex((i) =>
+                          i === null ? null : (i - 1 + galleryPhotos.length) % galleryPhotos.length,
+                        )
+                      }
+                      aria-label="Previous photo"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 size-11 rounded-full bg-foreground/70 text-background flex items-center justify-center hover:bg-foreground/85 transition-colors"
+                    >
+                      <ChevronLeft className="size-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setLightboxIndex((i) =>
+                          i === null ? null : (i + 1) % galleryPhotos.length,
+                        )
+                      }
+                      aria-label="Next photo"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 size-11 rounded-full bg-foreground/70 text-background flex items-center justify-center hover:bg-foreground/85 transition-colors"
+                    >
+                      <ChevronRight className="size-5" />
+                    </button>
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-foreground/75 text-background text-xs font-medium tabular-nums px-3 py-1 rounded-full">
+                      {lightboxIndex + 1} / {galleryPhotos.length}
+                    </div>
+                  </>
+                )}
+              </div>
             )}
           </DialogContent>
         </Dialog>
