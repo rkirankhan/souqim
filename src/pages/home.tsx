@@ -6,16 +6,7 @@ import { Input } from '@/components/ui/input'
 import { BusinessCard } from '@/components/business-card'
 import { supabase } from '@/lib/supabase'
 import type { Business } from '@/lib/database.types'
-import { CATEGORY_ICONS, DEFAULT_CATEGORY_ICON, CATEGORY_ACCENTS, DEFAULT_CATEGORY_ACCENT } from '@/lib/constants'
-
-const FEATURED_CATEGORY_NAMES = [
-  'Food & Catering',
-  'Beauty & Salon',
-  'Home Services',
-  'Fashion & Clothing',
-  'IT & Technology',
-  'Events & Planning',
-]
+import { CATEGORIES, CATEGORY_ILLUSTRATIONS } from '@/lib/constants'
 
 export function HomePage() {
   const navigate = useNavigate()
@@ -172,32 +163,45 @@ export function HomePage() {
       </section>
 
       {/* ── CATEGORIES ── */}
-      <section className="py-12 md:py-14 px-4 border-b" style={{ backgroundColor: '#FAF6F1' }}>
-        <div className="container max-w-5xl mx-auto">
-          <p className="text-center text-xs font-semibold tracking-[0.10em] text-[#9D8E87] uppercase mb-8">
+      <section className="py-16 md:py-20 px-4 border-b bg-card">
+        <div className="container max-w-6xl mx-auto">
+          <p className="text-center text-xs font-semibold tracking-[0.10em] text-[#9D8E87] uppercase mb-9 md:mb-10">
             Browse by category
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-3.5">
-            {FEATURED_CATEGORY_NAMES.map((name) => {
-              const Icon = CATEGORY_ICONS[name] || DEFAULT_CATEGORY_ICON
-              const accent = CATEGORY_ACCENTS[name] || DEFAULT_CATEGORY_ACCENT
-              return (
-                <button
-                  key={name}
-                  onClick={() => navigate(`/browse?category=${encodeURIComponent(name)}`)}
-                  className="group flex flex-col items-center gap-2.5 px-3 py-5 bg-card border rounded-[14px] transition-all hover:-translate-y-[3px] hover:shadow-md hover:border-[#D1CBC4]"
-                >
-                  <div
-                    className="size-[46px] rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: accent.bg }}
+          {(() => {
+            const cats = CATEGORIES.filter((c) => CATEGORY_ILLUSTRATIONS[c])
+            if (cats.length === 0) return null
+            return (
+              <div
+                className="flex gap-4 md:gap-6 overflow-x-auto pb-2 -mb-2 scrollbar-thin md:justify-center"
+                style={{
+                  WebkitMaskImage:
+                    'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
+                  maskImage:
+                    'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
+                }}
+              >
+                {cats.map((category) => (
+                  <Link
+                    key={category}
+                    to={`/browse?category=${encodeURIComponent(category)}`}
+                    className="group flex-shrink-0 flex flex-col items-center gap-1.5 w-[80px]"
+                    title={category}
                   >
-                    <Icon className="size-5" style={{ color: accent.fg }} />
-                  </div>
-                  <span className="text-xs font-medium text-foreground text-center leading-tight">{name}</span>
-                </button>
-              )
-            })}
-          </div>
+                    <img
+                      src={CATEGORY_ILLUSTRATIONS[category]}
+                      alt={category}
+                      className="size-[68px] md:size-[80px] object-contain select-none transition-transform group-hover:scale-[1.06]"
+                      loading="lazy"
+                    />
+                    <span className="text-[11px] font-medium text-center leading-tight line-clamp-2 text-foreground/80">
+                      {category}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )
+          })()}
         </div>
       </section>
 

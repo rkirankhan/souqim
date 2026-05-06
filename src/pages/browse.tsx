@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { BusinessCard } from '@/components/business-card'
 import { supabase } from '@/lib/supabase'
 import type { Business } from '@/lib/database.types'
-import { CATEGORIES, CATEGORY_ICONS, CATEGORY_ILLUSTRATIONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
+import { CATEGORIES, CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 
 export function BrowsePage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -228,57 +228,6 @@ export function BrowsePage() {
             </Button>
           </div>
 
-          {/* Category quick-jump scroll row (below search) */}
-          {(() => {
-            const cats = CATEGORIES.filter((c) => CATEGORY_ILLUSTRATIONS[c])
-            if (cats.length === 0) return null
-            return (
-              <div className="mt-7 md:mt-9">
-                <p className="text-center text-[11px] font-semibold tracking-[0.12em] uppercase text-[#9D8E87] mb-4">
-                  Browse by category
-                </p>
-                <div
-                  className="flex gap-4 md:gap-6 overflow-x-auto pb-2 -mb-2 scrollbar-thin md:justify-center"
-                  style={{
-                    WebkitMaskImage:
-                      'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
-                    maskImage:
-                      'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
-                  }}
-                >
-                  {cats.map((category) => {
-                    const isActive = selectedCategory === category
-                    return (
-                      <Link
-                        key={category}
-                        to={`/browse?category=${encodeURIComponent(category)}`}
-                        className={`group flex-shrink-0 flex flex-col items-center gap-1.5 w-[80px] transition-opacity ${
-                          selectedCategory && !isActive ? 'opacity-60 hover:opacity-100' : ''
-                        }`}
-                        title={category}
-                      >
-                        <img
-                          src={CATEGORY_ILLUSTRATIONS[category]}
-                          alt={category}
-                          className={`size-[68px] md:size-[80px] object-contain select-none transition-transform group-hover:scale-[1.06] ${
-                            isActive ? 'scale-[1.06]' : ''
-                          }`}
-                          loading="lazy"
-                        />
-                        <span
-                          className={`text-[11px] font-medium text-center leading-tight line-clamp-2 ${
-                            isActive ? 'text-primary' : 'text-foreground/80'
-                          }`}
-                        >
-                          {category}
-                        </span>
-                      </Link>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })()}
         </div>
       </section>
 
