@@ -30,7 +30,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation()
   const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { user, displayName, signOut, loading, isAdmin } = useAuth()
+  const { user, displayName, signOut, loading, isAdmin, hasListings } = useAuth()
 
   async function handleSignOut() {
     await signOut()
@@ -81,9 +81,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             {!loading && user && (
               <>
-                <Button asChild size="sm" variant="outline" className="hidden sm:flex rounded-full">
-                  <Link to="/list">List your business</Link>
-                </Button>
+                {hasListings ? (
+                  <Button asChild size="sm" variant="outline" className="hidden sm:flex rounded-full">
+                    <Link to="/dashboard">
+                      <LayoutDashboard className="size-4" />
+                      Dashboard
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button asChild size="sm" variant="outline" className="hidden sm:flex rounded-full">
+                    <Link to="/list">List your business</Link>
+                  </Button>
+                )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild className="hidden md:flex">
                     <button className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">

@@ -8,6 +8,7 @@ interface AuthContextValue {
   loading: boolean
   displayName: string
   isAdmin: boolean
+  hasListings: boolean
   signOut: () => Promise<void>
 }
 
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextValue>({
   loading: true,
   displayName: '',
   isAdmin: false,
+  hasListings: false,
   signOut: async () => {},
 })
 
@@ -25,6 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [hasListings, setHasListings] = useState(false)
 
   useEffect(() => {
     if (!supabaseConfigured) {
@@ -36,6 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(s)
       setUser(s?.user ?? null)
       checkAdmin(s?.user?.id)
+      checkListings(s?.user?.id)
       setLoading(false)
     })
 
@@ -43,6 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(s)
       setUser(s?.user ?? null)
       checkAdmin(s?.user?.id)
+      checkListings(s?.user?.id)
       setLoading(false)
     })
 
@@ -66,6 +71,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  async function checkListings(userId: string | undefined) {
+    if (!userId) {
+      setHasListings(false)
+      return
+    }
+    try {
+      const { count } = await supabase
+        .from('businesses')
+        .select('id', { count: 'exact', head: true })
+        .eq('owner_id', userId)
+      setHasListings((count ?? 0) > 0)
+    } catch {
+      setHasListings(false)
+    }
+  }
+
   const displayName = user?.user_metadata?.full_name
     || user?.user_metadata?.first_name
     || user?.email?.split('@')[0]
@@ -76,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, displayName, isAdmin, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, displayName, isAdmin, hasListings, signOut }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, X, Rocket } from 'lucide-react'
+import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, X, Rocket, Hop as Home } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -185,7 +185,7 @@ export function BusinessProfilePage() {
             setLightboxIndex(idx >= 0 ? idx : 0)
           }}
           aria-label="Open cover photo"
-          className="block w-full h-56 sm:h-72 md:h-[380px] overflow-hidden bg-muted relative cursor-zoom-in group"
+          className="block w-full h-44 sm:h-52 md:h-64 overflow-hidden bg-muted relative cursor-zoom-in group"
         >
           <img
             src={business.image_url}
@@ -220,7 +220,7 @@ export function BusinessProfilePage() {
             )}
 
             <div className="flex-1 min-w-0">
-              {(business.is_women_owned || business.is_startup) && (
+              {(business.is_women_owned || business.is_startup || business.is_home_based) && (
                 <div className="flex flex-wrap items-center gap-2 mb-3">
                   {business.is_women_owned && (
                     <div className="inline-flex items-center gap-1.5 bg-amber text-amber-foreground rounded-full px-3 py-1 text-xs font-semibold tracking-wide ring-1 ring-amber-foreground/10">
@@ -232,6 +232,12 @@ export function BusinessProfilePage() {
                     <div className="inline-flex items-center gap-1.5 bg-indigo-600 text-white rounded-full px-3 py-1 text-xs font-semibold tracking-wide ring-1 ring-indigo-700/20">
                       <Rocket className="size-3.5" />
                       Startup
+                    </div>
+                  )}
+                  {business.is_home_based && (
+                    <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 rounded-full px-3 py-1 text-xs font-semibold tracking-wide ring-1 ring-emerald-200">
+                      <Home className="size-3.5" />
+                      Home-based
                     </div>
                   )}
                 </div>
