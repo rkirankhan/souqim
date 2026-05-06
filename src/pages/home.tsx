@@ -66,12 +66,13 @@ export function HomePage() {
             className="text-4xl sm:text-5xl md:text-[62px] font-medium text-foreground mb-5"
             style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.06, letterSpacing: '-0.03em' }}
           >
-            Find any local business<br />
-            <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>worth knowing</em>.
+            Discover the{' '}
+            <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>heart</em>
+            <br />of your local community.
           </h1>
 
-          <p className="text-base md:text-lg text-[color:#5C4E46] max-w-[520px] mx-auto mb-6 leading-[1.65]">
-            Discover the small, independent shops, cafés, services and creators in your community.
+          <p className="text-base md:text-lg text-[color:#5C4E46] max-w-[640px] mx-auto mb-6 leading-[1.65]">
+            Find trusted independent businesses, local experts, and hidden gems — from cafés and salons to tradespeople, tutors, and creative professionals near you.
           </p>
 
           <div className="max-w-[820px] mx-auto mt-4 md:mt-6 overflow-hidden aspect-[3/1]">
@@ -176,7 +177,7 @@ export function HomePage() {
             if (cats.length === 0) return null
             return (
               <div
-                className="flex gap-4 md:gap-6 overflow-x-auto md:justify-center [&::-webkit-scrollbar]:hidden"
+                className="flex gap-4 md:gap-6 overflow-x-auto [&::-webkit-scrollbar]:hidden"
                 style={{
                   scrollbarWidth: 'none',
                   WebkitMaskImage:
