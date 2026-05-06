@@ -72,7 +72,7 @@ export function HomePage() {
           </h1>
 
           <p className="text-base md:text-lg text-[color:#5C4E46] max-w-[640px] mx-auto mb-6 leading-[1.65]">
-            Find trusted independent businesses, local experts, and hidden gems — from cafés and salons to tradespeople, tutors, and creative professionals near you.
+            Find trusted businesses, local experts, and hidden gems — from cafés and salons to tradespeople, tutors, and creative professionals near you.
           </p>
 
           <div className="max-w-[820px] mx-auto mt-4 md:mt-6 overflow-hidden aspect-[3/1]">
