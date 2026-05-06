@@ -54,7 +54,7 @@ const listingSchema = z.object({
   city: z.string().optional().or(z.literal('')),
   postcode: z.string().min(2, 'Postcode is required'),
   phone: z.string().optional(),
-  email: z.string().email('Please enter a valid email'),
+  email: z.string().email('Please enter a valid email').optional().or(z.literal('')),
   website: z.string().url('Invalid URL').optional().or(z.literal('')),
   is_women_owned: z.boolean(),
   is_home_based: z.boolean(),
@@ -239,7 +239,7 @@ export function ListPage() {
         location: combinedLocation,
         postcode: data.postcode,
         phone: data.phone || null,
-        email: data.email,
+        email: data.email || null,
         website: data.website || null,
         is_women_owned: data.is_women_owned,
         is_home_based: data.is_home_based,
@@ -548,7 +548,7 @@ export function ListPage() {
         location: combinedLocation,
         postcode: data.postcode,
         phone: data.phone || null,
-        email: data.email,
+        email: data.email || null,
         website: data.website || null,
         is_women_owned: data.is_women_owned,
         is_home_based: data.is_home_based,
@@ -1184,7 +1184,8 @@ function StepContact({
 
       <div className="space-y-1.5">
         <Label htmlFor="email" className="text-sm font-medium text-foreground">
-          Email *
+          Email
+          <span className="text-muted-foreground font-normal ml-1">(optional)</span>
         </Label>
         <Input
           id="email"
@@ -1194,7 +1195,7 @@ function StepContact({
           {...form.register('email')}
         />
         <p className="text-xs text-muted-foreground">
-          Used for customer enquiries and managing your listing.
+          Add it if you'd like customers to enquire by email.
         </p>
         {form.formState.errors.email && (
           <p className="text-sm text-destructive">
