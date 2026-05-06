@@ -410,39 +410,44 @@ export function BusinessProfilePage() {
 
           return (
             <div className="mb-12">
-              <div className="mb-6 border-b border-border">
-                <div role="tablist" className="flex gap-1 overflow-x-auto scrollbar-thin">
-                  {visible.map((t) => {
-                    const isActive = current === t.key
-                    return (
-                      <button
-                        key={t.key}
-                        role="tab"
-                        aria-selected={isActive}
-                        onClick={() => setActiveTab(t.key)}
-                        className={`relative inline-flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors -mb-px border-b-2 ${
-                          isActive
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+              <div
+                role="tablist"
+                className="mb-6 flex items-center gap-2 overflow-x-auto scrollbar-thin pb-1"
+              >
+                {visible.map((t) => {
+                  const isActive = current === t.key
+                  return (
+                    <button
+                      key={t.key}
+                      role="tab"
+                      aria-selected={isActive}
+                      onClick={() => setActiveTab(t.key)}
+                      className={`group relative inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 ring-1 ${
+                        isActive
+                          ? 'bg-primary text-primary-foreground ring-primary scale-[1.02]'
+                          : 'bg-card text-muted-foreground ring-border hover:ring-primary/40 hover:text-foreground hover:bg-card'
+                      }`}
+                    >
+                      <t.Icon
+                        className={`size-4 transition-transform duration-300 ${
+                          isActive ? 'scale-110' : 'group-hover:scale-110'
                         }`}
-                      >
-                        <t.Icon className="size-4" />
-                        {t.label}
-                        {t.count !== undefined && (
-                          <span
-                            className={`text-[10.5px] px-1.5 py-0.5 rounded-full font-semibold tabular-nums leading-none ${
-                              isActive
-                                ? 'bg-primary text-primary-foreground'
-                                : 'bg-muted text-muted-foreground'
-                            }`}
-                          >
-                            {t.count}
-                          </span>
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
+                      />
+                      {t.label}
+                      {t.count !== undefined && (
+                        <span
+                          className={`text-[10.5px] px-1.5 py-0.5 rounded-full font-semibold tabular-nums leading-none transition-colors ${
+                            isActive
+                              ? 'bg-white/20 text-primary-foreground'
+                              : 'bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'
+                          }`}
+                        >
+                          {t.count}
+                        </span>
+                      )}
+                    </button>
+                  )
+                })}
               </div>
 
               {current === 'about' && (
