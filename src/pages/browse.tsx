@@ -128,55 +128,32 @@ export function BrowsePage() {
   return (
     <div className="min-h-screen">
       {/* ── HEADER / SEARCH ── */}
-      <section className="border-b px-4 py-7 md:py-8" style={{ backgroundColor: '#FAF6F1' }}>
-        <div className="container max-w-6xl mx-auto">
-          {/* Category quick-jump scroll row */}
-          {(() => {
-            const cats = CATEGORIES.filter((c) => CATEGORY_ILLUSTRATIONS[c])
-            if (cats.length === 0) return null
-            return (
-              <div
-                className="flex gap-4 md:gap-6 overflow-x-auto pb-2 -mb-2 mb-5 scrollbar-thin"
-                style={{
-                  WebkitMaskImage:
-                    'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
-                  maskImage:
-                    'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
-                }}
-              >
-                {cats.map((category) => {
-                  const isActive = selectedCategory === category
-                  return (
-                    <Link
-                      key={category}
-                      to={`/browse?category=${encodeURIComponent(category)}`}
-                      className={`group flex-shrink-0 flex flex-col items-center gap-1.5 w-[80px] transition-opacity ${
-                        selectedCategory && !isActive ? 'opacity-60 hover:opacity-100' : ''
-                      }`}
-                      title={category}
-                    >
-                      <img
-                        src={CATEGORY_ILLUSTRATIONS[category]}
-                        alt={category}
-                        className={`size-[68px] md:size-[80px] object-contain select-none transition-transform group-hover:scale-[1.06] ${
-                          isActive ? 'scale-[1.06]' : ''
-                        }`}
-                        loading="lazy"
-                      />
-                      <span
-                        className={`text-[11px] font-medium text-center leading-tight line-clamp-2 ${
-                          isActive ? 'text-primary' : 'text-foreground/80'
-                        }`}
-                      >
-                        {category}
-                      </span>
-                    </Link>
-                  )
-                })}
-              </div>
-            )
-          })()}
+      <section
+        className="relative overflow-hidden border-b px-4 py-8 md:py-10"
+        style={{ backgroundColor: '#FEF3E8' }}
+      >
+        <div aria-hidden className="absolute -top-32 -left-16 w-[440px] h-[440px] rounded-full blur-3xl pointer-events-none" style={{ backgroundColor: '#C2410C', opacity: 0.10 }} />
+        <div aria-hidden className="absolute -bottom-32 -right-16 w-[400px] h-[400px] rounded-full blur-3xl pointer-events-none" style={{ backgroundColor: '#F59E0B', opacity: 0.14 }} />
 
+        <div className="container max-w-6xl mx-auto relative z-10">
+          {/* Title */}
+          <div className="text-center mb-6 md:mb-7">
+            <h1
+              className="text-2xl md:text-[36px] font-medium tracking-tight mb-1.5"
+              style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.1, letterSpacing: '-0.02em' }}
+            >
+              Explore{' '}
+              <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
+                local
+              </em>{' '}
+              businesses
+            </h1>
+            <p className="text-sm md:text-base text-[color:#5C4E46]">
+              Search by name, place, or what they do.
+            </p>
+          </div>
+
+          {/* Search bar */}
           <div
             className="flex flex-col sm:flex-row bg-card border rounded-[14px] p-1 max-w-[700px] mx-auto transition-all"
             style={{
@@ -250,6 +227,58 @@ export function BrowsePage() {
               <span className="sm:hidden md:inline">Search</span>
             </Button>
           </div>
+
+          {/* Category quick-jump scroll row (below search) */}
+          {(() => {
+            const cats = CATEGORIES.filter((c) => CATEGORY_ILLUSTRATIONS[c])
+            if (cats.length === 0) return null
+            return (
+              <div className="mt-7 md:mt-9">
+                <p className="text-center text-[11px] font-semibold tracking-[0.12em] uppercase text-[#9D8E87] mb-4">
+                  Browse by category
+                </p>
+                <div
+                  className="flex gap-4 md:gap-6 overflow-x-auto pb-2 -mb-2 scrollbar-thin md:justify-center"
+                  style={{
+                    WebkitMaskImage:
+                      'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
+                    maskImage:
+                      'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
+                  }}
+                >
+                  {cats.map((category) => {
+                    const isActive = selectedCategory === category
+                    return (
+                      <Link
+                        key={category}
+                        to={`/browse?category=${encodeURIComponent(category)}`}
+                        className={`group flex-shrink-0 flex flex-col items-center gap-1.5 w-[80px] transition-opacity ${
+                          selectedCategory && !isActive ? 'opacity-60 hover:opacity-100' : ''
+                        }`}
+                        title={category}
+                      >
+                        <img
+                          src={CATEGORY_ILLUSTRATIONS[category]}
+                          alt={category}
+                          className={`size-[68px] md:size-[80px] object-contain select-none transition-transform group-hover:scale-[1.06] ${
+                            isActive ? 'scale-[1.06]' : ''
+                          }`}
+                          loading="lazy"
+                        />
+                        <span
+                          className={`text-[11px] font-medium text-center leading-tight line-clamp-2 ${
+                            isActive ? 'text-primary' : 'text-foreground/80'
+                          }`}
+                        >
+                          {category}
+                        </span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })()}
         </div>
       </section>
 
