@@ -163,7 +163,10 @@ export function HomePage() {
       </section>
 
       {/* ── CATEGORIES ── */}
-      <section className="py-16 md:py-20 px-4 border-b bg-card">
+      <section
+        className="py-16 md:py-20 px-4 border-b"
+        style={{ background: 'linear-gradient(135deg, #FFFBF5 0%, #FEF3E8 50%, #FDE7CE 100%)' }}
+      >
         <div className="container max-w-6xl mx-auto">
           <p className="text-center text-xs font-semibold tracking-[0.10em] text-[#9D8E87] uppercase mb-9 md:mb-10">
             Browse by category
@@ -185,16 +188,16 @@ export function HomePage() {
                   <Link
                     key={category}
                     to={`/browse?category=${encodeURIComponent(category)}`}
-                    className="group flex-shrink-0 flex flex-col items-center gap-1.5 w-[80px]"
+                    className="group flex-shrink-0 flex flex-col items-center gap-2.5 w-[112px] md:w-[128px]"
                     title={category}
                   >
                     <img
                       src={CATEGORY_ILLUSTRATIONS[category]}
                       alt={category}
-                      className="size-[68px] md:size-[80px] object-contain select-none transition-transform group-hover:scale-[1.06]"
+                      className="size-[100px] md:size-[120px] object-contain select-none transition-transform group-hover:scale-[1.06]"
                       loading="lazy"
                     />
-                    <span className="text-[11px] font-medium text-center leading-tight line-clamp-2 text-foreground/80">
+                    <span className="text-xs md:text-[13px] font-medium text-center leading-tight line-clamp-2 text-foreground/80">
                       {category}
                     </span>
                   </Link>
