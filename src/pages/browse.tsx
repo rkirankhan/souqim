@@ -399,7 +399,7 @@ export function BrowsePage() {
                 Get discovered by your community. It's free.
               </p>
               <Button asChild className="w-full rounded-[10px]">
-                <Link to="/list">List your business</Link>
+                <Link to="/list">List your business for Free.</Link>
               </Button>
             </div>
           </aside>

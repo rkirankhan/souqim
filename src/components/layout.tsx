@@ -75,7 +75,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   Sign in
                 </Link>
                 <Button asChild size="sm" className="hidden sm:flex">
-                  <Link to="/list">List your business</Link>
+                  <Link to="/list">List your business for Free.</Link>
                 </Button>
               </>
             )}
@@ -91,7 +91,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </Button>
                 ) : (
                   <Button asChild size="sm" variant="outline" className="hidden sm:flex rounded-full">
-                    <Link to="/list">List your business</Link>
+                    <Link to="/list">List your business for Free.</Link>
                   </Button>
                 )}
                 <DropdownMenu>
@@ -209,7 +209,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
                   <Button asChild className="mt-4">
                     <Link to="/list" onClick={() => setMobileMenuOpen(false)}>
-                      List Your Business
+                      List your business for Free.
                     </Link>
                   </Button>
                 </nav>
