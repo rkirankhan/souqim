@@ -1,4 +1,4 @@
-import { MapPin, Store, Sparkles } from 'lucide-react'
+import { MapPin, Store, Sparkles, Rocket } from 'lucide-react'
 import type { Business } from '@/lib/database.types'
 import { Link } from 'react-router-dom'
 import { CATEGORY_ACCENTS, DEFAULT_CATEGORY_ACCENT } from '@/lib/constants'
@@ -6,6 +6,13 @@ import { CATEGORY_ACCENTS, DEFAULT_CATEGORY_ACCENT } from '@/lib/constants'
 interface BusinessCardProps {
   business: Business
   compact?: boolean
+}
+
+// "12 Some Street, Bristol" → "Bristol". Falls back to the full string when
+// there's no comma (location was already just the city/town).
+function cityFromLocation(location: string): string {
+  const idx = location.lastIndexOf(',')
+  return idx > -1 ? location.slice(idx + 1).trim() || location : location
 }
 
 export function BusinessCard({ business, compact = false }: BusinessCardProps) {
@@ -28,36 +35,39 @@ export function BusinessCard({ business, compact = false }: BusinessCardProps) {
           ) : (
             <Store className="size-7" style={{ color: accent.fg }} strokeWidth={1.4} />
           )}
-          {business.is_women_owned && (
-            <span className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 bg-amber text-amber-foreground rounded-full px-2 py-0.5 text-[10px] font-medium">
-              <Sparkles className="size-[9px]" />
-              Women-led
-            </span>
-          )}
+          <div className="absolute top-2.5 right-2.5 flex flex-col items-end gap-1">
+            {business.is_women_owned && (
+              <span className="inline-flex items-center gap-1 bg-amber text-amber-foreground rounded-full px-2 py-0.5 text-[10px] font-medium">
+                <Sparkles className="size-[9px]" />
+                Women-led
+              </span>
+            )}
+            {business.is_startup && (
+              <span className="inline-flex items-center gap-1 bg-indigo-600 text-white rounded-full px-2 py-0.5 text-[10px] font-medium">
+                <Rocket className="size-[9px]" />
+                Startup
+              </span>
+            )}
+          </div>
         </div>
 
         <div className={compact ? 'px-3.5 pt-3 pb-3.5' : 'px-4 pt-3.5 pb-4'}>
           <h3
-            className={`font-medium text-foreground leading-snug line-clamp-1 mb-1 ${compact ? 'text-[14px]' : 'text-[15px]'}`}
+            className={`font-medium text-foreground leading-snug line-clamp-1 mb-1.5 ${compact ? 'text-[14px]' : 'text-[15px]'}`}
             style={{ fontFamily: 'Fraunces, serif' }}
           >
             {business.name}
           </h3>
-          {business.tagline && (
-            <p className={`text-[#9D8E87] line-clamp-1 mb-2.5 ${compact ? 'text-xs' : 'text-[12.5px]'}`}>
-              {business.tagline}
-            </p>
-          )}
-          <div className="flex items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1 text-xs text-[#9D8E87]">
-              <MapPin className="size-[11px]" />
-              {business.location}
-            </span>
-            {primaryCat && (
-              <span className="text-[10.5px] px-1.5 py-0.5 rounded-md bg-[#FAF6F1] text-[color:#5C4E46]">
+          {primaryCat && (
+            <div>
+              <span className="inline-block text-[10.5px] px-1.5 py-0.5 rounded-md bg-[#FAF6F1] text-[color:#5C4E46] mb-2">
                 {primaryCat}
               </span>
-            )}
+            </div>
+          )}
+          <div className="inline-flex items-center gap-1 text-xs text-[#9D8E87]">
+            <MapPin className="size-[11px]" />
+            {cityFromLocation(business.location)}
           </div>
         </div>
       </div>

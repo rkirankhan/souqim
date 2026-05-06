@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
-import { Search, MapPin, Sparkles, Filter, X, Store } from 'lucide-react'
+import { Search, MapPin, Sparkles, Filter, X, Store, Rocket } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { BusinessCard } from '@/components/business-card'
@@ -21,6 +21,7 @@ export function BrowsePage() {
 
   const selectedCategory = searchParams.get('category') || ''
   const womenLedOnly = searchParams.get('women-led') === 'true'
+  const startupOnly = searchParams.get('startup') === 'true'
 
   useEffect(() => {
     loadBusinesses()
@@ -49,6 +50,10 @@ export function BrowsePage() {
 
       if (searchParams.get('women-led') === 'true') {
         query = query.eq('is_women_owned', true)
+      }
+
+      if (searchParams.get('startup') === 'true') {
+        query = query.eq('is_startup', true)
       }
 
       query = query.order('created_at', { ascending: false })
@@ -105,13 +110,20 @@ export function BrowsePage() {
     })
   }
 
+  function toggleStartup() {
+    updateParams((p) => {
+      if (p.get('startup') === 'true') p.delete('startup')
+      else p.set('startup', 'true')
+    })
+  }
+
   function clearAllFilters() {
     setSearchKeyword('')
     setSearchLocation('')
     setSearchParams({})
   }
 
-  const activeFilters = [selectedCategory, womenLedOnly].filter(Boolean).length
+  const activeFilters = [selectedCategory, womenLedOnly, startupOnly].filter(Boolean).length
 
   return (
     <div className="min-h-screen">
@@ -306,6 +318,29 @@ export function BrowsePage() {
                 </button>
               </div>
 
+              {/* Startup */}
+              <div className="px-[18px] py-3.5 border-b">
+                <button
+                  onClick={toggleStartup}
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-[10px] transition-colors"
+                  style={{ backgroundColor: startupOnly ? '#EEF2FF' : 'transparent' }}
+                >
+                  <span className="flex items-center gap-2 text-[13px] font-medium" style={{ color: startupOnly ? '#4F46E5' : undefined }}>
+                    <Rocket className="size-[14px]" style={{ color: startupOnly ? '#4F46E5' : '#6366F1' }} />
+                    Startups
+                  </span>
+                  <span
+                    className="relative w-9 h-5 rounded-full shrink-0 transition-colors"
+                    style={{ backgroundColor: startupOnly ? '#4F46E5' : '#D1CBC4' }}
+                  >
+                    <span
+                      className="absolute top-[3px] size-[14px] rounded-full bg-white shadow-sm transition-[left] duration-200"
+                      style={{ left: startupOnly ? 'calc(100% - 17px)' : '3px' }}
+                    />
+                  </span>
+                </button>
+              </div>
+
               {/* Categories */}
               <div className="px-[18px] py-3.5">
                 <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#9D8E87] mb-2.5">
@@ -393,6 +428,15 @@ export function BrowsePage() {
                   style={{ borderColor: '#E9C97A' }}
                 >
                   Women-led
+                  <X className="size-3" />
+                </button>
+              )}
+              {startupOnly && (
+                <button
+                  onClick={toggleStartup}
+                  className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[12.5px] font-medium bg-indigo-600 text-white border border-indigo-700"
+                >
+                  Startups
                   <X className="size-3" />
                 </button>
               )}

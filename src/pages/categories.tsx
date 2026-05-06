@@ -1,28 +1,34 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Sparkles, Rocket } from 'lucide-react'
 import { CATEGORIES, CATEGORY_ICONS, CATEGORY_ILLUSTRATIONS, DEFAULT_CATEGORY_ICON } from '@/lib/constants'
 import { supabase } from '@/lib/supabase'
 
 export function CategoriesPage() {
   const [counts, setCounts] = useState<Record<string, number>>({})
   const [missingIllustrations, setMissingIllustrations] = useState<Set<string>>(new Set())
+  const [collectionCounts, setCollectionCounts] = useState<{ womenLed: number; startup: number }>({ womenLed: 0, startup: 0 })
 
   useEffect(() => {
     let cancelled = false
     ;(async () => {
       const { data } = await supabase
         .from('businesses')
-        .select('categories')
+        .select('categories,is_women_owned,is_startup')
         .eq('status', 'live')
       if (cancelled) return
       const next: Record<string, number> = {}
-      for (const row of data || []) {
-        for (const cat of (row.categories as string[] | null) || []) {
+      let women = 0
+      let startup = 0
+      for (const row of (data || []) as { categories: string[] | null; is_women_owned?: boolean; is_startup?: boolean }[]) {
+        for (const cat of row.categories || []) {
           next[cat] = (next[cat] || 0) + 1
         }
+        if (row.is_women_owned) women += 1
+        if (row.is_startup) startup += 1
       }
       setCounts(next)
+      setCollectionCounts({ womenLed: women, startup })
     })()
     return () => { cancelled = true }
   }, [])
@@ -64,6 +70,59 @@ export function CategoriesPage() {
         </div>
       </section>
 
+
+      {/* Collections — curated cross-cutting filters */}
+      {(collectionCounts.womenLed > 0 || collectionCounts.startup > 0) && (
+        <section className="py-10 md:py-12 px-4 border-b" style={{ backgroundColor: '#FAF6F1' }}>
+          <div className="container max-w-6xl mx-auto">
+            <p className="text-xs font-semibold tracking-[0.10em] uppercase text-[#9D8E87] mb-2">
+              Collections
+            </p>
+            <h2
+              className="text-2xl md:text-3xl font-medium tracking-tight mb-6"
+              style={{ fontFamily: 'Fraunces, serif' }}
+            >
+              Discover by spirit
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+              {collectionCounts.womenLed > 0 && (
+                <Link
+                  to="/browse?women-led=true"
+                  className="group relative rounded-2xl border border-amber/40 p-6 md:p-7 transition-all hover:-translate-y-1 hover:border-amber/70"
+                  style={{ background: 'linear-gradient(135deg, #FEF3E8 0%, #FDE7CE 100%)' }}
+                >
+                  <div className="size-14 rounded-full bg-amber text-amber-foreground flex items-center justify-center mb-4">
+                    <Sparkles className="size-6" />
+                  </div>
+                  <h3 className="text-lg md:text-xl font-medium mb-1.5" style={{ fontFamily: 'Fraunces, serif' }}>
+                    Women-led businesses
+                  </h3>
+                  <p className="text-sm text-[color:#5C4E46]">
+                    {collectionCounts.womenLed} {collectionCounts.womenLed === 1 ? 'business' : 'businesses'} championed by women
+                  </p>
+                </Link>
+              )}
+              {collectionCounts.startup > 0 && (
+                <Link
+                  to="/browse?startup=true"
+                  className="group relative rounded-2xl border border-indigo-200 p-6 md:p-7 transition-all hover:-translate-y-1 hover:border-indigo-400"
+                  style={{ background: 'linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)' }}
+                >
+                  <div className="size-14 rounded-full bg-indigo-600 text-white flex items-center justify-center mb-4">
+                    <Rocket className="size-6" />
+                  </div>
+                  <h3 className="text-lg md:text-xl font-medium mb-1.5" style={{ fontFamily: 'Fraunces, serif' }}>
+                    Startups
+                  </h3>
+                  <p className="text-sm text-[color:#5C4E46]">
+                    {collectionCounts.startup} emerging {collectionCounts.startup === 1 ? 'business' : 'businesses'} on the rise
+                  </p>
+                </Link>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* All categories grid */}
       <section className="py-12 md:py-16 px-4" style={{ backgroundColor: '#FAF6F1' }}>

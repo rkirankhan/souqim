@@ -356,14 +356,26 @@ export function ListPage() {
     const valid = await form.trigger(fields)
     if (valid) {
       setStep((s) => Math.min(s + 1, 2))
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      // Validation failed — scroll the first error into view so the user
+      // sees what's wrong instead of being stranded at the bottom.
+      requestAnimationFrame(() => {
+        const errEl = document.querySelector('[data-slot="form-message"], .text-destructive')
+        if (errEl) errEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        else window.scrollTo({ top: 0, behavior: 'smooth' })
+      })
     }
   }
 
   function goBack() {
     setStep((s) => Math.max(s - 1, 0))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  // Snap to top whenever the active step changes. Done in an effect (rather
+  // than inside goNext) so it runs after React commits the new step's DOM.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [step])
 
   function handleLogoSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -641,10 +653,7 @@ export function ListPage() {
         <Stepper
           step={step}
           onStepClick={(i) => {
-            if (i < step) {
-              setStep(i)
-              window.scrollTo({ top: 0, behavior: 'smooth' })
-            }
+            if (i < step) setStep(i)
           }}
         />
 

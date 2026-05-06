@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, X, Rocket } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -220,10 +220,20 @@ export function BusinessProfilePage() {
             )}
 
             <div className="flex-1 min-w-0">
-              {business.is_women_owned && (
-                <div className="inline-flex items-center gap-1.5 bg-amber text-amber-foreground rounded-full px-3 py-1 text-xs font-semibold tracking-wide mb-3 ring-1 ring-amber-foreground/10">
-                  <Sparkles className="size-3.5" />
-                  Women-led business
+              {(business.is_women_owned || business.is_startup) && (
+                <div className="flex flex-wrap items-center gap-2 mb-3">
+                  {business.is_women_owned && (
+                    <div className="inline-flex items-center gap-1.5 bg-amber text-amber-foreground rounded-full px-3 py-1 text-xs font-semibold tracking-wide ring-1 ring-amber-foreground/10">
+                      <Sparkles className="size-3.5" />
+                      Women-led business
+                    </div>
+                  )}
+                  {business.is_startup && (
+                    <div className="inline-flex items-center gap-1.5 bg-indigo-600 text-white rounded-full px-3 py-1 text-xs font-semibold tracking-wide ring-1 ring-indigo-700/20">
+                      <Rocket className="size-3.5" />
+                      Startup
+                    </div>
+                  )}
                 </div>
               )}
               <h1
