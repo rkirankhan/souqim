@@ -11,7 +11,7 @@ import {
   Users,
   Heart,
   UtensilsCrossed,
-  Hop as Home,
+  House as Home,
   Package,
   Calendar,
   Wrench,

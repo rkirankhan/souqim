@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Link } from 'react-router-dom'
 import {
-  Sparkles, Rocket, Globe, Share2, Paintbrush, Hop as Home,
+  Sparkles, Rocket, Globe, Share2, Paintbrush, House as Home,
   ArrowRight, Check, MessageCircle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'

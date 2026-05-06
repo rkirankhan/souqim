@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, X, Rocket, Hop as Home, FileText, Images, MessageSquare, type LucideIcon } from 'lucide-react'
+import { MapPin, Phone, Mail, Globe, ArrowLeft, ExternalLink, Sparkles, ChevronLeft, ChevronRight, X, Rocket, House as Home, FileText, Images, MessageSquare, type LucideIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -422,17 +422,13 @@ export function BusinessProfilePage() {
                       role="tab"
                       aria-selected={isActive}
                       onClick={() => setActiveTab(t.key)}
-                      className={`group relative inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 ring-1 ${
+                      className={`group relative inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap border transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 ${
                         isActive
-                          ? 'bg-primary text-primary-foreground ring-primary scale-[1.02]'
-                          : 'bg-card text-muted-foreground ring-border hover:ring-primary/40 hover:text-foreground hover:bg-card'
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'bg-card text-muted-foreground border-border hover:border-primary/50 hover:text-foreground'
                       }`}
                     >
-                      <t.Icon
-                        className={`size-4 transition-transform duration-300 ${
-                          isActive ? 'scale-110' : 'group-hover:scale-110'
-                        }`}
-                      />
+                      <t.Icon className="size-4" />
                       {t.label}
                       {t.count !== undefined && (
                         <span
