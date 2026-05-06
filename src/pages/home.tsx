@@ -176,8 +176,9 @@ export function HomePage() {
             if (cats.length === 0) return null
             return (
               <div
-                className="flex gap-4 md:gap-6 overflow-x-auto pb-2 -mb-2 scrollbar-thin md:justify-center"
+                className="flex gap-4 md:gap-6 overflow-x-auto md:justify-center [&::-webkit-scrollbar]:hidden"
                 style={{
+                  scrollbarWidth: 'none',
                   WebkitMaskImage:
                     'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
                   maskImage:
