@@ -78,7 +78,7 @@ export const CATEGORY_ILLUSTRATIONS: Record<string, string> = {
   'Fashion & Clothing': '/categories/fashion-clothing.png',
   'Writers & Content Creators': '/categories/writers-content.png',
   'Photography': '/categories/photography.png',
-  'Videography & Film': '/categories/videography-film.png',
+  'Videography & Film': '/categories/video.png',
   'Education & Tutors': '/categories/education-tutors.png',
   'Coaching & Consulting': '/categories/coaching-consulting.png',
   'Health & Wellness': '/categories/health-wellness.png',
