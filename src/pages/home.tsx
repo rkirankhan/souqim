@@ -196,7 +196,7 @@ export function HomePage() {
                     <img
                       src={CATEGORY_ILLUSTRATIONS[category]}
                       alt={category}
-                      className="size-[100px] md:size-[120px] object-contain select-none transition-transform group-hover:scale-[1.06]"
+                      className="size-[100px] md:size-[120px] object-contain select-none rounded-full border border-[#F5C0A0] transition-transform group-hover:scale-[1.06]"
                       loading="lazy"
                     />
                     <span className="text-xs md:text-[13px] font-medium text-center leading-tight line-clamp-2 text-foreground/80">
