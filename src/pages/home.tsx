@@ -317,7 +317,10 @@ export function HomePage() {
             style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em', lineHeight: 1.08 }}
           >
             Ready to be{' '}
-            <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
+            <em
+              className="text-primary not-italic"
+              style={{ fontStyle: 'italic', marginRight: '0.08em' }}
+            >
               discovered
             </em>
             ?
