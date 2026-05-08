@@ -64,7 +64,7 @@ export function HomePage() {
 
           <h1
             className="text-4xl sm:text-5xl md:text-[62px] font-medium text-foreground mb-5"
-            style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.06, letterSpacing: '-0.03em' }}
+            style={{ fontFamily: '"DM Serif Display", serif', lineHeight: 1.06, letterSpacing: '-0.03em' }}
           >
             Discover the{' '}
             <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>heart</em>
@@ -224,7 +224,7 @@ export function HomePage() {
               </div>
               <h2
                 className="text-2xl md:text-[28px] font-medium text-foreground leading-tight mb-2.5"
-                style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.01em' }}
+                style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.01em' }}
               >
                 Women-led businesses
               </h2>
@@ -254,7 +254,7 @@ export function HomePage() {
             <div>
               <h2
                 className="text-2xl md:text-[32px] font-medium text-foreground mb-1.5"
-                style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em' }}
+                style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.02em' }}
               >
                 Recently listed
               </h2>
@@ -314,7 +314,7 @@ export function HomePage() {
           </span>
           <h2
             className="text-3xl md:text-[44px] font-medium text-foreground mb-4"
-            style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em', lineHeight: 1.08 }}
+            style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.02em', lineHeight: 1.08 }}
           >
             Ready to be{' '}
             <em

@@ -5,7 +5,7 @@ export function TermsPage() {
         <div className="mb-10">
           <h1
             className="text-4xl md:text-5xl font-medium tracking-tight mb-3"
-            style={{ fontFamily: 'Fraunces, serif' }}
+            style={{ fontFamily: '"DM Serif Display", serif' }}
           >
             Terms of Service
           </h1>
@@ -21,7 +21,7 @@ export function TermsPage() {
             service.
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Eligibility
           </h2>
           <p>
@@ -29,7 +29,7 @@ export function TermsPage() {
             representative of the business you&rsquo;re listing.
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Your account and listings
           </h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -48,7 +48,7 @@ export function TermsPage() {
             </li>
           </ul>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Acceptable use
           </h2>
           <p>You agree not to:</p>
@@ -64,7 +64,7 @@ export function TermsPage() {
             </li>
           </ul>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Free service
           </h2>
           <p>
@@ -73,7 +73,7 @@ export function TermsPage() {
             won&rsquo;t silently start charging existing listings.
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Disclaimer
           </h2>
           <p>
@@ -84,7 +84,7 @@ export function TermsPage() {
             relying on it.
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Limitation of liability
           </h2>
           <p>
@@ -93,7 +93,7 @@ export function TermsPage() {
             use of the service.
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Changes
           </h2>
           <p>
@@ -102,7 +102,7 @@ export function TermsPage() {
             means you accept the updated terms.
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Contact
           </h2>
           <p>

@@ -136,7 +136,7 @@ export function DashboardPage() {
     <div className="min-h-screen py-10 px-4">
       <div className="container max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-medium mb-1" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h1 className="text-3xl font-medium mb-1" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Welcome back, {firstName}
           </h1>
           <p className="text-muted-foreground">Manage your business listings</p>
@@ -179,7 +179,7 @@ function EmptyState() {
         <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-6">
           <Store className="size-8 text-muted-foreground" />
         </div>
-        <h2 className="text-xl font-medium mb-2" style={{ fontFamily: 'Fraunces, serif' }}>
+        <h2 className="text-xl font-medium mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
           You haven't listed a business yet
         </h2>
         <p className="text-muted-foreground mb-6 max-w-sm">

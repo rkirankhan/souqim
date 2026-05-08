@@ -57,7 +57,7 @@ export function CategoriesPage() {
           </p>
           <h1
             className="text-4xl md:text-[52px] font-medium tracking-tight mb-4"
-            style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
+            style={{ fontFamily: '"DM Serif Display", serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
           >
             Browse by{' '}
             <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
@@ -80,7 +80,7 @@ export function CategoriesPage() {
             </p>
             <h2
               className="text-2xl md:text-3xl font-medium tracking-tight mb-6"
-              style={{ fontFamily: 'Fraunces, serif' }}
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               Discover by spirit
             </h2>
@@ -94,7 +94,7 @@ export function CategoriesPage() {
                   <div className="size-14 rounded-full bg-amber text-amber-foreground flex items-center justify-center mb-4">
                     <Sparkles className="size-6" />
                   </div>
-                  <h3 className="text-lg md:text-xl font-medium mb-1.5" style={{ fontFamily: 'Fraunces, serif' }}>
+                  <h3 className="text-lg md:text-xl font-medium mb-1.5" style={{ fontFamily: '"DM Serif Display", serif' }}>
                     Women-led businesses
                   </h3>
                   <p className="text-sm text-[color:#5C4E46]">
@@ -111,7 +111,7 @@ export function CategoriesPage() {
                   <div className="size-14 rounded-full bg-indigo-600 text-white flex items-center justify-center mb-4">
                     <Rocket className="size-6" />
                   </div>
-                  <h3 className="text-lg md:text-xl font-medium mb-1.5" style={{ fontFamily: 'Fraunces, serif' }}>
+                  <h3 className="text-lg md:text-xl font-medium mb-1.5" style={{ fontFamily: '"DM Serif Display", serif' }}>
                     Startups
                   </h3>
                   <p className="text-sm text-[color:#5C4E46]">
@@ -134,7 +134,7 @@ export function CategoriesPage() {
               </p>
               <h2
                 className="text-2xl md:text-3xl font-medium tracking-tight"
-                style={{ fontFamily: 'Fraunces, serif' }}
+                style={{ fontFamily: '"DM Serif Display", serif' }}
               >
                 Find your people
               </h2>
@@ -179,7 +179,7 @@ export function CategoriesPage() {
                         <Icon className="size-9 text-primary" />
                       </div>
                     )}
-                    <h3 className="text-lg md:text-xl font-medium leading-tight mb-1.5 group-hover:text-primary transition-colors" style={{ fontFamily: 'Fraunces, serif' }}>
+                    <h3 className="text-lg md:text-xl font-medium leading-tight mb-1.5 group-hover:text-primary transition-colors" style={{ fontFamily: '"DM Serif Display", serif' }}>
                       {category}
                     </h3>
                     <p className="text-sm md:text-[15px] text-muted-foreground">{countLabel}</p>
@@ -195,7 +195,7 @@ export function CategoriesPage() {
         <div className="container max-w-3xl mx-auto text-center">
           <h2
             className="text-2xl md:text-3xl font-medium mb-3"
-            style={{ fontFamily: 'Fraunces, serif' }}
+            style={{ fontFamily: '"DM Serif Display", serif' }}
           >
             Don&rsquo;t see your trade?
           </h2>

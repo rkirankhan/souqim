@@ -5,7 +5,7 @@ export function PrivacyPage() {
         <div className="mb-10">
           <h1
             className="text-4xl md:text-5xl font-medium tracking-tight mb-3"
-            style={{ fontFamily: 'Fraunces, serif' }}
+            style={{ fontFamily: '"DM Serif Display", serif' }}
           >
             Privacy Policy
           </h1>
@@ -22,7 +22,7 @@ export function PrivacyPage() {
             you have.
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Information we collect
           </h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -42,7 +42,7 @@ export function PrivacyPage() {
             </li>
           </ul>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             How we use it
           </h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -52,7 +52,7 @@ export function PrivacyPage() {
             <li>To contact you about your account or listing if needed.</li>
           </ul>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Service providers
           </h2>
           <p>
@@ -61,7 +61,7 @@ export function PrivacyPage() {
             behalf under their own privacy policies.
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Cookies
           </h2>
           <p>
@@ -70,7 +70,7 @@ export function PrivacyPage() {
             We do not use advertising cookies.
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Your rights
           </h2>
           <p>
@@ -83,7 +83,7 @@ export function PrivacyPage() {
             .
           </p>
 
-          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Contact
           </h2>
           <p>

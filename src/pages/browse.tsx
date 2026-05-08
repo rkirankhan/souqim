@@ -140,7 +140,7 @@ export function BrowsePage() {
           <div className="text-center mb-6 md:mb-7">
             <h1
               className="text-2xl md:text-[36px] font-medium tracking-tight mb-1.5"
-              style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.1, letterSpacing: '-0.02em' }}
+              style={{ fontFamily: '"DM Serif Display", serif', lineHeight: 1.1, letterSpacing: '-0.02em' }}
             >
               Explore{' '}
               <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
@@ -370,7 +370,7 @@ export function BrowsePage() {
                 borderColor: '#F5D9C8',
               }}
             >
-              <p className="text-base font-medium text-foreground mb-1.5" style={{ fontFamily: 'Fraunces, serif' }}>
+              <p className="text-base font-medium text-foreground mb-1.5" style={{ fontFamily: '"DM Serif Display", serif' }}>
                 Own a business?
               </p>
               <p className="text-[13px] text-[color:#5C4E46] mb-3.5 leading-snug">
@@ -432,7 +432,7 @@ export function BrowsePage() {
                 style={{ borderColor: '#E8E2DC', backgroundColor: '#FAF6F1' }}
               >
                 <Store className="size-12 mx-auto" style={{ color: '#E8E2DC' }} strokeWidth={1.2} />
-                <h3 className="text-[22px] font-medium text-foreground mt-5 mb-2" style={{ fontFamily: 'Fraunces, serif' }}>
+                <h3 className="text-[22px] font-medium text-foreground mt-5 mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
                   No businesses found
                 </h3>
                 <p className="text-sm text-[#9D8E87] mb-6 max-w-[300px] mx-auto">

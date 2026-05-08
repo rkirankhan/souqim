@@ -16,7 +16,7 @@ export function ContactPage() {
           </div>
           <h1
             className="text-4xl md:text-[52px] font-medium tracking-tight mb-4"
-            style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
+            style={{ fontFamily: '"DM Serif Display", serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
           >
             We&rsquo;d love to{' '}
             <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
@@ -46,7 +46,7 @@ export function ContactPage() {
               </p>
               <h2
                 className="text-xl md:text-2xl font-medium leading-snug mb-2"
-                style={{ fontFamily: 'Fraunces, serif' }}
+                style={{ fontFamily: '"DM Serif Display", serif' }}
               >
                 Email us
               </h2>
@@ -72,7 +72,7 @@ export function ContactPage() {
               </p>
               <h2
                 className="text-xl md:text-2xl font-medium leading-snug mb-2"
-                style={{ fontFamily: 'Fraunces, serif' }}
+                style={{ fontFamily: '"DM Serif Display", serif' }}
               >
                 Say hi
               </h2>

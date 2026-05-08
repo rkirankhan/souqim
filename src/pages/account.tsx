@@ -48,7 +48,7 @@ export function AccountPage() {
   return (
     <div className="min-h-screen py-10 px-4">
       <div className="container max-w-lg mx-auto">
-        <h1 className="text-3xl font-medium mb-8" style={{ fontFamily: 'Fraunces, serif' }}>
+        <h1 className="text-3xl font-medium mb-8" style={{ fontFamily: '"DM Serif Display", serif' }}>
           Account
         </h1>
 

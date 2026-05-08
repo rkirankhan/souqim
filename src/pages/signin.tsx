@@ -119,11 +119,11 @@ export function SignInPage() {
         <div className="text-center mb-8">
           <span
             className="text-2xl font-medium text-primary inline-block mb-6"
-            style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.025em' }}
+            style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
           >
             List<em className="italic font-medium">m</em>io
           </span>
-          <h1 className="text-2xl font-medium mb-2" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h1 className="text-2xl font-medium mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
             {isSignup ? 'Create your account' : 'Sign in to Listmio'}
           </h1>
           <p className="text-muted-foreground text-sm">

@@ -188,7 +188,7 @@ export function ServicesPage() {
           </span>
           <h1
             className="text-4xl md:text-[52px] font-medium tracking-tight mb-4"
-            style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
+            style={{ fontFamily: '"DM Serif Display", serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
           >
             Grow your business with{' '}
             <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
@@ -239,7 +239,7 @@ export function ServicesPage() {
             </p>
             <h2
               className="text-2xl md:text-3xl font-medium tracking-tight"
-              style={{ fontFamily: 'Fraunces, serif' }}
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               Pick the help you need
             </h2>
@@ -259,7 +259,7 @@ export function ServicesPage() {
                 </div>
                 <h3
                   className="text-xl font-medium mb-2"
-                  style={{ fontFamily: 'Fraunces, serif' }}
+                  style={{ fontFamily: '"DM Serif Display", serif' }}
                 >
                   {s.title}
                 </h3>
@@ -279,7 +279,7 @@ export function ServicesPage() {
                     <span className="text-sm text-muted-foreground">From</span>
                     <span
                       className="text-2xl font-medium tabular-nums"
-                      style={{ fontFamily: 'Fraunces, serif' }}
+                      style={{ fontFamily: '"DM Serif Display", serif' }}
                     >
                       £{s.fromPrice}
                     </span>
@@ -318,7 +318,7 @@ export function ServicesPage() {
             </p>
             <h2
               className="text-2xl md:text-3xl font-medium tracking-tight"
-              style={{ fontFamily: 'Fraunces, serif' }}
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               A no-surprises partnership
             </h2>
@@ -333,7 +333,7 @@ export function ServicesPage() {
                 <span className="inline-block text-xs font-semibold tracking-[0.10em] text-primary mb-3">
                   {step.n}
                 </span>
-                <h3 className="text-lg font-medium mb-2" style={{ fontFamily: 'Fraunces, serif' }}>
+                <h3 className="text-lg font-medium mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
                   {step.title}
                 </h3>
                 <p className="text-sm text-[color:#5C4E46] leading-relaxed">
@@ -354,7 +354,7 @@ export function ServicesPage() {
             </p>
             <h2
               className="text-2xl md:text-3xl font-medium tracking-tight"
-              style={{ fontFamily: 'Fraunces, serif' }}
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               Made for small UK businesses
             </h2>
@@ -369,7 +369,7 @@ export function ServicesPage() {
                 key={b.title}
                 className="rounded-2xl border border-border bg-card p-6 md:p-7 transition-all hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-md"
               >
-                <h3 className="text-lg font-medium mb-2" style={{ fontFamily: 'Fraunces, serif' }}>
+                <h3 className="text-lg font-medium mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
                   {b.title}
                 </h3>
                 <p className="text-sm text-[color:#5C4E46] leading-relaxed">{b.body}</p>
@@ -388,7 +388,7 @@ export function ServicesPage() {
             </p>
             <h2
               className="text-2xl md:text-3xl font-medium tracking-tight mb-3"
-              style={{ fontFamily: 'Fraunces, serif' }}
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               Tell us what you need
             </h2>
@@ -519,7 +519,7 @@ export function ServicesPage() {
             </p>
             <h2
               className="text-2xl md:text-3xl font-medium tracking-tight"
-              style={{ fontFamily: 'Fraunces, serif' }}
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               Good to know
             </h2>
@@ -533,7 +533,7 @@ export function ServicesPage() {
             ].map((item) => (
               <details key={item.q} className="group p-5 md:p-6">
                 <summary className="flex items-start justify-between gap-3 cursor-pointer list-none">
-                  <h3 className="text-base font-medium pr-4" style={{ fontFamily: 'Fraunces, serif' }}>
+                  <h3 className="text-base font-medium pr-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
                     {item.q}
                   </h3>
                   <span className="shrink-0 size-7 rounded-full bg-muted/60 flex items-center justify-center transition-transform group-open:rotate-45">
@@ -554,7 +554,7 @@ export function ServicesPage() {
         <div className="container max-w-3xl mx-auto text-center text-white">
           <h2
             className="text-2xl md:text-3xl font-medium tracking-tight mb-3"
-            style={{ fontFamily: 'Fraunces, serif' }}
+            style={{ fontFamily: '"DM Serif Display", serif' }}
           >
             Not sure what you need? Just say hi.
           </h2>

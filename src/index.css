@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Serif+Text:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -79,6 +79,30 @@
 
 :root {
   --radius: 0.75rem;
+
+  /* ─── Brand palette ────────────────────────────────────────
+     Single source of truth for the Listmio brand colours, in
+     hex, mirroring 'ListMio Brand Guidelines.html'. Use these
+     in inline styles via var(--orange) etc. instead of pasting
+     hex codes. The shadcn --primary / --background / --card
+     tokens further down are derived to stay in sync. */
+  --orange:        #C2410C;   /* Primary terracotta (CTAs, brand) */
+  --orange-hov:    #9A3412;   /* Primary hover */
+  --orange-tint:   #FEF0E7;   /* Soft tint for focus rings, hover bg */
+  --teal:          #0F766E;   /* Secondary accent */
+  --teal-light:    #E6FFFA;   /* Pill / chip background */
+  --navy:          #1D2939;   /* Footer + dark CTA */
+  --cream:         #FEF3E8;   /* Hero surface */
+  --canvas:        #FAF6F1;   /* Page background */
+  --ink:           #1A1209;   /* Body type */
+  --ink-sub:       #5C4E46;   /* Sub copy */
+  --ink-muted:     #9D8E87;   /* Muted text */
+  --border-warm:   #E8E2DC;   /* Default warm border */
+  --border-mid:    #D1CBC4;   /* Heavier warm border */
+  --amber-soft:    #F5E6C8;   /* Community / women-led pill bg */
+  --amber-text:    #92400E;   /* Community pill text */
+  --amber-deep:    #D97706;   /* Amber accents */
+
   /* Warm Craft: cream canvas, warm orange primary, teal accent */
   --background: oklch(0.97 0.01 50);
   --foreground: oklch(0.24 0 0);
@@ -167,8 +191,8 @@
     line-height: 1.6;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Fraunces', serif;
-    font-weight: 500;
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
     line-height: 1.2;
   }
 }

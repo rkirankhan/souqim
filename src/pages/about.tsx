@@ -54,7 +54,7 @@ export function AboutPage() {
 
           <h1
             className="text-4xl md:text-5xl lg:text-[58px] font-medium tracking-tight mb-6"
-            style={{ fontFamily: 'Fraunces, serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
+            style={{ fontFamily: '"DM Serif Display", serif', lineHeight: 1.06, letterSpacing: '-0.02em' }}
           >
             A directory built for the{' '}
             <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
@@ -72,7 +72,7 @@ export function AboutPage() {
       {/* Why we exist — pull-quote callout */}
       <section className="px-4 py-16 md:py-24">
         <div className="container max-w-3xl mx-auto text-center space-y-6">
-          <p className="text-2xl md:text-3xl font-medium leading-snug" style={{ fontFamily: 'Fraunces, serif' }}>
+          <p className="text-2xl md:text-3xl font-medium leading-snug" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Most directories are built for advertisers. Listings get buried
             under paid placements.
           </p>
@@ -101,7 +101,7 @@ export function AboutPage() {
             </p>
             <h2
               className="text-3xl md:text-4xl font-medium tracking-tight"
-              style={{ fontFamily: 'Fraunces, serif' }}
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               Four principles, no fine print.
             </h2>
@@ -121,14 +121,14 @@ export function AboutPage() {
                     </div>
                     <span
                       className="text-3xl font-medium text-primary/30 leading-none tabular-nums"
-                      style={{ fontFamily: 'Fraunces, serif' }}
+                      style={{ fontFamily: '"DM Serif Display", serif' }}
                     >
                       {String(i + 1).padStart(2, '0')}
                     </span>
                   </div>
                   <h3
                     className="text-lg md:text-xl font-medium mb-2"
-                    style={{ fontFamily: 'Fraunces, serif' }}
+                    style={{ fontFamily: '"DM Serif Display", serif' }}
                   >
                     {b.title}
                   </h3>
@@ -151,7 +151,7 @@ export function AboutPage() {
             </p>
             <h2
               className="text-3xl md:text-4xl font-medium tracking-tight"
-              style={{ fontFamily: 'Fraunces, serif' }}
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               About the founder
             </h2>
@@ -160,7 +160,7 @@ export function AboutPage() {
           <div className="bg-card border border-border rounded-3xl p-8 md:p-12 max-w-3xl mx-auto shadow-sm">
             <p
               className="text-xl md:text-[26px] font-medium leading-snug mb-7"
-              style={{ fontFamily: 'Fraunces, serif' }}
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               &ldquo;Visibility shouldn&rsquo;t depend on who already has a
               network.&rdquo;
@@ -247,7 +247,7 @@ export function AboutPage() {
               <h2
                 className="text-3xl md:text-[44px] font-medium text-foreground mb-4"
                 style={{
-                  fontFamily: 'Fraunces, serif',
+                  fontFamily: '"DM Serif Display", serif',
                   letterSpacing: '-0.02em',
                   lineHeight: 1.08,
                 }}

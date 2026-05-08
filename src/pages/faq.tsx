@@ -35,7 +35,7 @@ export function FaqPage() {
         <div className="mb-10 text-center">
           <h1
             className="text-4xl md:text-5xl font-medium tracking-tight mb-3"
-            style={{ fontFamily: 'Fraunces, serif' }}
+            style={{ fontFamily: '"DM Serif Display", serif' }}
           >
             Frequently Asked Questions
           </h1>

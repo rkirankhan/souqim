@@ -123,7 +123,7 @@ export function EditBusinessPage() {
         </Button>
 
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-medium tracking-tight mb-2" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h1 className="text-3xl font-medium tracking-tight mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
             Edit Listing
           </h1>
           <p className="text-muted-foreground">

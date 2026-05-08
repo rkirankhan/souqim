@@ -54,7 +54,7 @@ export function BusinessCard({ business, compact = false }: BusinessCardProps) {
         <div className={compact ? 'px-3.5 pt-3 pb-3.5' : 'px-4 pt-3.5 pb-4'}>
           <h3
             className={`font-medium text-foreground leading-snug line-clamp-1 mb-1.5 ${compact ? 'text-[14px]' : 'text-[15px]'}`}
-            style={{ fontFamily: 'Fraunces, serif' }}
+            style={{ fontFamily: '"DM Serif Display", serif' }}
           >
             {business.name}
           </h3>

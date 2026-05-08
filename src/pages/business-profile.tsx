@@ -213,7 +213,7 @@ export function BusinessProfilePage() {
               />
             ) : (
               <div className="size-24 md:size-28 rounded-full bg-primary/10 flex items-center justify-center ring-4 ring-card shrink-0">
-                <span className="text-2xl md:text-3xl font-medium text-primary" style={{ fontFamily: 'Fraunces, serif' }}>
+                <span className="text-2xl md:text-3xl font-medium text-primary" style={{ fontFamily: '"DM Serif Display", serif' }}>
                   {getInitials(business.name)}
                 </span>
               </div>
@@ -244,7 +244,7 @@ export function BusinessProfilePage() {
               )}
               <h1
                 className="text-3xl md:text-[40px] font-medium mb-2 leading-tight tracking-tight"
-                style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em' }}
+                style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.02em' }}
               >
                 {business.name}
               </h1>
@@ -451,7 +451,7 @@ export function BusinessProfilePage() {
                   <div className="bg-card border border-border rounded-2xl p-6">
                     <h2
                       className="text-xl font-medium mb-3"
-                      style={{ fontFamily: 'Fraunces, serif' }}
+                      style={{ fontFamily: '"DM Serif Display", serif' }}
                     >
                       About
                     </h2>
@@ -478,7 +478,7 @@ export function BusinessProfilePage() {
                         <div className="flex items-center justify-between mb-5">
                           <h3
                             className="text-lg font-medium"
-                            style={{ fontFamily: 'Fraunces, serif' }}
+                            style={{ fontFamily: '"DM Serif Display", serif' }}
                           >
                             Opening hours
                           </h3>
@@ -587,7 +587,7 @@ export function BusinessProfilePage() {
                   </p>
                   <h3
                     className="text-xl font-medium mb-2"
-                    style={{ fontFamily: 'Fraunces, serif' }}
+                    style={{ fontFamily: '"DM Serif Display", serif' }}
                   >
                     No posts yet
                   </h3>

@@ -73,7 +73,7 @@ export function AddBusinessPage() {
     <div className="min-h-screen py-10 px-4">
       <div className="container max-w-2xl mx-auto">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-medium tracking-tight mb-2" style={{ fontFamily: 'Fraunces, serif' }}>
+          <h1 className="text-3xl font-medium tracking-tight mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
             List Your Business
           </h1>
           <p className="text-muted-foreground">

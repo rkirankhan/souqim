@@ -45,7 +45,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <Link to="/" className="flex items-center gap-2">
             <span
               className="text-xl font-medium text-primary"
-              style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.025em' }}
+              style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
             >
               List<em className="italic font-medium">m</em>io
             </span>
@@ -230,7 +230,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div>
               <h3
                 className="font-medium mb-3 text-white inline-flex items-center gap-2"
-                style={{ fontFamily: 'Fraunces, serif' }}
+                style={{ fontFamily: '"DM Serif Display", serif' }}
               >
                 <Info className="size-4 text-white/50" />
                 About
@@ -244,7 +244,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div>
               <h3
                 className="font-medium mb-3 text-white inline-flex items-center gap-2"
-                style={{ fontFamily: 'Fraunces, serif' }}
+                style={{ fontFamily: '"DM Serif Display", serif' }}
               >
                 <LayoutGrid className="size-4 text-white/50" />
                 Categories
@@ -259,7 +259,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div>
               <h3
                 className="font-medium mb-3 text-white inline-flex items-center gap-2"
-                style={{ fontFamily: 'Fraunces, serif' }}
+                style={{ fontFamily: '"DM Serif Display", serif' }}
               >
                 <MessageSquare className="size-4 text-white/50" />
                 Support
@@ -277,7 +277,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div>
               <span
                 className="text-[28px] text-white font-medium block leading-none"
-                style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.025em' }}
+                style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
               >
                 List<em className="italic font-medium">m</em>io
               </span>

@@ -127,7 +127,7 @@ export function AdminPage() {
               <ShieldCheck className="size-3.5" />
               Admin
             </p>
-            <h1 className="text-3xl font-medium" style={{ fontFamily: 'Fraunces, serif' }}>
+            <h1 className="text-3xl font-medium" style={{ fontFamily: '"DM Serif Display", serif' }}>
               Manage listings
             </h1>
             <p className="text-sm text-muted-foreground mt-1">

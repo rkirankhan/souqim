@@ -639,7 +639,7 @@ export function ListPage() {
         <div className="text-center mb-8">
           <h1
             className="text-3xl sm:text-4xl font-medium tracking-tight mb-2"
-            style={{ fontFamily: 'Fraunces, serif' }}
+            style={{ fontFamily: '"DM Serif Display", serif' }}
           >
             {isEditMode ? 'Edit your listing' : 'List Your Business'}
           </h1>
