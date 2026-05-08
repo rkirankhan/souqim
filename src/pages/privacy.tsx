@@ -16,7 +16,7 @@ export function PrivacyPage() {
 
         <div className="prose prose-neutral max-w-none space-y-6 text-foreground leading-7">
           <p>
-            ListMio (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;)
+            Listmio (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;)
             respects your privacy. This policy explains what information we
             collect when you use listmio.com, how we use it, and the choices
             you have.

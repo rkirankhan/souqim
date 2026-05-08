@@ -16,7 +16,7 @@ export function TermsPage() {
 
         <div className="prose prose-neutral max-w-none space-y-6 text-foreground leading-7">
           <p>
-            By using ListMio (&ldquo;the service&rdquo;), you agree to these
+            By using Listmio (&ldquo;the service&rdquo;), you agree to these
             terms. If you don&rsquo;t agree, please don&rsquo;t use the
             service.
           </p>
@@ -77,7 +77,7 @@ export function TermsPage() {
             Disclaimer
           </h2>
           <p>
-            ListMio is provided &ldquo;as is&rdquo;. We make no warranty about
+            Listmio is provided &ldquo;as is&rdquo;. We make no warranty about
             the accuracy of listings or that the service will be uninterrupted
             or error-free. Information about businesses comes from those
             businesses themselves &mdash; verify anything important before
@@ -88,7 +88,7 @@ export function TermsPage() {
             Limitation of liability
           </h2>
           <p>
-            To the maximum extent permitted by law, ListMio is not liable for
+            To the maximum extent permitted by law, Listmio is not liable for
             indirect, incidental or consequential damages arising from your
             use of the service.
           </p>

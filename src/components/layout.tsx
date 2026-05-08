@@ -43,8 +43,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 w-full border-b bg-card">
         <div className="container max-w-7xl mx-auto flex h-16 items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-medium text-primary" style={{ fontFamily: 'Fraunces, serif' }}>
-              ListMio
+            <span
+              className="text-xl font-medium text-primary"
+              style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.025em' }}
+            >
+              List<em className="italic font-medium">m</em>io
             </span>
           </Link>
 
@@ -229,7 +232,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 About
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/about" className="hover:text-foreground transition-colors">About ListMio</Link></li>
+                <li><Link to="/about" className="hover:text-foreground transition-colors">About Listmio</Link></li>
                 <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
                 <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link></li>
               </ul>
@@ -259,7 +262,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="pt-6 border-t border-border/50 text-sm text-muted-foreground text-center sm:text-left">
-            <p>© 2026 ListMio. All Rights Reserved - List your business. Be found by your community.</p>
+            <p>© 2026 Listmio. All Rights Reserved - List your business. Be found by your community.</p>
           </div>
         </div>
       </footer>

@@ -258,7 +258,7 @@ export function HomePage() {
               >
                 Recently listed
               </h2>
-              <p className="text-sm md:text-[15px] text-[#9D8E87]">Newest businesses on ListMio</p>
+              <p className="text-sm md:text-[15px] text-[#9D8E87]">Newest businesses on Listmio</p>
             </div>
             <Button asChild variant="outline" size="sm" className="rounded-full">
               <Link to="/browse">
@@ -299,7 +299,7 @@ export function HomePage() {
             Ready to get discovered?
           </h2>
           <p className="text-base md:text-[17px] leading-relaxed text-white/55 mb-9 max-w-[460px] mx-auto">
-            Join thousands of small businesses connecting with their community on ListMio. It's completely free.
+            Join thousands of small businesses connecting with their community on Listmio. It's completely free.
           </p>
           <div className="flex justify-center gap-3 flex-wrap">
             <Button asChild size="lg" className="rounded-xl px-8">
