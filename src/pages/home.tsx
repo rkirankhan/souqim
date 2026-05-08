@@ -231,7 +231,7 @@ export function HomePage() {
               <p className="text-[15px] text-[color:#5C4E46] leading-relaxed mb-5 max-w-sm">
                 Discover and support the incredible women entrepreneurs in your community.
               </p>
-              <Button asChild variant="outline" className="rounded-full border-primary text-primary hover:bg-primary/5">
+              <Button asChild variant="outline" className="rounded-full border-primary text-primary hover:bg-primary/5 hover:text-primary">
                 <Link to="/browse?women-led=true">
                   <Sparkles className="size-[14px]" />
                   Browse women-led
