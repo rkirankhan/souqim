@@ -288,29 +288,51 @@ export function HomePage() {
 
       {/* ── DARK CTA ── */}
       <section
-        className="py-16 md:py-20 px-4"
-        style={{ background: 'linear-gradient(135deg, #1D2939 0%, #0F1A27 100%)' }}
+        className="relative overflow-hidden py-20 md:py-28 px-4"
+        style={{ background: 'linear-gradient(180deg, #FEF3E8 0%, #FDE7CE 100%)' }}
       >
-        <div className="container max-w-xl mx-auto text-center">
+        <div
+          aria-hidden
+          className="absolute -top-24 -left-24 w-[480px] h-[480px] rounded-full pointer-events-none"
+          style={{ backgroundColor: '#C2410C', opacity: 0.16, filter: 'blur(110px)' }}
+        />
+        <div
+          aria-hidden
+          className="absolute -bottom-20 -right-12 w-[400px] h-[400px] rounded-full pointer-events-none"
+          style={{ backgroundColor: '#0F766E', opacity: 0.10, filter: 'blur(100px)' }}
+        />
+        <div
+          aria-hidden
+          className="absolute top-1/3 left-1/3 w-[340px] h-[340px] rounded-full pointer-events-none"
+          style={{ backgroundColor: '#F59E0B', opacity: 0.10, filter: 'blur(90px)' }}
+        />
+
+        <div className="container max-w-2xl mx-auto text-center relative z-10">
+          <span className="inline-flex items-center gap-1.5 bg-amber text-amber-foreground rounded-full px-3.5 py-1.5 text-xs font-medium mb-7">
+            <Sparkles className="size-3" />
+            Free forever for small businesses
+          </span>
           <h2
-            className="text-3xl md:text-[40px] font-medium text-white mb-4"
-            style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em', lineHeight: 1.1 }}
+            className="text-3xl md:text-[44px] font-medium text-foreground mb-4"
+            style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em', lineHeight: 1.08 }}
           >
-            Ready to get discovered?
+            Ready to be{' '}
+            <em className="text-primary not-italic" style={{ fontStyle: 'italic' }}>
+              discovered
+            </em>
+            ?
           </h2>
-          <p className="text-base md:text-[17px] leading-relaxed text-white/55 mb-9 max-w-[460px] mx-auto">
-            Join thousands of small businesses connecting with their community on Listmio. It's completely free.
+          <p className="text-base md:text-lg leading-relaxed text-[color:#5C4E46] mb-9 max-w-[480px] mx-auto">
+            Join thousands of small UK businesses connecting with their community on Listmio.
           </p>
           <div className="flex justify-center gap-3 flex-wrap">
-            <Button asChild size="lg" className="rounded-xl px-8">
-              <Link to="/list">List your business — it's free</Link>
+            <Button asChild size="lg" className="rounded-full px-7">
+              <Link to="/list">
+                List your business
+                <ArrowRight className="size-4" />
+              </Link>
             </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="rounded-xl bg-transparent border-white/30 text-white/80 hover:bg-white/5 hover:text-white hover:border-white/60"
-            >
+            <Button asChild variant="outline" size="lg" className="rounded-full px-6">
               <Link to="/about">Learn more</Link>
             </Button>
           </div>
