@@ -223,46 +223,71 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="border-t bg-muted/30 mt-16">
-        <div className="container max-w-7xl mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <footer className="mt-16 text-white/70" style={{ backgroundColor: '#1D2939' }}>
+        <div className="container max-w-7xl mx-auto px-4 pt-14 pb-8">
+          {/* Top: link columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div>
-              <h3 className="font-medium mb-3 text-foreground inline-flex items-center gap-2" style={{ fontFamily: 'Fraunces, serif' }}>
-                <Info className="size-4 text-muted-foreground" />
+              <h3
+                className="font-medium mb-3 text-white inline-flex items-center gap-2"
+                style={{ fontFamily: 'Fraunces, serif' }}
+              >
+                <Info className="size-4 text-white/50" />
                 About
               </h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/about" className="hover:text-foreground transition-colors">About Listmio</Link></li>
-                <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link></li>
+              <ul className="space-y-2 text-sm">
+                <li><Link to="/about" className="text-white/60 hover:text-white transition-colors">About Listmio</Link></li>
+                <li><Link to="/privacy" className="text-white/60 hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="text-white/60 hover:text-white transition-colors">Terms</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-medium mb-3 text-foreground inline-flex items-center gap-2" style={{ fontFamily: 'Fraunces, serif' }}>
-                <LayoutGrid className="size-4 text-muted-foreground" />
+              <h3
+                className="font-medium mb-3 text-white inline-flex items-center gap-2"
+                style={{ fontFamily: 'Fraunces, serif' }}
+              >
+                <LayoutGrid className="size-4 text-white/50" />
                 Categories
               </h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/browse?category=Food & Catering" className="hover:text-foreground transition-colors">Food & Drink</Link></li>
-                <li><Link to="/browse?category=Beauty & Salon" className="hover:text-foreground transition-colors">Beauty & Wellness</Link></li>
-                <li><Link to="/browse?category=Home Services" className="hover:text-foreground transition-colors">Home Services</Link></li>
-                <li><Link to="/browse?women-led=true" className="hover:text-foreground transition-colors">Women-led businesses</Link></li>
+              <ul className="space-y-2 text-sm">
+                <li><Link to="/browse?category=Food & Catering" className="text-white/60 hover:text-white transition-colors">Food & Drink</Link></li>
+                <li><Link to="/browse?category=Beauty & Salon" className="text-white/60 hover:text-white transition-colors">Beauty & Wellness</Link></li>
+                <li><Link to="/browse?category=Home Services" className="text-white/60 hover:text-white transition-colors">Home Services</Link></li>
+                <li><Link to="/browse?women-led=true" className="text-white/60 hover:text-white transition-colors">Women-led businesses</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-medium mb-3 text-foreground inline-flex items-center gap-2" style={{ fontFamily: 'Fraunces, serif' }}>
-                <MessageSquare className="size-4 text-muted-foreground" />
+              <h3
+                className="font-medium mb-3 text-white inline-flex items-center gap-2"
+                style={{ fontFamily: 'Fraunces, serif' }}
+              >
+                <MessageSquare className="size-4 text-white/50" />
                 Support
               </h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/services" className="hover:text-foreground transition-colors">Services</Link></li>
-                <li><Link to="/contact" className="hover:text-foreground transition-colors">Contact us</Link></li>
-                <li><Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link></li>
+              <ul className="space-y-2 text-sm">
+                <li><Link to="/services" className="text-white/60 hover:text-white transition-colors">Services</Link></li>
+                <li><Link to="/contact" className="text-white/60 hover:text-white transition-colors">Contact us</Link></li>
+                <li><Link to="/faq" className="text-white/60 hover:text-white transition-colors">FAQ</Link></li>
               </ul>
             </div>
           </div>
-          <div className="pt-6 border-t border-border/50 text-sm text-muted-foreground text-center sm:text-left">
-            <p>© 2026 Listmio. All Rights Reserved - List your business. Be found by your community.</p>
+
+          {/* Bottom: brand lockup + meta */}
+          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+            <div>
+              <span
+                className="text-[28px] text-white font-medium block leading-none"
+                style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.025em' }}
+              >
+                List<em className="italic font-medium">m</em>io
+              </span>
+              <span className="block text-xs text-white/40 mt-2 tracking-[0.02em]">
+                UK's community business directory · © 2026
+              </span>
+            </div>
+            <div className="text-xs text-white/40 sm:text-right">
+              List your business. Be found by your community.
+            </div>
           </div>
         </div>
       </footer>
