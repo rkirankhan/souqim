@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
-import { Heart, Shield, MapPin, Paintbrush, Sparkles } from 'lucide-react'
+import { Heart, Shield, MapPin, Paintbrush, Sparkles, ArrowRight } from 'lucide-react'
 
 const beliefs = [
   {
@@ -218,46 +218,59 @@ export function AboutPage() {
 
       {/* CTA */}
       <section className="px-4 pb-16 md:pb-24">
-        <div className="container max-w-4xl mx-auto">
+        <div className="container max-w-5xl mx-auto">
           <div
-            className="relative overflow-hidden rounded-3xl px-8 py-14 md:px-16 md:py-20 text-center text-white"
-            style={{
-              backgroundImage:
-                'linear-gradient(135deg, #C2410C 0%, #AE4024 60%, #8A2D14 100%)',
-            }}
+            className="relative overflow-hidden rounded-3xl px-8 py-16 md:px-16 md:py-24 text-center"
+            style={{ background: 'linear-gradient(135deg, #FEF3E8 0%, #FDE7CE 100%)' }}
           >
-            <div aria-hidden className="absolute -top-20 -left-12 w-[280px] h-[280px] rounded-full bg-amber/30 blur-3xl" />
-            <div aria-hidden className="absolute -bottom-20 -right-10 w-[260px] h-[260px] rounded-full bg-white/10 blur-3xl" />
+            <div
+              aria-hidden
+              className="absolute -top-24 -left-20 w-[440px] h-[440px] rounded-full pointer-events-none"
+              style={{ backgroundColor: '#C2410C', opacity: 0.16, filter: 'blur(110px)' }}
+            />
+            <div
+              aria-hidden
+              className="absolute -bottom-20 -right-12 w-[380px] h-[380px] rounded-full pointer-events-none"
+              style={{ backgroundColor: '#0F766E', opacity: 0.10, filter: 'blur(100px)' }}
+            />
+            <div
+              aria-hidden
+              className="absolute top-1/4 right-1/4 w-[320px] h-[320px] rounded-full pointer-events-none"
+              style={{ backgroundColor: '#F59E0B', opacity: 0.10, filter: 'blur(90px)' }}
+            />
 
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-1.5 bg-white/15 text-white/90 rounded-full px-3.5 py-1.5 text-xs font-medium mb-6 ring-1 ring-white/20">
+              <span className="inline-flex items-center gap-1.5 bg-amber text-amber-foreground rounded-full px-3.5 py-1.5 text-xs font-medium mb-7">
                 <Sparkles className="size-3" />
-                Free forever
-              </div>
+                Free forever for small businesses
+              </span>
               <h2
-                className="text-3xl md:text-[42px] font-medium mb-4"
-                style={{ fontFamily: 'Fraunces, serif', letterSpacing: '-0.01em' }}
+                className="text-3xl md:text-[44px] font-medium text-foreground mb-4"
+                style={{
+                  fontFamily: 'Fraunces, serif',
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1.08,
+                }}
               >
-                List your business
+                List your business.{' '}
+                <em
+                  className="text-primary not-italic"
+                  style={{ fontStyle: 'italic' }}
+                >
+                  Be found.
+                </em>
               </h2>
-              <p className="text-white/85 text-base md:text-lg mb-8 max-w-md mx-auto leading-relaxed">
-                Free to list. Built for businesses like yours. Be found by your
-                community.
+              <p className="text-base md:text-lg leading-relaxed text-[color:#5C4E46] mb-9 max-w-[480px] mx-auto">
+                Built for the small UK businesses powering their communities forward — not the corporate masses.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <Button
-                  size="lg"
-                  asChild
-                  className="bg-white text-primary hover:bg-white/90 rounded-full"
-                >
-                  <Link to="/list">Get started</Link>
+                <Button asChild size="lg" className="rounded-full px-7">
+                  <Link to="/list">
+                    Get started
+                    <ArrowRight className="size-4" />
+                  </Link>
                 </Button>
-                <Button
-                  size="lg"
-                  variant="ghost"
-                  asChild
-                  className="text-white hover:bg-white/10 hover:text-white rounded-full"
-                >
+                <Button asChild variant="outline" size="lg" className="rounded-full px-6">
                   <Link to="/browse">Explore listings</Link>
                 </Button>
               </div>
