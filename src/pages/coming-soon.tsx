@@ -32,7 +32,7 @@ export function ComingSoonPage() {
             letterSpacing: '-0.025em',
           }}
         >
-          List<em className="italic">m</em>io
+          Ni<em className="italic">z</em>vio
         </div>
 
         {/* Eyebrow */}

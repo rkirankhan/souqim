@@ -121,10 +121,10 @@ export function SignInPage() {
             className="text-2xl font-medium text-primary inline-block mb-6"
             style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
           >
-            List<em className="italic font-medium">m</em>io
+            Ni<em className="italic font-medium">z</em>vio
           </span>
           <h1 className="text-2xl font-medium mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
-            {isSignup ? 'Create your account' : 'Sign in to Listmio'}
+            {isSignup ? 'Create your account' : 'Sign in to Nizvio'}
           </h1>
           <p className="text-muted-foreground text-sm">
             {isSignup

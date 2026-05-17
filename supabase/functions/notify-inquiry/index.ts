@@ -1,5 +1,5 @@
 // Edge Function called by a Supabase database webhook on INSERT into
-// service_inquiries. Sends a notification to the Listmio team and an
+// service_inquiries. Sends a notification to the Nizvio team and an
 // acknowledgement to the requester via Resend.
 //
 // Required secret: RESEND_API_KEY
@@ -106,7 +106,7 @@ Deno.serve(async (req: Request) => {
     const toEmail = Deno.env.get("INQUIRY_TO_EMAIL") ?? "info@listmio.com";
     const fromEmail =
       Deno.env.get("INQUIRY_FROM_EMAIL") ??
-      "Listmio <onboarding@resend.dev>";
+      "Nizvio <onboarding@resend.dev>";
     const sendAck = (Deno.env.get("SEND_ACK") ?? "true") !== "false";
 
     const payload = (await req.json()) as WebhookPayload;
@@ -154,8 +154,7 @@ Deno.serve(async (req: Request) => {
           In the meantime — anything to add or change? Just reply to this email.
         </p>
         <p style="font-size:14px;line-height:1.6;color:#6b6b6b;margin-top:24px">
-          — The Listmio team<br/>
-          <a href="https://listmio.com" style="color:#C2410C">listmio.com</a>
+          — The Nizvio team
         </p>
       </div>
     `;
@@ -176,7 +175,7 @@ Deno.serve(async (req: Request) => {
         from: fromEmail,
         to: r.email,
         replyTo: toEmail,
-        subject: "We got your request — Listmio",
+        subject: "We got your request — Nizvio",
         html: ackHtml,
       });
       ackOk = ackRes.ok;

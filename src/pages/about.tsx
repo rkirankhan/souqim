@@ -79,7 +79,7 @@ export function AboutPage() {
           <div>
             <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary rounded-full px-3.5 py-1.5 text-xs md:text-sm font-medium">
               <Sparkles className="size-3" />
-              Listmio is built differently
+              Nizvio is built differently
             </span>
           </div>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
@@ -147,7 +147,7 @@ export function AboutPage() {
         <div className="container max-w-4xl mx-auto">
           <div className="text-center mb-10 md:mb-12">
             <p className="text-xs font-semibold tracking-[0.10em] uppercase text-[#9D8E87] mb-3">
-              Behind Listmio
+              Behind Nizvio
             </p>
             <h2
               className="text-3xl md:text-4xl font-medium tracking-tight"
@@ -168,7 +168,7 @@ export function AboutPage() {
 
             <div className="space-y-4 text-foreground leading-7 text-[15px] md:text-base">
               <p>
-                Listmio is founded by{' '}
+                Nizvio is founded by{' '}
                 <a
                   href="https://www.linkedin.com/in/rkirankhan/"
                   target="_blank"
@@ -183,7 +183,7 @@ export function AboutPage() {
                 Mapp Digital, American Express and many more.
               </p>
               <p>
-                She created Listmio after noticing how many thoughtful,
+                She created Nizvio after noticing how many thoughtful,
                 independently run businesses in her community struggled to be
                 discovered &mdash; not due to a lack of quality, but because
                 existing platforms weren&rsquo;t designed with them in mind.
@@ -191,7 +191,7 @@ export function AboutPage() {
                 often faced an additional layer of invisibility.
               </p>
               <p>
-                Listmio is her response to that gap: a directory built around
+                Nizvio is her response to that gap: a directory built around
                 the needs of those listing on it, with a focus on giving
                 women-led ventures the visibility they deserve.
               </p>

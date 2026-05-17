@@ -40,7 +40,7 @@ export function FaqPage() {
             Frequently Asked Questions
           </h1>
           <p className="text-muted-foreground">
-            Answers to the most common questions about Listmio.
+            Answers to the most common questions about Nizvio.
           </p>
         </div>
 
