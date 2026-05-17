@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: 'How do I delete my listing?',
-    a: 'Sign in, go to your dashboard, and remove the listing from there. If you have trouble, contact us at info@listmio.com.',
+    a: 'Sign in, go to your dashboard, and remove the listing from there. If you have trouble, contact us at info@nizvio.com.',
   },
 ]
 

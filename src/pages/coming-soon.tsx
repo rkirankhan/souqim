@@ -75,10 +75,10 @@ export function ComingSoonPage() {
         <p className="text-sm" style={{ color: 'var(--ink-muted)' }}>
           Questions in the meantime?{' '}
           <a
-            href="mailto:info@listmio.com"
+            href="mailto:info@nizvio.com"
             className="text-primary font-medium hover:underline underline-offset-2"
           >
-            info@listmio.com
+            info@nizvio.com
           </a>
         </p>
       </div>

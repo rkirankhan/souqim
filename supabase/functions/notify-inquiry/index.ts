@@ -4,7 +4,7 @@
 //
 // Required secret: RESEND_API_KEY
 // Optional env vars (with sensible defaults):
-//   INQUIRY_TO_EMAIL    — where the team notification goes (default info@listmio.com)
+//   INQUIRY_TO_EMAIL    — where the team notification goes (default info@nizvio.com)
 //   INQUIRY_FROM_EMAIL  — the From: address (default onboarding@resend.dev,
 //                         works without domain verification)
 //   SEND_ACK            — set to "false" to disable the requester acknowledgement.
@@ -103,7 +103,7 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const toEmail = Deno.env.get("INQUIRY_TO_EMAIL") ?? "info@listmio.com";
+    const toEmail = Deno.env.get("INQUIRY_TO_EMAIL") ?? "info@nizvio.com";
     const fromEmail =
       Deno.env.get("INQUIRY_FROM_EMAIL") ??
       "Nizvio <onboarding@resend.dev>";

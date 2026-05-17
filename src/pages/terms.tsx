@@ -107,8 +107,8 @@ export function TermsPage() {
           </h2>
           <p>
             Questions about these terms?{' '}
-            <a className="text-primary hover:underline" href="mailto:info@listmio.com">
-              info@listmio.com
+            <a className="text-primary hover:underline" href="mailto:info@nizvio.com">
+              info@nizvio.com
             </a>
             .
           </p>

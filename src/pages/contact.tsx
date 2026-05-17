@@ -35,7 +35,7 @@ export function ContactPage() {
         <div className="container max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-5 md:gap-6">
             <a
-              href="mailto:support@listmio.com"
+              href="mailto:support@nizvio.com"
               className="group block bg-card border border-border rounded-2xl p-7 md:p-8 transition-all hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5"
             >
               <div className="rounded-xl bg-primary/10 p-3 w-fit mb-5 transition-colors group-hover:bg-primary/15">
@@ -55,13 +55,13 @@ export function ContactPage() {
                 issues, removing a listing, business verification.
               </p>
               <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary group-hover:underline underline-offset-2">
-                support@listmio.com
+                support@nizvio.com
                 <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
               </span>
             </a>
 
             <a
-              href="mailto:info@listmio.com"
+              href="mailto:info@nizvio.com"
               className="group block bg-card border border-border rounded-2xl p-7 md:p-8 transition-all hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5"
             >
               <div className="rounded-xl bg-amber/40 p-3 w-fit mb-5 transition-colors group-hover:bg-amber/55">
@@ -81,7 +81,7 @@ export function ContactPage() {
                 tied to a specific listing.
               </p>
               <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary group-hover:underline underline-offset-2">
-                info@listmio.com
+                info@nizvio.com
                 <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
               </span>
             </a>
