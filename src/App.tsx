@@ -1,10 +1,9 @@
 // ────────────────────────────────────────────────────────────────────────────
-// SITE IS IN 'COMING SOON' MODE.
+// Live site is the default export (App).
 //
-// Every route currently returns the ComingSoonPage while we sort out a new
-// domain. The full app is preserved below in `LiveApp` (and all the page
-// imports stay so nothing is lost). To turn the site back on, swap the
-// default export from `App` to `LiveApp`.
+// ComingSoonOnly is preserved below — to take the site offline temporarily
+// (e.g. for a relaunch or maintenance window), change the default export
+// from `App` to `ComingSoonOnly`. All page imports stay so nothing is lost.
 // ────────────────────────────────────────────────────────────────────────────
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
@@ -30,21 +29,9 @@ import { DashboardPage } from '@/pages/dashboard'
 import { AccountPage } from '@/pages/account'
 import { AdminPage } from '@/pages/admin'
 
+// Full site — the default. Includes the layout (header + footer), all routes,
+// and the toaster.
 export function App() {
-  // Coming-soon mode — every URL renders the placeholder.
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="*" element={<ComingSoonPage />} />
-      </Routes>
-      <Toaster />
-    </BrowserRouter>
-  )
-}
-
-// Original full app — restore by changing the default export to LiveApp
-// (or by reverting this file).
-export function LiveApp() {
   return (
     <BrowserRouter>
       <ScrollToTop />
@@ -70,6 +57,19 @@ export function LiveApp() {
           <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
         </Routes>
       </Layout>
+      <Toaster />
+    </BrowserRouter>
+  )
+}
+
+// Coming-soon-only mode. Swap the default export to this to take the live
+// site down temporarily (the placeholder catches every URL).
+export function ComingSoonOnly() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="*" element={<ComingSoonPage />} />
+      </Routes>
       <Toaster />
     </BrowserRouter>
   )
