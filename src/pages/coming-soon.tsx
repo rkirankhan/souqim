@@ -32,7 +32,7 @@ export function ComingSoonPage() {
             letterSpacing: '-0.025em',
           }}
         >
-          Ni<em className="italic">z</em>vio
+          Souq<em className="italic">i</em>m
         </div>
 
         {/* Eyebrow */}
@@ -75,10 +75,10 @@ export function ComingSoonPage() {
         <p className="text-sm" style={{ color: 'var(--ink-muted)' }}>
           Questions in the meantime?{' '}
           <a
-            href="mailto:info@nizvio.com"
+            href="mailto:info@souqim.com"
             className="text-primary font-medium hover:underline underline-offset-2"
           >
-            info@nizvio.com
+            info@souqim.com
           </a>
         </p>
       </div>

@@ -16,9 +16,9 @@ export function PrivacyPage() {
 
         <div className="prose prose-neutral max-w-none space-y-6 text-foreground leading-7">
           <p>
-            Nizvio (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;)
+            Souqim (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;)
             respects your privacy. This policy explains what information we
-            collect when you use nizvio.com, how we use it, and the choices
+            collect when you use souqim.com, how we use it, and the choices
             you have.
           </p>
 
@@ -77,8 +77,8 @@ export function PrivacyPage() {
             You can review, edit or remove your listings from your dashboard at
             any time. To request deletion of your account or a copy of the data
             we hold on you, email{' '}
-            <a className="text-primary hover:underline" href="mailto:info@nizvio.com">
-              info@nizvio.com
+            <a className="text-primary hover:underline" href="mailto:info@souqim.com">
+              info@souqim.com
             </a>
             .
           </p>
@@ -88,8 +88,8 @@ export function PrivacyPage() {
           </h2>
           <p>
             Questions about this policy?{' '}
-            <a className="text-primary hover:underline" href="mailto:info@nizvio.com">
-              info@nizvio.com
+            <a className="text-primary hover:underline" href="mailto:info@souqim.com">
+              info@souqim.com
             </a>
             .
           </p>

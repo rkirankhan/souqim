@@ -1,5 +1,5 @@
--- Nizvio — promote info@nizvio.com to admin
--- Run AFTER you've signed in once at the site with info@nizvio.com (via Google
+-- Souqim — promote info@souqim.com to admin
+-- Run AFTER you've signed in once at the site with info@souqim.com (via Google
 -- or email). Otherwise the seed at the bottom won't find your auth.users row.
 --
 -- Safe to run multiple times — uses ON CONFLICT DO NOTHING.
@@ -14,15 +14,15 @@ DECLARE
 BEGIN
   SELECT id INTO admin_user_id
     FROM auth.users
-    WHERE email = 'info@nizvio.com'
+    WHERE email = 'info@souqim.com'
     LIMIT 1;
 
   IF admin_user_id IS NOT NULL THEN
     INSERT INTO admins (user_id) VALUES (admin_user_id)
       ON CONFLICT (user_id) DO NOTHING;
-    RAISE NOTICE 'Seeded info@nizvio.com as admin (user_id: %)', admin_user_id;
+    RAISE NOTICE 'Seeded info@souqim.com as admin (user_id: %)', admin_user_id;
   ELSE
-    RAISE NOTICE 'No auth.users row for info@nizvio.com — sign in once via the site, then re-run this script.';
+    RAISE NOTICE 'No auth.users row for info@souqim.com — sign in once via the site, then re-run this script.';
   END IF;
 END $$;
 
@@ -32,7 +32,7 @@ FROM admins a JOIN auth.users u ON a.user_id = u.id
 ORDER BY a.created_at;
 
 -- Optional: revoke the old info@listmio.com admin once you're satisfied
--- the nizvio account works. Uncomment to run:
+-- the souqim account works. Uncomment to run:
 --
 -- DELETE FROM admins
 --   WHERE user_id IN (

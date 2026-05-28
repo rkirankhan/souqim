@@ -1,10 +1,10 @@
 // Edge Function called by a Supabase database webhook on INSERT into
-// service_inquiries. Sends a notification to the Nizvio team and an
+// service_inquiries. Sends a notification to the Souqim team and an
 // acknowledgement to the requester via Resend.
 //
 // Required secret: RESEND_API_KEY
 // Optional env vars (with sensible defaults):
-//   INQUIRY_TO_EMAIL    — where the team notification goes (default info@nizvio.com)
+//   INQUIRY_TO_EMAIL    — where the team notification goes (default info@souqim.com)
 //   INQUIRY_FROM_EMAIL  — the From: address (default onboarding@resend.dev,
 //                         works without domain verification)
 //   SEND_ACK            — set to "false" to disable the requester acknowledgement.
@@ -103,10 +103,10 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const toEmail = Deno.env.get("INQUIRY_TO_EMAIL") ?? "info@nizvio.com";
+    const toEmail = Deno.env.get("INQUIRY_TO_EMAIL") ?? "info@souqim.com";
     const fromEmail =
       Deno.env.get("INQUIRY_FROM_EMAIL") ??
-      "Nizvio <onboarding@resend.dev>";
+      "Souqim <onboarding@resend.dev>";
     const sendAck = (Deno.env.get("SEND_ACK") ?? "true") !== "false";
 
     const payload = (await req.json()) as WebhookPayload;
@@ -154,7 +154,7 @@ Deno.serve(async (req: Request) => {
           In the meantime — anything to add or change? Just reply to this email.
         </p>
         <p style="font-size:14px;line-height:1.6;color:#6b6b6b;margin-top:24px">
-          — The Nizvio team
+          — The Souqim team
         </p>
       </div>
     `;
@@ -175,7 +175,7 @@ Deno.serve(async (req: Request) => {
         from: fromEmail,
         to: r.email,
         replyTo: toEmail,
-        subject: "We got your request — Nizvio",
+        subject: "We got your request — Souqim",
         html: ackHtml,
       });
       ackOk = ackRes.ok;

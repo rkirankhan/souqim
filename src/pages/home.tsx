@@ -258,7 +258,7 @@ export function HomePage() {
               >
                 Recently listed
               </h2>
-              <p className="text-sm md:text-[15px] text-[#9D8E87]">Newest businesses on Nizvio</p>
+              <p className="text-sm md:text-[15px] text-[#9D8E87]">Newest businesses on Souqim</p>
             </div>
             <Button asChild variant="outline" size="sm" className="rounded-full">
               <Link to="/browse">
@@ -326,7 +326,7 @@ export function HomePage() {
             ?
           </h2>
           <p className="text-base md:text-lg leading-relaxed text-[color:#5C4E46] mb-9 max-w-[480px] mx-auto">
-            Join thousands of small UK businesses connecting with their community on Nizvio.
+            Join thousands of small UK businesses connecting with their community on Souqim.
           </p>
           <div className="flex justify-center gap-3 flex-wrap">
             <Button asChild size="lg" className="rounded-full px-7">

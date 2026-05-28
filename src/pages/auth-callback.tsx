@@ -42,7 +42,7 @@ export function AuthCallbackPage() {
           session.user.email || ''
         )
         if (claimed) {
-          toast.success("You're on Nizvio. Welcome in.")
+          toast.success("You're on Souqim. Welcome in.")
         }
         navigate('/dashboard', { replace: true })
       } else {

@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: 'How do I delete my listing?',
-    a: 'Sign in, go to your dashboard, and remove the listing from there. If you have trouble, contact us at info@nizvio.com.',
+    a: 'Sign in, go to your dashboard, and remove the listing from there. If you have trouble, contact us at info@souqim.com.',
   },
 ]
 
@@ -40,7 +40,7 @@ export function FaqPage() {
             Frequently Asked Questions
           </h1>
           <p className="text-muted-foreground">
-            Answers to the most common questions about Nizvio.
+            Answers to the most common questions about Souqim.
           </p>
         </div>
 
