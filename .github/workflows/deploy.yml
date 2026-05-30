@@ -37,4 +37,8 @@ jobs:
           port: 21
           local-dir: ./dist/
           server-dir: ./public_html/
-          dangerous-clean-slate: false
+          # Force a full sync this deploy. The action's state file in
+          # public_html/ got into a bad state and stopped detecting changes.
+          # Set this back to false after one successful run.
+          dangerous-clean-slate: true
+          log-level: verbose
