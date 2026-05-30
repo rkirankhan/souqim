@@ -118,13 +118,13 @@ export function SignInPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <span
-            className="text-2xl font-medium text-primary inline-block mb-6"
-            style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
+            className="text-2xl font-semibold text-primary inline-block mb-6"
+            style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.04em' }}
           >
-            SouqIm
+            souqim
           </span>
           <h1 className="text-2xl font-medium mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
-            {isSignup ? 'Create your account' : 'Sign in to SouqIm'}
+            {isSignup ? 'Create your account' : 'Sign in to souqim'}
           </h1>
           <p className="text-muted-foreground text-sm">
             {isSignup

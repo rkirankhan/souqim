@@ -81,7 +81,7 @@
   --radius: 0.75rem;
 
   /* ─── Brand palette ────────────────────────────────────────
-     Single source of truth for the SouqIm brand colours, in
+     Single source of truth for the souqim brand colours, in
      hex, mirroring 'ListMio Brand Guidelines.html'. Use these
      in inline styles via var(--orange) etc. instead of pasting
      hex codes. The shadcn --primary / --background / --card

@@ -44,10 +44,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container max-w-7xl mx-auto flex h-16 items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
             <span
-              className="text-xl font-medium text-primary"
-              style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
+              className="text-xl font-semibold text-primary"
+              style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.04em' }}
             >
-              SouqIm
+              souqim
             </span>
           </Link>
 
@@ -236,7 +236,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 About
               </h3>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/about" className="text-white/60 hover:text-white transition-colors">About SouqIm</Link></li>
+                <li><Link to="/about" className="text-white/60 hover:text-white transition-colors">About souqim</Link></li>
                 <li><Link to="/privacy" className="text-white/60 hover:text-white transition-colors">Privacy Policy</Link></li>
                 <li><Link to="/terms" className="text-white/60 hover:text-white transition-colors">Terms</Link></li>
               </ul>
@@ -276,10 +276,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
             <div>
               <span
-                className="text-[28px] text-white font-medium block leading-none"
-                style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
+                className="text-[28px] text-white font-semibold block leading-none"
+                style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.04em' }}
               >
-                SouqIm
+                souqim
               </span>
               <span className="block text-xs text-white/40 mt-2 tracking-[0.02em]">
                 UK's community business directory · © 2026

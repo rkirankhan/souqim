@@ -42,7 +42,7 @@ export function AuthCallbackPage() {
           session.user.email || ''
         )
         if (claimed) {
-          toast.success("You're on SouqIm. Welcome in.")
+          toast.success("You're on souqim. Welcome in.")
         }
         navigate('/dashboard', { replace: true })
       } else {

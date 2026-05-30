@@ -317,7 +317,7 @@ function BusinessListingCard({
                     <AlertDialogTitle>Delete this listing?</AlertDialogTitle>
                     <AlertDialogDescription>
                       <span className="font-medium text-foreground">{business.name}</span>{' '}
-                      will be removed from SouqIm for good. This can&rsquo;t be
+                      will be removed from souqim for good. This can&rsquo;t be
                       undone &mdash; the listing, photos and stats will all be
                       gone.
                     </AlertDialogDescription>

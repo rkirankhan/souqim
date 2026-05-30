@@ -26,13 +26,13 @@ export function ComingSoonPage() {
       <div className="relative z-10 max-w-2xl mx-auto text-center">
         {/* Wordmark */}
         <div
-          className="text-[34px] md:text-[40px] text-primary mb-10 md:mb-14"
+          className="text-[34px] md:text-[40px] font-semibold text-primary mb-10 md:mb-14"
           style={{
-            fontFamily: '"DM Serif Display", serif',
-            letterSpacing: '-0.025em',
+            fontFamily: 'Inter, sans-serif',
+            letterSpacing: '-0.04em',
           }}
         >
-          SouqIm
+          souqim
         </div>
 
         {/* Eyebrow */}
