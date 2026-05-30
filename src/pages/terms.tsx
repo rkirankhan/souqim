@@ -10,15 +10,19 @@ export function TermsPage() {
             Terms of Service
           </h1>
           <p className="text-sm text-muted-foreground">
-            Last updated: 1 May 2026
+            Last updated: 30 May 2026
           </p>
         </div>
 
         <div className="prose prose-neutral max-w-none space-y-6 text-foreground leading-7">
           <p>
-            By using souqim (&ldquo;the service&rdquo;), you agree to these
-            terms. If you don&rsquo;t agree, please don&rsquo;t use the
-            service.
+            souqim (&ldquo;the service&rdquo;) is operated by{' '}
+            <span className="font-medium">Khaas Hub Ltd</span>, a company
+            registered in England &amp; Wales (company number{' '}
+            <span className="font-medium">16721132</span>), trading as
+            &ldquo;souqim&rdquo; (&ldquo;we&rdquo;, &ldquo;our&rdquo;,
+            &ldquo;us&rdquo;). By using the service, you agree to these terms.
+            If you don&rsquo;t agree, please don&rsquo;t use the service.
           </p>
 
           <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
@@ -100,6 +104,15 @@ export function TermsPage() {
             We may update these terms over time. Material changes will be
             announced on the site. Continued use of the service after a change
             means you accept the updated terms.
+          </p>
+
+          <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
+            Governing law
+          </h2>
+          <p>
+            These terms are governed by the laws of England &amp; Wales, and any
+            disputes will be subject to the exclusive jurisdiction of the courts
+            of England &amp; Wales.
           </p>
 
           <h2 className="text-2xl font-medium pt-4" style={{ fontFamily: '"DM Serif Display", serif' }}>
