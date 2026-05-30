@@ -36,9 +36,9 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
           local-dir: ./dist/
-          server-dir: ./public_html/
-          # Force a full sync this deploy. The action's state file in
-          # public_html/ got into a bad state and stopped detecting changes.
-          # Set this back to false after one successful run.
-          dangerous-clean-slate: true
-          log-level: verbose
+          # The Hostinger FTP user u219239568.souqim.com is chrooted into
+          # public_html/, so its home is already the web root. Writing to
+          # ./public_html/ would create a nested public_html/public_html/
+          # which souqim.com doesn't read from. Upload to ./ instead.
+          server-dir: ./
+          dangerous-clean-slate: false
