@@ -65,7 +65,7 @@ const SERVICES: {
   {
     key: 'listing',
     title: 'Listing optimization',
-    pitch: 'Make your Souqim page actually convert browsers into customers.',
+    pitch: 'Make your SouqIm page actually convert browsers into customers.',
     Icon: Sparkles,
     iconBg: '#FEF3E8',
     iconColor: '#D97706',
@@ -345,7 +345,7 @@ export function ServicesPage() {
         </div>
       </section>
 
-      {/* Why Souqim */}
+      {/* Why SouqIm */}
       <section className="py-12 md:py-16 px-4" style={{ backgroundColor: '#FAF6F1' }}>
         <div className="container max-w-5xl mx-auto">
           <div className="text-center mb-9 md:mb-12">

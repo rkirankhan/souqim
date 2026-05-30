@@ -32,7 +32,7 @@ export function ComingSoonPage() {
             letterSpacing: '-0.025em',
           }}
         >
-          Sou<em className="italic">q</em>im
+          SouqIm
         </div>
 
         {/* Eyebrow */}
