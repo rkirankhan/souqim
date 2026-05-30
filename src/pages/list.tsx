@@ -264,9 +264,11 @@ export function ListPage() {
       }
       try {
         toast.info('Welcome back — publishing your listing now.')
-        const { error } = await supabase
+        const { data: newBusiness, error } = await supabase
           .from('businesses')
           .insert(insertPayload as any)
+          .select('*')
+          .single()
         if (cancelled) return
         if (error) throw error
         if (isAdmin) {
@@ -274,7 +276,9 @@ export function ListPage() {
         } else {
           toast.success("Submitted! We'll review it shortly and let you know.")
         }
-        navigate('/dashboard')
+        // Pass the freshly-inserted row via router state so the dashboard
+        // can render it immediately, before its own select query catches up.
+        navigate('/dashboard', { state: { freshListing: newBusiness } })
       } catch (err: any) {
         console.error('Error auto-publishing pending listing:', err)
         toast.error(err?.message || 'Failed to publish. Please try again.')
@@ -585,7 +589,7 @@ export function ListPage() {
         const { data: business, error } = await supabase
           .from('businesses')
           .insert(insertPayload as any)
-          .select('id, slug')
+          .select('*')
           .single()
         if (error) throw error
         if (isAdmin) {
@@ -593,7 +597,9 @@ export function ListPage() {
           setTimeout(() => navigate(`/business/${business.slug || business.id}`), 600)
         } else {
           toast.success("Submitted! We'll review it shortly and let you know.")
-          setTimeout(() => navigate('/dashboard'), 600)
+          // Pass the freshly-inserted row via router state so the dashboard
+          // can render it immediately, before its own select query catches up.
+          setTimeout(() => navigate('/dashboard', { state: { freshListing: business } }), 600)
         }
       }
     } catch (err: any) {

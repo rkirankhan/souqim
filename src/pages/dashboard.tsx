@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '@/lib/auth-context'
 import { supabase } from '@/lib/supabase'
 import type { Business } from '@/lib/database.types'
@@ -32,8 +32,13 @@ const STATUS_BADGE: Record<string, { label: string; className: string }> = {
 
 export function DashboardPage() {
   const { user, displayName } = useAuth()
-  const [businesses, setBusinesses] = useState<Business[]>([])
-  const [loading, setLoading] = useState(true)
+  const location = useLocation()
+  // If the listing form just navigated here, it passes the inserted row in
+  // router state so we can render it instantly — bypassing the brief window
+  // where Supabase has committed the row but our select hasn't seen it yet.
+  const freshListing = (location.state as { freshListing?: Business } | null)?.freshListing ?? null
+  const [businesses, setBusinesses] = useState<Business[]>(freshListing ? [freshListing] : [])
+  const [loading, setLoading] = useState(!freshListing)
   const [togglingId, setTogglingId] = useState<string | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
@@ -41,8 +46,8 @@ export function DashboardPage() {
     if (user) claimAndLoad()
   }, [user])
 
-  async function claimAndLoad() {
-    setLoading(true)
+  async function claimAndLoad(attempt = 1) {
+    if (attempt === 1 && !freshListing) setLoading(true)
     try {
       const email = user!.email || ''
       if (email) {
@@ -75,7 +80,15 @@ export function DashboardPage() {
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      setBusinesses((data as Business[]) || [])
+      const rows = (data as Business[]) || []
+
+      // Edge case: the dashboard mounted before the just-inserted row was
+      // readable. Retry once after a short delay before showing empty state.
+      if (rows.length === 0 && attempt < 2 && businesses.length === 0) {
+        setTimeout(() => claimAndLoad(2), 800)
+        return
+      }
+      setBusinesses(rows)
     } catch (err) {
       console.error('Error loading businesses:', err)
       toast.error('Failed to load your listings.')
