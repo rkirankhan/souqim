@@ -121,7 +121,7 @@ export function SignInPage() {
             className="text-2xl font-medium text-primary inline-block mb-6"
             style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
           >
-            Souq<em className="italic font-medium">i</em>m
+            Sou<em className="italic font-medium">q</em>im
           </span>
           <h1 className="text-2xl font-medium mb-2" style={{ fontFamily: '"DM Serif Display", serif' }}>
             {isSignup ? 'Create your account' : 'Sign in to Souqim'}

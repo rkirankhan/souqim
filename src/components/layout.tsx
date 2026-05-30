@@ -47,7 +47,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               className="text-xl font-medium text-primary"
               style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
             >
-              Souq<em className="italic font-medium">i</em>m
+              Sou<em className="italic font-medium">q</em>im
             </span>
           </Link>
 
@@ -279,7 +279,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 className="text-[28px] text-white font-medium block leading-none"
                 style={{ fontFamily: '"DM Serif Display", serif', letterSpacing: '-0.025em' }}
               >
-                Souq<em className="italic font-medium">i</em>m
+                Sou<em className="italic font-medium">q</em>im
               </span>
               <span className="block text-xs text-white/40 mt-2 tracking-[0.02em]">
                 UK's community business directory · © 2026
